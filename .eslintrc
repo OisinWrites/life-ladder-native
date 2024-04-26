@@ -1,0 +1,15 @@
+{
+    "extends": [
+      "some-other-config-you-use",
+      "prettier"
+    ],
+    "plugins": [
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": "error",
+      "no-unused-vars": "warn",
+      "no-console": "off"
+    }
+}
+  
