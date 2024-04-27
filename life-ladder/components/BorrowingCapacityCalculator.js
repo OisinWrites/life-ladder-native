@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
-import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal } from '../utilities/FormatNumber';
+import React, { useState } from 'react';
+import { View, Text, Pressable, TextInput } from 'react-native';
+import styles from '../styles/borrowingStyles';
+import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal } from '../utils/FormatNumber';
 
 const BorrowingCapacityCalculator = ({
     applicants,
@@ -29,7 +30,7 @@ const BorrowingCapacityCalculator = ({
             {displaySwap ? (
                 <View>
                     <Text style={styles.header}>Borrowing Capacity Calculator</Text>
-                    <Button title="Edit Section" onPress={handleToggleComplete} />
+                    <Pressable title="Edit Section" onPress={handleToggleComplete} ><Text>Edit</Text></Pressable>
                     <Text>Number of Applicants: {applicants}</Text>
                     <Text>{firstTimeBuyer === 'Yes' ? "First Time Buyer" : "Second Time Buyer"}</Text>
                     <Text>Max Borrowable Amount: {formattedMaxBorrowableAmount}</Text>
@@ -40,16 +41,16 @@ const BorrowingCapacityCalculator = ({
                     <Text style={styles.header}>Borrowing Capacity Calculator</Text>
                     {displayWarning && <Text>Complete this section before moving on.</Text>}
                     <View style={styles.row}>
-                        <Button
+                        <Pressable
                             title="1 Applicant"
                             onPress={() => setApplicants(1)}
                             color={applicants === 1 ? 'blue' : 'gray'}
-                        />
-                        <Button
+                        ><Text>1 Applicant</Text></Pressable>
+                        <Pressable
                             title="2 Applicants"
                             onPress={() => setApplicants(2)}
                             color={applicants === 2 ? 'blue' : 'gray'}
-                        />
+                        ><Text>2 Applicants</Text></Pressable>
                     </View>
                     <TextInput
                         style={styles.input}
@@ -69,21 +70,21 @@ const BorrowingCapacityCalculator = ({
                         {applicants === 2 ? 'Are you both first-time buyers?' : 'Are you a first-time buyer?'}
                     </Text>
                     <View style={styles.row}>
-                        <Button
+                        <Pressable
                             title="Yes"
                             onPress={() => setFirstTimeBuyer('Yes')}
                             color={firstTimeBuyer === 'Yes' ? 'blue' : 'gray'}
-                        />
-                        <Button
+                        ><Text>Yes</Text></Pressable>
+                        <Pressable
                             title="No"
                             onPress={() => setFirstTimeBuyer('No')}
                             color={firstTimeBuyer === 'No' ? 'blue' : 'gray'}
-                        />
+                        ><Text>No</Text></Pressable>
                     </View>
                     <Text>Mortgage Borrowing Multiplier: {multiplier}x</Text>
                     <Text>Max Borrowable Amount: {formattedMaxBorrowableAmount}</Text>
                     <Text>Property Value at max LTV of 90%: {formattedEstimatedPropertyValue}</Text>
-                    <Button
+                    <Pressable
                         title={showInput ? 'Hide Input' : 'Update Max Borrowable Amount'}
                         onPress={() => setShowInput(!showInput)}
                     />
@@ -100,28 +101,5 @@ const BorrowingCapacityCalculator = ({
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 10,
-    },
-    header: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-        padding: 10,
-    },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 10,
-    }
-});
 
 export default BorrowingCapacityCalculator;

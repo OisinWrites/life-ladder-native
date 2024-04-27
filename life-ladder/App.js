@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
+import styles from './styles/appStyles';
 
 import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculator';
 
@@ -53,10 +54,10 @@ function App() {
 
   return (
     <View style={styles.app}>
-      <TouchableOpacity onPress={handleHeaderClick} style={styles.appHeader}>
-        <Text style={styles.headerText}>Life Ladder</Text>
-        <Text style={styles.subHeaderText}>Mortgage and Savings Calculator</Text>
-      </TouchableOpacity>
+      <Pressable onPress={handleHeaderClick} style={styles.appHeader}>
+        <Text style={styles.appHeader}>Life Ladder</Text>
+        <Text style={[styles.appHeader, styles.subHeaderText]}>Mortgage and Savings Calculator</Text>
+      </Pressable>
       <View style={styles.main}>
         <BorrowingCapacityCalculator
           applicants={applicants}
@@ -79,20 +80,5 @@ function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  app: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 20,
-  },
-  appHeader: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      marginBottom: 20,
-  },
-  subheader: {
-      fontSize: 18,
-      fontWeight: 'normal',
-  },
-});
+export default App;
+
