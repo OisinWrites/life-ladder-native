@@ -1,7 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable } from 'react-native';
-import styles from './styles/appStyles';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { View, Text, Pressable, Image, ScrollView } from 'react-native';
+import appStyles from './styles/appStyles';
+import lifeladderheader from './assets/images/lifeladderheader.png'; 
 
 import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculator';
 
@@ -53,30 +55,37 @@ function App() {
   }, [maxBorrowableAmount]);
 
   return (
-    <View style={styles.app}>
-      <Pressable onPress={handleHeaderClick} style={styles.appHeader}>
-        <Text style={styles.appHeader}>Life Ladder</Text>
-        <Text style={[styles.appHeader, styles.subHeaderText]}>Mortgage and Savings Calculator</Text>
-      </Pressable>
-      <View style={styles.main}>
-        <BorrowingCapacityCalculator
-          applicants={applicants}
-          setApplicants={setApplicants}
-          firstTimeBuyer={firstTimeBuyer}
-          setFirstTimeBuyer={setFirstTimeBuyer}
-          salary1={salary1}
-          setSalary1={setSalary1}
-          salary2={salary2}
-          setSalary2={setSalary2}
-          maxBorrowableAmount={maxBorrowableAmount}
-          setMaxBorrowableAmount={setMaxBorrowableAmount}
-          displaySwap={displaySwap}
-          displayWarning={displayWarning}
-          handleToggleComplete={handleToggleComplete}
-          estimatedPropertyValue={estimatedPropertyValue}
-        />
+    <ScrollView contentContainerStyle={[appStyles.center]}>
+
+      <View style={[appStyles.app, appStyles.center]}>
+
+        <Pressable onPress={handleHeaderClick} style={appStyles.appHeader}>
+          <Image source={lifeladderheader} style={appStyles.logoHeader} />
+          <Text style={[appStyles.appHeader, appStyles.subHeaderText]}>Mortgage and Savings Calculator</Text>
+        </Pressable>
+        <View><FontAwesome5 name="rocket" size={30} color="#900" />
+        <FontAwesome5 name="house" size={30} color="#900" />
+        </View>
+        <View style={[appStyles.main, appStyles.section, appStyles.center]}>
+          <BorrowingCapacityCalculator
+            applicants={applicants}
+            setApplicants={setApplicants}
+            firstTimeBuyer={firstTimeBuyer}
+            setFirstTimeBuyer={setFirstTimeBuyer}
+            salary1={salary1}
+            setSalary1={setSalary1}
+            salary2={salary2}
+            setSalary2={setSalary2}
+            maxBorrowableAmount={maxBorrowableAmount}
+            setMaxBorrowableAmount={setMaxBorrowableAmount}
+            displaySwap={displaySwap}
+            displayWarning={displayWarning}
+            handleToggleComplete={handleToggleComplete}
+            estimatedPropertyValue={estimatedPropertyValue}
+          />
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

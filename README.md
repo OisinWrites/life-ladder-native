@@ -28,3 +28,31 @@ React Native Tools and Expo Tools: Access their features through the command pal
 
 To create app
 cl: npx create-expo-app MyNewProject
+
+HTML & CSS
+Neither HTML nor CSS, being web based languages, are supported in a React Native App
+which must operate within ios or android. 
+HTML elements are replaced by new terms which additionally are written in PascalCasing.
+<div> = <View>
+<p> = <Text>
+<img> = <Image>
+<input type="text"> = <TextInput>
+<button> = <Button>
+<a> = <Pressable>
+<ul/ol/li> ~ <FlatList/SectionList>
+
+Additional:
+<ScrollView>: Allows content to be scrollable. It can scroll vertically or horizontally and can contain any type of component within it.
+<SafeAreaView>: This component automatically adjusts its padding to respect the notches on iOS (like iPhone X and later) and also the status bar on Android, ensuring that content does not overlap with system-specific design elements.
+<Modal>: Used for displaying content in a modal. You can toggle visibility and customize its appearance extensively.
+<ActivityIndicator>: Provides a simple way to show a loading/spinner indicator.
+<Switch>: A toggle switch component for showing a boolean input.
+<Picker> (deprecated in the latest versions, now moved to @react-native-picker/picker): A dropdown list for selecting one of several options.
+
+Adding FontAwesome5 icons
+
+npm i --save @fortawesome/react-native-fontawesome @fortawesome/fontawesome-svg-core react-native-svg
+
+npm i --save @fortawesome/free-solid-svg-icons
+npm i --save @fortawesome/free-brands-svg-icons
+npm i --save @fortawesome/free-regular-svg-icons
