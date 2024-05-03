@@ -56,3 +56,13 @@ npm i --save @fortawesome/react-native-fontawesome @fortawesome/fontawesome-svg-
 npm i --save @fortawesome/free-solid-svg-icons
 npm i --save @fortawesome/free-brands-svg-icons
 npm i --save @fortawesome/free-regular-svg-icons
+
+Deployment
+
+Run from app dir not root
+npx expo login
+specify an apk buildType in eas file
+eas build --platform android --profile apk
+download build article from expo dev (link provided in terminal after commands)
+from command prompt, navigate to apk file: adb install 'life-ladder-android'.apk
+eas credentials
