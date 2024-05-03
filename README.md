@@ -59,10 +59,10 @@ npm i --save @fortawesome/free-regular-svg-icons
 
 Deployment
 
+Production for an app through playstore necessitates a aab file which expo will automatically build. To install an app directly, without channelling through a store, we need to specify to expo to create an apk file. Expo can simplify the production of ios and android builds, automating much of the native requirements for each.
 Run from app dir not root
 npx expo login
 specify an apk buildType in eas file
 eas build --platform android --profile apk
 download build article from expo dev (link provided in terminal after commands)
 from command prompt, navigate to apk file: adb install 'life-ladder-android'.apk
-eas credentials
