@@ -1,9 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const appStyles = StyleSheet.create({
-    app: {
-      textAlign: 'center',
-    },
+const styles = StyleSheet.create({
     appLogo: {
       height: 300, // Adjusted size, originally '40vmin'
       resizeMode: 'contain', // Ensures the image scales properly
@@ -17,7 +14,7 @@ const appStyles = StyleSheet.create({
     appHeader: {
       backgroundColor: '#282c34',
       height: '100vh', // Example conversion for '50vh'
-      width: '100vw',
+      width: '100%',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -28,22 +25,79 @@ const appStyles = StyleSheet.create({
     subHeaderText: {
         fontSize: 15, // Example conversion for 'calc(10px + 2vmin)'
         marginBottom: 40,
+        color: 'white',
     },
     appLink: {
       color: '#61dafb',
     },
     center: {
-        alignItems: 'center',
-    },
-    section: {
-        height: '100vh',
-        width: '90vw',
+      alignItems: 'center',
     },
     horizontalRule: {
-        borderBottomColor: 'black',
-        borderBottomWidth: 1,
-        marginVertical: 20, // Adds spacing above and below the line
+      borderBottomColor: 'black',
+      borderBottomWidth: 1,
+      marginVertical: 20, // Adds spacing above and below the line
+    },
+    container: {
+      flex: 1,
+      padding: 10,
+      maxWidth: 600,
+    },
+    header: {
+      fontSize: 18,
+      fontWeight: 'bold',
+    },
+    input: {
+      height: 25,
+      borderColor: '#f2f9fc',
+      borderWidth: 1,
+      padding: 5,
+      backgroundColor: '#cde8f7',
+      borderRadius: 10,
+      width: 200,
+    },
+    row: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 2,
+    },
+    centerText: {
+      textAlign: 'center',
+    },
+    pressed: {
+      opacity: 0.5,
+      padding: 2,
+    },
+    rounded: {
+      borderRadius: 10,
+      paddingInline: 10,
+    },
+    margin: {
+      marginHorizontal: 20,
+      paddingVertical: 3,
+    },
+    textColorWhite: {
+      color: 'white',
+    },
+    textColorGray: {
+      color: 'gray',
+    },
+    textColorGreen: {
+      color: '#1FA149',
+    },
+    button: {
+      height: 25,
+      alignContent: 'center',
+    },
+    bold: {
+      fontWeight: 'bold',
+    },
+    completed: {
+      color: '#03a1fc',
+    },
+    marginBottom: {
+      marginBottom: 15,
     }
 });
 
-export default appStyles
+export default styles

@@ -12,9 +12,13 @@ export const handleNumericChange = (value, setter) => {
     const stringValue = String(value);
     const numericalValue = stringValue.replace(/,/g, '').replace(/[^\d.-]/g, '');
     const parts = numericalValue.split('.');
-    if (parts.length > 1 && parts[1].length > 2) {
+    if (parts.length > 1 && parts[1] && parts[1].length > 2) {
         // If more than two decimals, do not update the setter
         return;
+    }
+    
+    if (parts[0] && parts[0].length > 7) {
+        return; // Do not update if integer part exceeds 7 digits
     }
     
     setter(numericalValue);

@@ -1,54 +1,45 @@
 import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 10,
-        maxWidth: 400,
-    },
-    header: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    input: {
-        height: 25,
-        borderColor: '#f2f9fc',
-        borderWidth: 1,
-        padding: 5,
-        backgroundColor: '#cde8f7',
-        borderRadius: 10,
-        width: 200,
-    },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 2,
-    },
-    center: {
-        textAlign: 'center',
-    },
-    pressed: {
-        opacity: 0.5,
+const borrowingStyles = StyleSheet.create({
+    slideSim: {
+        backgroundColor: '#91b0c2',
         padding: 2,
+        flexDirection: 'row',
+        borderRadius: 20,
+        width: 90,
     },
-    rounded: {
-        borderRadius: 10,
-        paddingInline: 10,
-    },
-    margin: {
-        marginHorizontal: 20,
+    slideButtons: {
+        borderRadius: 20,
         paddingVertical: 3,
-    },
-    textColorWhite: {
-        color: 'white',
-    },
-    textColorGray: {
-        color : 'gray',
-    },
-    button: {
-        height: 25,
+        justifyContent: 'space-evenly',
+        width: '50%',
         alignContent: 'center',
-    },  
+    },
+    larger: {
+        fontSize: 16,
+    },
+    salaryInputs: {
+        paddingVertical: 3,
+        width: '100%',
+        borderRadius: 20,
+        borderColor: '#91b0c2',
+        borderWidth: 2,
+        paddingLeft: 8,
+        marginBottom: 2,
+        backgroundColor: 'white',
+    },
+    quoteToggle: {
+        borderRadius: 20,
+        backgroundColor: '#91b0c2',
+        width: '100%',
+        padding: 3,     
+        marginBottom: 2,
+        marginTop: 4,
+    },
+    manualInput: {
+        backgroundColor: 'white',
+        borderRadius: 25,
+    },
 });
 
-export default styles
+export default borrowingStyles

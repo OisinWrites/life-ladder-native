@@ -1,21 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { View, Text, Pressable, Image, ScrollView } from 'react-native';
-import appStyles from './styles/appStyles';
+import styles from './styles/appStyles';
 import lifeladderheader from './assets/images/lifeladderheader.png'; 
 
 import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculator';
 
 function App() {
   const [applicants, setApplicants] = useState(1);
-  const [firstTimeBuyer, setFirstTimeBuyer] = useState(null);
+  const [firstTimeBuyer, setFirstTimeBuyer] = useState('Yes');
   const [salary1, setSalary1] = useState(null);
   const [salary2, setSalary2] = useState(null);
   const [maxBorrowableAmount, setMaxBorrowableAmount] = useState(null);
   const [displaySwap, setDisplaySwap] = useState(false);
   const [displayWarning, setDisplayWarning] = useState(false);
   const [estimatedPropertyValue, setEstimatedPropertyValue] = useState(0);
+  const [allowRecalculation, setAllowRecalculation] = useState(true);
+
 
   const handleHeaderClick = () => {
     if (borrowingSectionComplete) {
@@ -39,34 +40,35 @@ function App() {
   const multiplier = firstTimeBuyer === 'Yes' ? 4 : 3.5;
 
   useEffect(() => {
-    let totalSalary = parseFloat(salary1) || 0;
-    if (applicants === 2) {
-      totalSalary += parseFloat(salary2) || 0;
+    if (allowRecalculation) {
+      let totalSalary = parseFloat(salary1) || 0;
+      if (applicants === 2) {
+        totalSalary += parseFloat(salary2) || 0;
+      }
+      const calculatedAmount = totalSalary * multiplier;
+      setMaxBorrowableAmount(calculatedAmount);
     }
-    const calculatedAmount = totalSalary * multiplier;
-    setMaxBorrowableAmount(calculatedAmount);
-  }, [salary1, salary2, applicants, multiplier]);
+  }, [salary1, salary2, applicants, multiplier, allowRecalculation]);
 
   useEffect(() => {
     if (maxBorrowableAmount) {
       const calculatedValue = (maxBorrowableAmount / 9) * 10;
       setEstimatedPropertyValue(calculatedValue);
+    } else {
+      setEstimatedPropertyValue(0);
     }
   }, [maxBorrowableAmount]);
 
   return (
-    <ScrollView contentContainerStyle={[appStyles.center]}>
+    <ScrollView>
 
-      <View style={[appStyles.app, appStyles.center]}>
-
-        <Pressable onPress={handleHeaderClick} style={appStyles.appHeader}>
-          <Image source={lifeladderheader} style={appStyles.logoHeader} />
-          <Text style={[appStyles.appHeader, appStyles.subHeaderText]}>Mortgage and Savings Calculator</Text>
+        <Pressable style={styles.appHeader} onPress={handleHeaderClick}>
+          <Image source={lifeladderheader} style={styles.logoHeader} />
+          <Text style={styles.subHeaderText}>Mortgage and Savings Calculator</Text>
         </Pressable>
-        <View><FontAwesome5 name="rocket" size={30} color="#900" />
-        <FontAwesome5 name="house" size={30} color="#900" />
-        </View>
-        <View style={[appStyles.main, appStyles.section, appStyles.center]}>
+
+
+        <View style={[styles.main, styles.section, styles.center]}>
           <BorrowingCapacityCalculator
             applicants={applicants}
             setApplicants={setApplicants}
@@ -82,9 +84,10 @@ function App() {
             displayWarning={displayWarning}
             handleToggleComplete={handleToggleComplete}
             estimatedPropertyValue={estimatedPropertyValue}
+            setAllowRecalculation={setAllowRecalculation}
           />
         </View>
-      </View>
+
     </ScrollView>
   );
 }
