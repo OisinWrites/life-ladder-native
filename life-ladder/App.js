@@ -20,6 +20,10 @@ import {
 
 SplashScreen.preventAutoHideAsync();
 
+const normalizeNumber = (value) => {
+  const parsedValue = parseFloat(value);
+  return isNaN(parsedValue) ? null : parsedValue;
+};
 
 function App() {
   const [fontsLoaded] = useFonts({
@@ -72,9 +76,9 @@ function App() {
     setDisplayWarning2(false);
   };
 
-  const borrowingSectionComplete = salary1 !== null &&
-                                   firstTimeBuyer !== null &&
-                                   (applicants === 1 || (applicants === 2 && salary2 !== null));
+  const borrowingSectionComplete = (normalizeNumber(salary1) !== null && normalizeNumber(salary1) !== 0)
+                                   &&
+                                   (applicants === 1 || (applicants === 2 && normalizeNumber(salary2) !== null && normalizeNumber(salary2) !== 0));
 
   const multiplier = firstTimeBuyer === 'Yes' ? 4 : 3.5;
 
@@ -104,7 +108,7 @@ function App() {
 
         <Pressable style={[styles.appHeader, styles.fullHeight]} onPress={handleHeaderClick}>
           <Image source={lifeladderheader} style={styles.logoHeader} />
-          <Text style={styles.subHeaderText}>Mortgage and Savings Calculator</Text>
+          <CustomText style={[styles.subHeaderText, styles.h2]}>Mortgage and Savings Calculator</CustomText>
         </Pressable>
 
         <View style={[styles.main, styles.section, styles.center]}>

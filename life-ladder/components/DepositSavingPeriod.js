@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, TextInput } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import styles from '../styles/appStyles';
 import borrowingStyles from '../styles/borrowingStyles';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
 import { calculateTaxDetails } from '../utils/taxCalc';
+import CustomText from '../utils/CustomText';
+import CustomTextInput from '../utils/CustomTextInput';
 
 import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal, formatNumber } from '../utils/FormatNumber';
 const DepositSavingPeriod = ({
@@ -31,35 +33,35 @@ const DepositSavingPeriod = ({
         {displaySwap2 ? (
             <View>
                 <Pressable style={styles.row} title="Edit Section" onPress={handleToggleComplete2} >
-                    <Text style={[styles.centerText, styles.header, styles.completed]}>Deposit Saving Period</Text>
+                    <CustomText style={[styles.centerText, styles.header, styles.completed]}>Deposit Saving Period</CustomText>
                 </Pressable>
             </View>
         ) : (
             <View>
 
                 <View style={styles.marginBottom}>
-                    <Text style={[styles.centerText, styles.header]}>Deposit Saving Period</Text>
+                    <CustomText style={[styles.centerText, styles.header]}>Deposit Saving Period</CustomText>
                     {displayWarning2 && 
-                        <Text style={[styles.textColorGreen, styles.centerText, styles.bold ]}>
+                        <CustomText style={[styles.textColorGreen, styles.centerText, styles.bold ]}>
                             Complete this section before moving on
-                        </Text>
+                        </CustomText>
                     }
                 </View>
 
-                <View style={styles.row}>
+                <View style={styles.row}>  
 
                     <View style={styles.marginRight}>
                         <View style={[styles.row, styles.center]}>
-                            <Text>Monthly Rent:</Text>
+                            <CustomText>Monthly Rent:</CustomText>
                             <View style={[
                                 borrowingStyles.salaryInputs,
                                 styles.widthLimit,
                                 styles.marginRight,
                                 styles.marginLeft
                                 ]}>
-                                <TextInput
+                                <CustomTextInput
                                     inputMode='numeric'
-                                    style={[{color:'#03a1fc'}, styles.bold, styles.widthLimit]}                             
+                                    style={[styles.bigblue, styles.h2]}                             
                                     value={handleFormattedDisplay(rent1)}
                                     onChangeText={(text) => handleNumericChange(text, setRent1)}
                                 />       
@@ -67,16 +69,16 @@ const DepositSavingPeriod = ({
                         </View>
 
                         <View style={[styles.row, styles.center]}>
-                            <Text>Monthly Bills:</Text>
+                            <CustomText>Monthly Bills:</CustomText>
                             <View style={[
                                 borrowingStyles.salaryInputs,
                                 styles.widthLimit,
                                 styles.marginRight,
                                 styles.marginLeft
                                 ]}>
-                                <TextInput
+                                <CustomTextInput
                                     inputMode='numeric'
-                                    style={[{color:'#03a1fc'}, styles.bold, styles.widthLimit]}                             
+                                    style={[styles.bigblue, styles.h2]}                             
                                     value={handleFormattedDisplay(bills1)}
                                     onChangeText={(text) => handleNumericChange(text, setBills1)}
                                 />       
@@ -84,16 +86,16 @@ const DepositSavingPeriod = ({
                         </View>
 
                         <View style={[styles.row, styles.center]}>
-                            <Text>Weekly Discretionary:</Text>
+                            <CustomText>Weekly Spending:</CustomText>
                             <View style={[
                                 borrowingStyles.salaryInputs,
                                 styles.widthLimit,
                                 styles.marginRight,
                                 styles.marginLeft
                                 ]}>
-                                <TextInput
+                                <CustomTextInput
                                     inputMode='numeric'
-                                    style={[{color:'#03a1fc'}, styles.bold, styles.widthLimit]}                             
+                                    style={[styles.bigblue, styles.h2]}                             
                                     value={handleFormattedDisplay(weeklyDiscretionary1)}
                                     onChangeText={(text) => handleNumericChange(text, setWeeklyDiscretionary1)}
                                 />       
@@ -101,23 +103,27 @@ const DepositSavingPeriod = ({
                         </View>
                     </View>
 
+                    
+                </View>
+                
+                <View style={styles.row}>
                     <View>
-                        <Text style={styles.centerText}>monthly tax</Text>
+                        <CustomText style={styles.centerText}>monthly tax</CustomText>
                         <View style={styles.row}>
-                            <Text>usc:</Text>
-                            <Text style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplayTwoDecimal(taxDetails1.usc / 12)}</Text>
+                            <CustomText>usc:</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplayTwoDecimal(taxDetails1.usc / 12)}</CustomText>
                         </View>
                         <View style={styles.row}>
-                            <Text>paye:</Text>
-                            <Text style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplayTwoDecimal(taxDetails1.paye / 12)}</Text>
+                            <CustomText>paye:</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplayTwoDecimal(taxDetails1.paye / 12)}</CustomText>
                         </View>
                         <View style={styles.row}>
-                            <Text>prsi:</Text>
-                            <Text style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplayTwoDecimal(taxDetails1.prsi / 12)}</Text>
+                            <CustomText>prsi:</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplayTwoDecimal(taxDetails1.prsi / 12)}</CustomText>
                         </View>
                         <View style={styles.row}>
-                            <Text>net pay:</Text>
-                            <Text style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplayTwoDecimal(taxDetails1.netMonthlyIncome)}</Text>
+                            <CustomText>net pay:</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplayTwoDecimal(taxDetails1.netMonthlyIncome)}</CustomText>
                         </View>
                     </View>
                 </View>

@@ -8,21 +8,24 @@ export const formatNumber = value => {
 };
 
 export const handleNumericChange = (value, setter) => {
+    // Convert to string and remove commas and non-numeric characters
+    const stringValue = String(value).replace(/,/g, '').replace(/[^\d.-]/g, '');
     
-    const stringValue = String(value);
-    const numericalValue = stringValue.replace(/,/g, '').replace(/[^\d.-]/g, '');
-    const parts = numericalValue.split('.');
+    // Remove leading zeros from the integer part
+    const normalizedValue = stringValue.replace(/^0+(?!\.)/, '');
+  
+    const parts = normalizedValue.split('.');
     if (parts.length > 1 && parts[1] && parts[1].length > 2) {
-        // If more than two decimals, do not update the setter
-        return;
+      // If more than two decimals, do not update the setter
+      return;
     }
-    
+  
     if (parts[0] && parts[0].length > 7) {
-        return; // Do not update if integer part exceeds 7 digits
+      return; // Do not update if integer part exceeds 7 digits
     }
-    
-    setter(numericalValue);
-};
+  
+    setter(normalizedValue);
+  };
 
 export const handleFormattedDisplay = value => {
     return formatNumber(value || '');  

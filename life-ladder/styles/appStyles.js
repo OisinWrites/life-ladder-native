@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
       maxWidth: 600,
     },
     header: {
-      fontSize: 18,
+      fontSize: 22,
       fontWeight: 'bold',
     },
     input: {
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
       marginBottom: 15,
     },
     widthLimit: {
-      width: 110,
+      width: 190,
     },
     marginRight: {
       marginRight: 8,
@@ -126,7 +126,13 @@ const styles = StyleSheet.create({
     },
     bigblue: {
       color:'#03a1fc',
-    }
+    },
+    widthFull: {
+      width: '100%',
+    },
+    marginBottomTen: {
+      marginBottom: 10,
+    },
 });
 
 export default styles
