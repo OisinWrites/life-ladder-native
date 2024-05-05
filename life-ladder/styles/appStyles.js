@@ -11,9 +11,11 @@ const styles = StyleSheet.create({
         marginTop: '45vh',
         transform: 'translate(0%, -50%)',
     },
+    fullHeight: {
+      height: '70%',
+    },
     appHeader: {
       backgroundColor: '#282c34',
-      height: '100vh', // Example conversion for '50vh'
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
@@ -109,7 +111,10 @@ const styles = StyleSheet.create({
     },
     marginLeft: {
       marginLeft: 4,
-    }
+    },
+    sendRight: {
+      justifyContent: 'right',
+    },
 });
 
 export default styles

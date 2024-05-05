@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, TextInput } from 'react-native';
+import { View, Text, Pressable, Animated, TextInput } from 'react-native';
 import borrowingStyles from '../styles/borrowingStyles';
 import styles from '../styles/appStyles';
+import sliderStyle from '../styles/sliderStyle';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
+import SlidingToggle from '../utils/toggleAnimation';
+
 
 import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal } from '../utils/FormatNumber';
-
 
 
 const BorrowingCapacityCalculator = ({
@@ -28,10 +30,35 @@ const BorrowingCapacityCalculator = ({
     const multiplier = firstTimeBuyer === 'Yes' ? 4 : 3.5;
     const formattedMaxBorrowableAmount = maxBorrowableAmount !== null ? handleFormattedDisplayTwoDecimal(parseFloat(maxBorrowableAmount)) : null;
     const formattedEstimatedPropertyValue = estimatedPropertyValue !== null ? handleFormattedDisplayTwoDecimal(parseFloat(estimatedPropertyValue)) : null;
+    const [selectedValue, setSelectedValue] = useState('No');
 
     const [showInput, setShowInput] = useState(false);
 
     const [totalSalary, setTotalSalary] = useState(0);
+
+    const firstTimeBuyerOptions = [
+        {
+          label: 'No',
+          value: 'No',
+        },
+        {
+          label: 'Yes',
+          value: 'Yes',
+        },
+      ];
+
+      
+  const applicantOptions = [
+    {
+      label: <FontAwesomeIcon style={borrowingStyles.larger} name="person" size={20} color={applicants === 1 ? '#03a1fc' : 'white'} />,
+      value: 1,
+    },
+    {
+      label: <FontAwesomeIcon name="user-group" size={20} color={applicants === 2 ? '#03a1fc' : 'white'} />,
+      value: 2,
+    },
+  ];
+    
 
     useEffect(() => {
         let calculatedTotalSalary = parseFloat(salary1) || 0;
@@ -76,34 +103,12 @@ const BorrowingCapacityCalculator = ({
                         <Text>
                             Number of Applicants:
                         </Text>
-                        <View style={borrowingStyles.slideSim}>
-                            <Pressable
-                                title="Yes"
-                                onPress={() => setApplicants(1)}
-                                style={({ pressed }) => [
-                                    [borrowingStyles.slideButtons],
-                                    { backgroundColor: applicants === 1 ? 'white' : '#91b0c2' },
-                                    pressed && styles.pressed
-                                ]}>
-                                <Text style=
-                                    {[{ color: applicants === 1 ? '#03a1fc' : 'white' },
-                                    styles.centerText, styles.bold]}                                        
-                                    ><FontAwesomeIcon style={borrowingStyles.larger} name="person" /></Text>
-                            </Pressable>
-                            <Pressable
-                                title="2 Applicants"
-                                onPress={() => setApplicants(2)}
-                                style={({ pressed }) => [
-                                    [borrowingStyles.slideButtons],
-                                    { backgroundColor: applicants === 2 ? 'white' : '#91b0c2' },
-                                    pressed && styles.pressed
-                                ]}>
-                                <Text style=
-                                    {[{ color: applicants === 2 ? '#03a1fc' : 'white' },
-                                    styles.centerText, styles.bold]}
-
-                                    ><FontAwesomeIcon name="user-group" /></Text>
-                            </Pressable>
+                        <View style={[styles.sliderContainer, styles.sendRight]}>
+                            <SlidingToggle
+                            options={applicantOptions}
+                            defaultOption={applicants}
+                            onSelect={(value) => setApplicants(value)}
+                            />
                         </View>
                     </View>
 
@@ -111,39 +116,19 @@ const BorrowingCapacityCalculator = ({
                         <Text>
                             {applicants === 2 ? 'Both first-time buyers?' : 'First-time buyer?'}
                         </Text>
-                        <View style={borrowingStyles.slideSim}>
-                            <Pressable
-                                title="No"
-                                onPress={() => setFirstTimeBuyer('No')}
-                                style={({ pressed }) => [
-                                    [borrowingStyles.slideButtons],
-                                    { backgroundColor:  firstTimeBuyer === 'No' ? 'white' : '#91b0c2' },
-                                    pressed && styles.pressed
-                                ]}>
-                                <Text style=
-                                    {[{ color:  firstTimeBuyer === 'No' ? '#03a1fc' : 'white' },
-                                    styles.centerText, styles.bold]}
-                                    >No</Text>
-                            </Pressable>
-                            <Pressable
-                                title="Yes"
-                                onPress={() => setFirstTimeBuyer('Yes')}
-                                style={({ pressed }) => [
-                                    [borrowingStyles.slideButtons],
-                                    { backgroundColor:  firstTimeBuyer === 'Yes' ? 'white' : '#91b0c2' },
-                                    pressed && styles.pressed
-                                ]}>
-                                <Text style=
-                                    {[{ color:  firstTimeBuyer === 'Yes' ? '#03a1fc' : 'white' },
-                                    styles.centerText, styles.bold]}                                        
-                                    >Yes</Text>
-                            </Pressable>
+                        <View style={[sliderStyle.container, styles.sendRight, styles.marginLeft]}>
+                            <SlidingToggle
+                                options={firstTimeBuyerOptions}
+                                defaultOption={firstTimeBuyer}
+                                onSelect={(value) => setFirstTimeBuyer(value)}
+                                />
                         </View>
                     </View>
 
                     <View>
                         <View style={[borrowingStyles.salaryInputs]}>
                             <TextInput
+                                keyboardType='numeric'
                                 style={[{color:'#03a1fc'}, styles.bold]}                             
                                 placeholder={applicants === 2 ? ("Applicant 1's Annual Salary") : ("Your Annual Salary")}
                                 value={handleFormattedDisplay(salary1)}
@@ -153,6 +138,7 @@ const BorrowingCapacityCalculator = ({
                         {applicants === 2 && (
                         <View style={[borrowingStyles.salaryInputs]}>
                             <TextInput
+                                keyboardType='numeric'
                                 style={[{color:'#03a1fc'}, styles.bold]}
                                 placeholder="Applicant 2's Annual Salary"
                                 value={handleFormattedDisplay(salary2)}
@@ -174,6 +160,7 @@ const BorrowingCapacityCalculator = ({
                         {showInput && (
                             <View style={[borrowingStyles.salaryInputs]}>
                                 <TextInput
+                                    keyboardType='numeric'
                                     style={[{color:'#03a1fc'}, styles.bold]}                             
                                     value={handleFormattedDisplay(maxBorrowableAmount)}
                                     onChangeText={(text) => handleNumericChange(text, setMaxBorrowableAmount)}

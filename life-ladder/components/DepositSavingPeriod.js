@@ -58,6 +58,7 @@ const DepositSavingPeriod = ({
                                 styles.marginLeft
                                 ]}>
                                 <TextInput
+                                    keyboardType='numeric'
                                     style={[{color:'#03a1fc'}, styles.bold, styles.widthLimit]}                             
                                     value={handleFormattedDisplay(rent1)}
                                     onChangeText={(text) => handleNumericChange(text, setRent1)}
@@ -74,6 +75,7 @@ const DepositSavingPeriod = ({
                                 styles.marginLeft
                                 ]}>
                                 <TextInput
+                                    keyboardType='numeric'
                                     style={[{color:'#03a1fc'}, styles.bold, styles.widthLimit]}                             
                                     value={handleFormattedDisplay(bills1)}
                                     onChangeText={(text) => handleNumericChange(text, setBills1)}
@@ -82,7 +84,7 @@ const DepositSavingPeriod = ({
                         </View>
 
                         <View style={[styles.row, styles.center]}>
-                            <Text>Weekly Discretionary</Text>
+                            <Text>Weekly Discretionary:</Text>
                             <View style={[
                                 borrowingStyles.salaryInputs,
                                 styles.widthLimit,
@@ -90,6 +92,7 @@ const DepositSavingPeriod = ({
                                 styles.marginLeft
                                 ]}>
                                 <TextInput
+                                    keyboardType='numeric'
                                     style={[{color:'#03a1fc'}, styles.bold, styles.widthLimit]}                             
                                     value={handleFormattedDisplay(weeklyDiscretionary1)}
                                     onChangeText={(text) => handleNumericChange(text, setWeeklyDiscretionary1)}

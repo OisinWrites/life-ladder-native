@@ -82,7 +82,7 @@ function App() {
   return (
     <ScrollView>
 
-        <Pressable style={styles.appHeader} onPress={handleHeaderClick}>
+        <Pressable style={[styles.appHeader, styles.fullHeight]} onPress={handleHeaderClick}>
           <Image source={lifeladderheader} style={styles.logoHeader} />
           <Text style={styles.subHeaderText}>Mortgage and Savings Calculator</Text>
         </Pressable>
