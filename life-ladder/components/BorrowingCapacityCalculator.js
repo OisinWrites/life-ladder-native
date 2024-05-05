@@ -108,37 +108,37 @@ const BorrowingCapacityCalculator = ({
                     </View>
 
                     <View style={[styles.row, styles.center]}>
-                            <Text>
-                                {applicants === 2 ? 'Both first-time buyers?' : 'First-time buyer?'}
-                            </Text>
-                            <View style={borrowingStyles.slideSim}>
-                                <Pressable
-                                    title="Yes"
-                                    onPress={() => setFirstTimeBuyer('Yes')}
-                                    style={({ pressed }) => [
-                                        [borrowingStyles.slideButtons],
-                                        { backgroundColor:  firstTimeBuyer === 'Yes' ? 'white' : '#91b0c2' },
-                                        pressed && styles.pressed
-                                    ]}>
-                                    <Text style=
-                                        {[{ color:  firstTimeBuyer === 'Yes' ? '#03a1fc' : 'white' },
-                                        styles.centerText, styles.bold]}                                        >Yes</Text>
-                                </Pressable>
-                                <Pressable
-                                    title="No"
-                                    onPress={() => setFirstTimeBuyer('No')}
-                                    style={({ pressed }) => [
-                                        [borrowingStyles.slideButtons],
-                                        { backgroundColor:  firstTimeBuyer === 'No' ? 'white' : '#91b0c2' },
-                                        pressed && styles.pressed
-                                    ]}>
-                                    <Text style=
-                                        {[{ color:  firstTimeBuyer === 'No' ? '#03a1fc' : 'white' },
-                                        styles.centerText, styles.bold]}
-
-                                        >No</Text>
-                                </Pressable>
-                            </View>
+                        <Text>
+                            {applicants === 2 ? 'Both first-time buyers?' : 'First-time buyer?'}
+                        </Text>
+                        <View style={borrowingStyles.slideSim}>
+                            <Pressable
+                                title="No"
+                                onPress={() => setFirstTimeBuyer('No')}
+                                style={({ pressed }) => [
+                                    [borrowingStyles.slideButtons],
+                                    { backgroundColor:  firstTimeBuyer === 'No' ? 'white' : '#91b0c2' },
+                                    pressed && styles.pressed
+                                ]}>
+                                <Text style=
+                                    {[{ color:  firstTimeBuyer === 'No' ? '#03a1fc' : 'white' },
+                                    styles.centerText, styles.bold]}
+                                    >No</Text>
+                            </Pressable>
+                            <Pressable
+                                title="Yes"
+                                onPress={() => setFirstTimeBuyer('Yes')}
+                                style={({ pressed }) => [
+                                    [borrowingStyles.slideButtons],
+                                    { backgroundColor:  firstTimeBuyer === 'Yes' ? 'white' : '#91b0c2' },
+                                    pressed && styles.pressed
+                                ]}>
+                                <Text style=
+                                    {[{ color:  firstTimeBuyer === 'Yes' ? '#03a1fc' : 'white' },
+                                    styles.centerText, styles.bold]}                                        
+                                    >Yes</Text>
+                            </Pressable>
+                        </View>
                     </View>
 
                     <View>
@@ -191,14 +191,17 @@ const BorrowingCapacityCalculator = ({
                             </>
                          ) : null}
                     </View>
+
                     <View style={styles.row}>
                         <Text>Mortgage Borrowing Multiplier:</Text>
                         <Text>{multiplier}x</Text>
                     </View>
+
                     <View style={styles.row}>
                         <Text>Max Borrowable Amount:</Text>
                         <Text>{formattedMaxBorrowableAmount}</Text>
                     </View>
+
                     <View style={styles.row}>
                         <Text>Property Value at max LTV of 90%: </Text>
                         <Text>{formattedEstimatedPropertyValue}</Text>

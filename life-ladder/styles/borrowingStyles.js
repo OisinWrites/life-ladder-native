@@ -20,7 +20,6 @@ const borrowingStyles = StyleSheet.create({
     },
     salaryInputs: {
         paddingVertical: 3,
-        width: '100%',
         borderRadius: 20,
         borderColor: '#91b0c2',
         borderWidth: 2,

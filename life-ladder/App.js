@@ -5,18 +5,23 @@ import styles from './styles/appStyles';
 import lifeladderheader from './assets/images/lifeladderheader.png'; 
 
 import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculator';
+import DepositSavingPeriod from './components/DepositSavingPeriod';
 
 function App() {
   const [applicants, setApplicants] = useState(1);
-  const [firstTimeBuyer, setFirstTimeBuyer] = useState('Yes');
+  const [firstTimeBuyer, setFirstTimeBuyer] = useState('No');
   const [salary1, setSalary1] = useState(null);
   const [salary2, setSalary2] = useState(null);
   const [maxBorrowableAmount, setMaxBorrowableAmount] = useState(null);
   const [displaySwap, setDisplaySwap] = useState(false);
+  const [displaySwap2, setDisplaySwap2] = useState(false);
   const [displayWarning, setDisplayWarning] = useState(false);
+  const [displayWarning2, setDisplayWarning2] = useState(false);
   const [estimatedPropertyValue, setEstimatedPropertyValue] = useState(0);
   const [allowRecalculation, setAllowRecalculation] = useState(true);
-
+  const [rent1, setRent1] = useState('');
+  const [bills1, setBills1] = useState('');
+  const [weeklyDiscretionary1, setWeeklyDiscretionary1] = useState('');
 
   const handleHeaderClick = () => {
     if (borrowingSectionComplete) {
@@ -28,9 +33,24 @@ function App() {
     }
   };
 
+  const handleHeaderClick2 = () => {
+    if (depositSectionComplete) {
+      setDisplaySwap2(true);
+      setDisplayWarning2(false);
+    } else {
+      setDisplayWarning2(true);
+      setDisplaySwap2(false);
+    }
+  };
+
   const handleToggleComplete = () => {
     setDisplaySwap(false);
     setDisplayWarning(false);
+  };
+
+  const handleToggleComplete2 = () => {
+    setDisplaySwap2(false);
+    setDisplayWarning2(false);
   };
 
   const borrowingSectionComplete = salary1 !== null &&
@@ -67,6 +87,7 @@ function App() {
           <Text style={styles.subHeaderText}>Mortgage and Savings Calculator</Text>
         </Pressable>
 
+        <Text>{rent1} {bills1}</Text>
 
         <View style={[styles.main, styles.section, styles.center]}>
           <BorrowingCapacityCalculator
@@ -85,6 +106,25 @@ function App() {
             handleToggleComplete={handleToggleComplete}
             estimatedPropertyValue={estimatedPropertyValue}
             setAllowRecalculation={setAllowRecalculation}
+          />
+        </View>
+
+        <View style={[styles.main, styles.section, styles.center]}>
+          <DepositSavingPeriod
+            applicants={applicants}
+            salary1={salary1}
+            salary2={salary2}
+            maxBorrowableAmount={maxBorrowableAmount}
+            displaySwap2={displaySwap2}
+            displayWarning2={displayWarning2}
+            handleToggleComplete2={handleToggleComplete2}
+            estimatedPropertyValue={estimatedPropertyValue}
+            rent1={rent1}
+            setRent1={setRent1}
+            bills1={bills1}
+            setBills1={setBills1}
+            weeklyDiscretionary1={weeklyDiscretionary1}
+            setWeeklyDiscretionary1={setWeeklyDiscretionary1}
           />
         </View>
 

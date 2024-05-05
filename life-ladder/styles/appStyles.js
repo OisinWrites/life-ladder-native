@@ -64,6 +64,9 @@ const styles = StyleSheet.create({
     centerText: {
       textAlign: 'center',
     },
+    textRight: {
+      textAlign: 'right',
+    },
     pressed: {
       opacity: 0.5,
       padding: 2,
@@ -97,6 +100,15 @@ const styles = StyleSheet.create({
     },
     marginBottom: {
       marginBottom: 15,
+    },
+    widthLimit: {
+      width: 110,
+    },
+    marginRight: {
+      marginRight: 8,
+    },
+    marginLeft: {
+      marginLeft: 4,
     }
 });
 
