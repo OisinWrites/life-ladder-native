@@ -5,6 +5,8 @@ import styles from '../styles/appStyles';
 import sliderStyle from '../styles/sliderStyle';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
 import SlidingToggle from '../utils/toggleAnimation';
+import CustomText from '../utils/CustomText';
+import CustomTextInput from '../utils/CustomTextInput';
 
 
 import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal } from '../utils/FormatNumber';
@@ -84,25 +86,25 @@ const BorrowingCapacityCalculator = ({
             {displaySwap ? (
                 <View>
                     <Pressable style={styles.row} title="Edit Section" onPress={handleToggleComplete} >
-                        <Text style={[styles.centerText, styles.header, styles.completed]}>Borrowing Capacity Calculator</Text>
+                        <CustomText style={[styles.centerText, styles.header, styles.completed]}>Borrowing Capacity Calculator</CustomText>
                     </Pressable>
                 </View>
             ) : (
                 <View>
                     
                     <View style={styles.marginBottom}>
-                        <Text style={[styles.centerText, styles.header]}>Borrowing Capacity Calculator</Text>
+                        <CustomText style={[styles.centerText, styles.header]}>Borrowing Capacity Calculator</CustomText>
                         {displayWarning && 
-                            <Text style={[styles.textColorGreen, styles.centerText, styles.bold ]}>
+                            <CustomText style={[styles.textColorGreen, styles.centerText, styles.bold ]}>
                                 Complete this section before moving on
-                            </Text>
+                            </CustomText>
                         }
                     </View>
 
-                    <View style={[styles.row, styles.center]}>
-                        <Text>
+                    <View style={[styles.row, styles.center, styles.marginLeft]}>
+                        <CustomText style={[styles.h2, styles.marginRight]}>
                             Number of Applicants:
-                        </Text>
+                        </CustomText>
                         <View style={[styles.sliderContainer, styles.sendRight]}>
                             <SlidingToggle
                             options={applicantOptions}
@@ -112,10 +114,10 @@ const BorrowingCapacityCalculator = ({
                         </View>
                     </View>
 
-                    <View style={[styles.row, styles.center]}>
-                        <Text>
+                    <View style={[styles.row, styles.center, styles.marginLeft]}>
+                        <CustomText style={[styles.h2, styles.marginRight]}>
                             {applicants === 2 ? 'Both first-time buyers?' : 'First-time buyer?'}
-                        </Text>
+                        </CustomText>
                         <View style={[sliderStyle.container, styles.sendRight, styles.marginLeft]}>
                             <SlidingToggle
                                 options={firstTimeBuyerOptions}
@@ -127,9 +129,9 @@ const BorrowingCapacityCalculator = ({
 
                     <View>
                         <View style={[borrowingStyles.salaryInputs]}>
-                            <TextInput
-                                keyboardType='numeric'
-                                style={[{color:'#03a1fc'}, styles.bold]}                             
+                            <CustomTextInput
+                                inputMode='numeric'
+                                style={[styles.bigblue, styles.h2]}                             
                                 placeholder={applicants === 2 ? ("Applicant 1's Annual Salary") : ("Your Annual Salary")}
                                 value={handleFormattedDisplay(salary1)}
                                 onChangeText={(text) => handleNumericChange(text, setSalary1)}
@@ -137,9 +139,9 @@ const BorrowingCapacityCalculator = ({
                         </View>
                         {applicants === 2 && (
                         <View style={[borrowingStyles.salaryInputs]}>
-                            <TextInput
-                                keyboardType='numeric'
-                                style={[{color:'#03a1fc'}, styles.bold]}
+                            <CustomTextInput
+                                inputMode='numeric'
+                                style={[styles.bigblue, styles.h2]}                             
                                 placeholder="Applicant 2's Annual Salary"
                                 value={handleFormattedDisplay(salary2)}
                                 onChangeText={(text) => handleNumericChange(text, setSalary2)}
@@ -152,15 +154,15 @@ const BorrowingCapacityCalculator = ({
                         <View style={borrowingStyles.quoteToggle}>
                             <Pressable onPress={() => {setShowInput(prev => !prev);
                                  setAllowRecalculation(prev => !prev);}}>
-                                <Text style={[styles.textColorWhite, styles.bold, styles.centerText]}>
+                                <CustomText style={[styles.textColorWhite, styles.bold, styles.centerText]}>
                                     {showInput ? 'Revert to Salary Multiplier' : 'Use your own Mortgage Quote'}
-                                </Text>
+                                </CustomText>
                             </Pressable>
                         </View>
                         {showInput && (
                             <View style={[borrowingStyles.salaryInputs]}>
                                 <TextInput
-                                    keyboardType='numeric'
+                                    inputMode='numeric'
                                     style={[{color:'#03a1fc'}, styles.bold]}                             
                                     value={handleFormattedDisplay(maxBorrowableAmount)}
                                     onChangeText={(text) => handleNumericChange(text, setMaxBorrowableAmount)}
@@ -173,25 +175,25 @@ const BorrowingCapacityCalculator = ({
                     <View style={styles.row}>
                         { salary1 > 0 && salary2 > 0 ? (
                             <>
-                                <Text>{'Combined Annual Salary:'}</Text>
-                                <Text>{handleFormattedDisplay(totalSalary)}</Text>
+                                <CustomText>{'Combined Annual Salary:'}</CustomText>
+                                <CustomText>{handleFormattedDisplay(totalSalary)}</CustomText>
                             </>
                          ) : null}
                     </View>
 
                     <View style={styles.row}>
-                        <Text>Mortgage Borrowing Multiplier:</Text>
-                        <Text>{multiplier}x</Text>
+                        <CustomText>Mortgage Borrowing Multiplier:</CustomText>
+                        <CustomText>{multiplier}x</CustomText>
                     </View>
 
                     <View style={styles.row}>
-                        <Text>Max Borrowable Amount:</Text>
-                        <Text>{formattedMaxBorrowableAmount}</Text>
+                        <CustomText>Max Borrowable Amount:</CustomText>
+                        <CustomText>{formattedMaxBorrowableAmount}</CustomText>
                     </View>
 
                     <View style={styles.row}>
-                        <Text>Property Value at max LTV of 90%: </Text>
-                        <Text>{formattedEstimatedPropertyValue}</Text>
+                        <CustomText>Property Value at max LTV of 90%: </CustomText>
+                        <CustomText>{formattedEstimatedPropertyValue}</CustomText>
 
                     </View>
 

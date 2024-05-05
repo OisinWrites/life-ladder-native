@@ -58,7 +58,7 @@ const DepositSavingPeriod = ({
                                 styles.marginLeft
                                 ]}>
                                 <TextInput
-                                    keyboardType='numeric'
+                                    inputMode='numeric'
                                     style={[{color:'#03a1fc'}, styles.bold, styles.widthLimit]}                             
                                     value={handleFormattedDisplay(rent1)}
                                     onChangeText={(text) => handleNumericChange(text, setRent1)}
@@ -75,7 +75,7 @@ const DepositSavingPeriod = ({
                                 styles.marginLeft
                                 ]}>
                                 <TextInput
-                                    keyboardType='numeric'
+                                    inputMode='numeric'
                                     style={[{color:'#03a1fc'}, styles.bold, styles.widthLimit]}                             
                                     value={handleFormattedDisplay(bills1)}
                                     onChangeText={(text) => handleNumericChange(text, setBills1)}
@@ -92,7 +92,7 @@ const DepositSavingPeriod = ({
                                 styles.marginLeft
                                 ]}>
                                 <TextInput
-                                    keyboardType='numeric'
+                                    inputMode='numeric'
                                     style={[{color:'#03a1fc'}, styles.bold, styles.widthLimit]}                             
                                     value={handleFormattedDisplay(weeklyDiscretionary1)}
                                     onChangeText={(text) => handleNumericChange(text, setWeeklyDiscretionary1)}

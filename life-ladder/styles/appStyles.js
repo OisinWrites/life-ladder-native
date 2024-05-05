@@ -115,6 +115,18 @@ const styles = StyleSheet.create({
     sendRight: {
       justifyContent: 'right',
     },
+    defaultFontSize: {
+      fontSize: 30,
+    },
+    defaultPlaceholderOpacity: {
+      opacity: 0.8,
+    },
+    h2: {
+      fontSize: 20,
+    },
+    bigblue: {
+      color:'#03a1fc',
+    }
 });
 
 export default styles

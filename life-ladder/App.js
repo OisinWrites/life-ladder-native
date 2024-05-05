@@ -1,13 +1,32 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, Image, ScrollView } from 'react-native';
+import { View, Text, Pressable, Image, ScrollView, StyleSheet } from 'react-native';
 import styles from './styles/appStyles';
-import lifeladderheader from './assets/images/lifeladderheader.png'; 
+import lifeladderheader from './assets/images/lifeladderheader.png';
+
+import { GlobalStylesProvider } from './utils/GlobalStylesContext';
+import CustomTextInput from './utils/CustomTextInput';
+import CustomText from './utils/CustomText';
 
 import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculator';
 import DepositSavingPeriod from './components/DepositSavingPeriod';
 
+import * as SplashScreen from 'expo-splash-screen';
+import {
+  useFonts,
+  Lato_400Regular,
+  Lato_700Bold,
+} from '@expo-google-fonts/lato';
+
+SplashScreen.preventAutoHideAsync();
+
+
 function App() {
+  const [fontsLoaded] = useFonts({
+    Lato_400Regular,
+    Lato_700Bold,
+  });
+
   const [applicants, setApplicants] = useState(1);
   const [firstTimeBuyer, setFirstTimeBuyer] = useState('No');
   const [salary1, setSalary1] = useState(null);
@@ -81,13 +100,12 @@ function App() {
 
   return (
     <ScrollView>
+      <GlobalStylesProvider>
 
         <Pressable style={[styles.appHeader, styles.fullHeight]} onPress={handleHeaderClick}>
           <Image source={lifeladderheader} style={styles.logoHeader} />
           <Text style={styles.subHeaderText}>Mortgage and Savings Calculator</Text>
         </Pressable>
-
-        <Text>{rent1} {bills1}</Text>
 
         <View style={[styles.main, styles.section, styles.center]}>
           <BorrowingCapacityCalculator
@@ -128,6 +146,7 @@ function App() {
           />
         </View>
 
+      </GlobalStylesProvider>
     </ScrollView>
   );
 }
