@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     horizontalRule: {
       borderBottomColor: 'black',
       borderBottomWidth: 1,
-      marginVertical: 1,
+      margin: 4,
     },
     container: {
       flex: 1,
@@ -136,6 +136,9 @@ const styles = StyleSheet.create({
     marginVertical: {
       marginTop: 8,
       marginBottom: 8,
+    },
+    marginTop: {
+      marginTop: 4,
     }
 });
 

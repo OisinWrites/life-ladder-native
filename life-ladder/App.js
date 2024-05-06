@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, Image, ScrollView, StyleSheet } from 'react-native';
+import { View, Pressable, Image, ScrollView } from 'react-native';
 import styles from './styles/appStyles';
 import lifeladderheader from './assets/images/lifeladderheader.png';
 
 import { GlobalStylesProvider } from './utils/GlobalStylesContext';
-import CustomTextInput from './utils/CustomTextInput';
 import CustomText from './utils/CustomText';
+import { handleFormattedDisplayTwoDecimal } from './utils/FormatNumber';
+
 
 import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculator';
 import PersonalFinances from './components/PersonalFinances';
@@ -59,7 +60,8 @@ function App() {
   const [otherSavingGoals2, setOtherSavingGoals2] = useState('');
   const [savingPowerMonthly1, setSavingPowerMonthly1] = useState('');
   const [savingPowerMonthly2, setSavingPowerMonthly2] = useState('');
-
+  const [mortgageDrawdown, setMortgageDrawdown] = useState(maxBorrowableAmount !== '' ? handleFormattedDisplayTwoDecimal(maxBorrowableAmount) : 0);
+    
   const handleHeaderClick = () => {
     if (borrowingSectionComplete) {
       setDisplaySwap(true);
@@ -210,6 +212,8 @@ function App() {
             otherSavingGoals2={otherSavingGoals2}
             savingPowerMonthly1={savingPowerMonthly1}
             savingPowerMonthly2={savingPowerMonthly2}
+            mortgageDrawdown={mortgageDrawdown}
+            setMortgageDrawdown={setMortgageDrawdown}
           />
         </View>
 
