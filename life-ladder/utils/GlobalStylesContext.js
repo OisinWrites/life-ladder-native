@@ -4,7 +4,7 @@ const GlobalStylesContext = createContext();
 
 const GlobalStylesProvider = ({ children }) => {
   const styles = {
-    defaultFontSize: 16,
+    defaultFontSize: 17,
     placeholderOpacity: 0.7,
   };
 

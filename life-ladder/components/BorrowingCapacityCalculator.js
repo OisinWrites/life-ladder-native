@@ -29,13 +29,12 @@ const BorrowingCapacityCalculator = ({
     estimatedPropertyValue,
     setAllowRecalculation
 }) => {
-    const multiplier = firstTimeBuyer === 'Yes' ? 4 : 3.5;
+    const [multiplier, setMultiplier] = useState(3.5);
     const formattedMaxBorrowableAmount = maxBorrowableAmount !== null ? handleFormattedDisplayTwoDecimal(parseFloat(maxBorrowableAmount)) : null;
     const formattedEstimatedPropertyValue = estimatedPropertyValue !== null ? handleFormattedDisplayTwoDecimal(parseFloat(estimatedPropertyValue)) : null;
-    const [selectedValue, setSelectedValue] = useState('No');
 
     const [showInput, setShowInput] = useState(false);
-
+    const [exemptionGiven, setExemptionGiven] = useState()
     const [totalSalary, setTotalSalary] = useState(0);
 
     const firstTimeBuyerOptions = [
@@ -48,18 +47,28 @@ const BorrowingCapacityCalculator = ({
           value: 'Yes',
         },
       ];
-
+    
+    const exemptionGivenOptions = [
+        {
+          label: 'No',
+          value: 'No',
+        },
+        {
+          label: 'Yes',
+          value: 'Yes',
+        },
+    ];
       
-  const applicantOptions = [
-    {
-      label: <FontAwesomeIcon style={borrowingStyles.larger} name="person" size={20} color={applicants === 1 ? '#03a1fc' : 'white'} />,
-      value: 1,
-    },
-    {
-      label: <FontAwesomeIcon name="user-group" size={20} color={applicants === 2 ? '#03a1fc' : 'white'} />,
-      value: 2,
-    },
-  ];
+    const applicantOptions = [
+        {
+        label: <FontAwesomeIcon style={borrowingStyles.larger} name="person" size={20} color={applicants === 1 ? '#03a1fc' : 'white'} />,
+        value: 1,
+        },
+        {
+        label: <FontAwesomeIcon name="user-group" size={20} color={applicants === 2 ? '#03a1fc' : 'white'} />,
+        value: 2,
+        },
+    ];
     
 
     useEffect(() => {
@@ -102,7 +111,7 @@ const BorrowingCapacityCalculator = ({
                     </View>
 
                     <View style={[styles.row, styles.center, styles.marginLeft]}>
-                        <CustomText style={[styles.h2, styles.marginRight]}>
+                        <CustomText style={[styles.marginRight]}>
                             Number of Applicants:
                         </CustomText>
                         <View style={[styles.sliderContainer, styles.sendRight]}>
@@ -114,21 +123,8 @@ const BorrowingCapacityCalculator = ({
                         </View>
                     </View>
 
-                    <View style={[styles.row, styles.center, styles.marginLeft]}>
-                        <CustomText style={[styles.h2, styles.marginRight]}>
-                            {applicants === 2 ? 'Both first-time buyers?' : 'First-time buyer?'}
-                        </CustomText>
-                        <View style={[sliderStyle.container, styles.sendRight, styles.marginLeft]}>
-                            <SlidingToggle
-                                options={firstTimeBuyerOptions}
-                                defaultOption={firstTimeBuyer}
-                                onSelect={(value) => setFirstTimeBuyer(value)}
-                                />
-                        </View>
-                    </View>
-
                     <View>
-                        <View style={[styles.row, styles.center]}>
+                        <View style={[styles.row, styles.center, styles.marginLeft]}>
                             <CustomText>
                                 {applicants === 2 ? ("Applicant 1's Annual Salary") : ("Your Annual Salary")}:
                             </CustomText>
@@ -139,14 +135,14 @@ const BorrowingCapacityCalculator = ({
                             ]}>                            
                                 <CustomTextInput
                                     inputMode='numeric'
-                                    style={[styles.bigblue, styles.h2]}                             
+                                    style={[styles.bigblue, styles.h2, styles.widthLimit]}                             
                                     value={handleFormattedDisplay(salary1)}
                                     onChangeText={(text) => handleNumericChange(text, setSalary1)}
                                 />       
                             </View>
                         </View>
                         {applicants === 2 && (
-                        <View style={[styles.row, styles.center]}>
+                        <View style={[styles.row, styles.center, styles.marginLeft]}>
     
                             <CustomText>
                                 Applicant 2's Annual Salary:
@@ -167,29 +163,7 @@ const BorrowingCapacityCalculator = ({
                         )}
                     </View>
 
-                    <View style={styles.center}>
-                        <View style={borrowingStyles.quoteToggle}>
-                            <Pressable onPress={() => {setShowInput(prev => !prev);
-                                 setAllowRecalculation(prev => !prev);}}>
-                                <CustomText style={[styles.textColorWhite, styles.bold, styles.centerText]}>
-                                    {showInput ? 'Revert to Salary Multiplier' : 'Use your own Mortgage Quote'}
-                                </CustomText>
-                            </Pressable>
-                        </View>
-                        {showInput && (
-                            <View style={[borrowingStyles.salaryInputs, styles.widthFull, styles.marginBottomTen]}>
-                                <CustomTextInput
-                                    inputMode='numeric'
-                                    style={[styles.bigblue, styles.h2]}                             
-                                    value={handleFormattedDisplay(maxBorrowableAmount)}
-                                    onChangeText={(text) => handleNumericChange(text, setMaxBorrowableAmount)}
-                                    placeholder="Enter Mortgage Quote"
-                                />
-                            </View>
-                        )}
-                    </View>
-
-                    <View style={styles.row}>
+                    <View style={[styles.row, styles.marginLeft]}>
                         { salary1 > 0 && salary2 > 0 ? (
                             <>
                                 <CustomText>{'Combined Annual Salary:'}</CustomText>
@@ -198,20 +172,95 @@ const BorrowingCapacityCalculator = ({
                          ) : null}
                     </View>
 
-                    <View style={styles.row}>
-                        <CustomText>Borrowing Multiplier:</CustomText>
-                        <CustomText>{multiplier}x</CustomText>
-                    </View>
+                    
+                    { !showInput &&
+                        <>
+                        <View style={[styles.row, styles.center, styles.marginLeft]}>
+                            <CustomText style={[styles.marginRight]}>
+                                {applicants === 2 ? 'Both first-time buyers?' : 'First-time buyer?'}
+                            </CustomText>
+                            <View style={[sliderStyle.container, styles.sendRight, styles.marginLeft]}>
+                                <SlidingToggle
+                                    options={firstTimeBuyerOptions}
+                                    defaultOption={firstTimeBuyer}
+                                    onSelect={(value) => setFirstTimeBuyer(value)}
+                                    />
+                            </View>
+                        </View>
 
-                    <View style={styles.row}>
+                        <View style={[styles.row, styles.center, styles.marginLeft]}>
+                            <CustomText style={[styles.marginRight]}>
+                                Borrowing Rate Exemption:
+                            </CustomText>
+                            <View style={[sliderStyle.container, styles.sendRight, styles.marginLeft]}>
+                                <SlidingToggle
+                                    options={exemptionGivenOptions}
+                                    defaultOption={'No'}
+                                    onSelect={(value) => setExemptionGiven(value)}
+                                    />
+                            </View>
+                        </View>
+
+                        <View style={[styles.center, styles.row, styles.marginLeft]}>
+                            <CustomText style={[styles.marginRight]}>Borrowing Rate:</CustomText>
+                            <View style={[styles.row, styles.widthLimit, styles.sendRight]}>
+                                <Pressable onPress={() => setMultiplier(3.5)}>
+                                    <CustomText style={[styles.textColorWhite, styles.bold, styles.centerText,
+                                        multiplier === 3.5 ? styles.circleSelected : styles.circleGrey
+                                    ]}>
+                                        3.5x</CustomText>
+                                </Pressable>
+                                { firstTimeBuyer === 'Yes' && (
+                                <Pressable onPress={() => setMultiplier(4)}>
+                                    <CustomText style={[styles.textColorWhite, styles.bold, styles.centerText,
+                                        multiplier === 4 ? styles.circleSelected : styles.circleGrey
+                                    ]}>
+                                        4x</CustomText>
+                                </Pressable>)}
+                                { exemptionGiven === 'Yes' && (
+                                <Pressable onPress={() => setMultiplier(4.5)}>
+                                    <CustomText style={[styles.textColorWhite, styles.bold, styles.centerText,
+                                        multiplier === 4.5 ? styles.circleSelected : styles.circleGrey
+                                    ]}>
+                                        4.5x</CustomText>
+                                </Pressable>)}
+                            </View>
+                        </View>
+
+                    <View style={[styles.row, styles.marginLeft, styles.marginTop]}>
                         <CustomText>Max Loan:</CustomText>
                         <CustomText>{formattedMaxBorrowableAmount}</CustomText>
                     </View>
+                    </>
+                    }
 
-                    <View style={styles.row}>
+                    <View style={[styles.row, styles.marginLeft, styles.marginTop]}>
                         <CustomText>Property Value @ 90% LTV: </CustomText>
                         <CustomText>{formattedEstimatedPropertyValue}</CustomText>
-
+                    </View>
+                    
+                    <View style={[styles.row, styles.center, styles.marginTop]}>
+                        <View style={[borrowingStyles.quoteToggle]}>
+                            <Pressable onPress={() => {setShowInput(prev => !prev);
+                                 setAllowRecalculation(prev => !prev);}}>
+                                <CustomText style={[styles.textColorWhite, styles.bold, styles.centerText]}>
+                                    {showInput ? 'Revert to Salary Multiplier?' : 'Use your own Mortgage Quote?'}
+                                </CustomText>                                
+                            </Pressable>
+                        </View>
+                        <View style={[styles.widthLimit, styles.marginLeft,
+                            showInput && borrowingStyles.salaryInputs,
+                            ]}>
+                            {showInput && (
+                                <CustomTextInput
+                                    inputMode='numeric'
+                                    style={[styles.bigblue, styles.h2]}                    
+                                    value={handleFormattedDisplay(maxBorrowableAmount)}
+                                    onChangeText={(text) => handleNumericChange(text, setMaxBorrowableAmount)}
+                                    placeholder="enter mortgage quote"
+                                />
+                            )}    
+                        </View>
                     </View>
 
                 </View>

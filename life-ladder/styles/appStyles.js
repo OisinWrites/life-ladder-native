@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
       marginRight: 8,
     },
     marginLeft: {
-      marginLeft: 4,
+      marginLeft: 8,
     },
     sendRight: {
       justifyContent: 'right',
@@ -138,8 +138,32 @@ const styles = StyleSheet.create({
       marginBottom: 8,
     },
     marginTop: {
-      marginTop: 4,
-    }
+      marginTop: 10,
+    },
+    circleGrey: {
+      alignContent: 'center',
+      height: 40,
+      width: 40,
+      backgroundColor: '#91b0c2',
+      borderRadius: '100%',
+      marginLeft: 6,
+      fontSize: 15,
+    },
+    circleSelected: {
+      alignContent: 'center',
+      height: 40,
+      width: 40,
+      borderColor:  '#91b0c2',
+      borderWidth: 3,
+      borderRadius: '100%',
+      marginLeft: 6,
+      color: '#03a1fc',
+      fontSize: 15,
+    },
+    justifyCenter: {
+      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
+    },
 });
 
 export default styles

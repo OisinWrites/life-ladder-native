@@ -30,10 +30,9 @@ const borrowingStyles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: '#91b0c2',
         paddingTop: 5,
-        marginTop: 10,
-        width: '80%',
         marginBottom: 2,
         height: 33,
+        paddingHorizontal: 8,
     },
     manualInput: {
         backgroundColor: 'white',
