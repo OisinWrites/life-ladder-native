@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     horizontalRule: {
       borderBottomColor: 'black',
       borderBottomWidth: 1,
-      marginVertical: 20, // Adds spacing above and below the line
+      marginVertical: 1,
     },
     container: {
       flex: 1,
@@ -133,6 +133,10 @@ const styles = StyleSheet.create({
     marginBottomTen: {
       marginBottom: 10,
     },
+    marginVertical: {
+      marginTop: 8,
+      marginBottom: 8,
+    }
 });
 
 export default styles

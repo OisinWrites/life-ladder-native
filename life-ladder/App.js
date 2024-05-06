@@ -9,7 +9,7 @@ import CustomTextInput from './utils/CustomTextInput';
 import CustomText from './utils/CustomText';
 
 import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculator';
-import DepositSavingPeriod from './components/DepositSavingPeriod';
+import PersonalFinances from './components/PersonalFinances';
 
 import * as SplashScreen from 'expo-splash-screen';
 import {
@@ -45,6 +45,12 @@ function App() {
   const [rent1, setRent1] = useState('');
   const [bills1, setBills1] = useState('');
   const [weeklyDiscretionary1, setWeeklyDiscretionary1] = useState('');
+  const [annualBills1, setAnnualBills1] = useState('');
+  const [annualBills2, setAnnualBills2] = useState('');
+  const [currentSavings1, setCurrentSavings1] = useState('');
+  const [currentSavings2, setCurrentSavings2] = useState('');
+  const [otherSavingGoals1, setOtherSavingGoals1] = useState('');
+  const [otherSavingGoals2, setOtherSavingGoals2] = useState('');
 
   const handleHeaderClick = () => {
     if (borrowingSectionComplete) {
@@ -132,7 +138,7 @@ function App() {
         </View>
 
         <View style={[styles.main, styles.section, styles.center]}>
-          <DepositSavingPeriod
+          <PersonalFinances
             applicants={applicants}
             salary1={salary1}
             salary2={salary2}
@@ -147,6 +153,18 @@ function App() {
             setBills1={setBills1}
             weeklyDiscretionary1={weeklyDiscretionary1}
             setWeeklyDiscretionary1={setWeeklyDiscretionary1}
+            annualBills1={annualBills1}
+            setAnnualBills1={setAnnualBills1}
+            annualBills2={annualBills2}
+            setAnnualBills2={setAnnualBills2}
+            currentSavings1={currentSavings1}
+            setCurrentSavings1={setCurrentSavings1}
+            currentSavings2={currentSavings2}
+            setCurrentSavings2={setCurrentSavings2}
+            otherSavingGoals1={otherSavingGoals1}
+            setOtherSavingGoals1={setOtherSavingGoals1}
+            otherSavingGoals2={otherSavingGoals2}
+            setotherSavingGoals2={setOtherSavingGoals2}
           />
         </View>
 
