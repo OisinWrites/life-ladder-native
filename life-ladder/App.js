@@ -10,6 +10,7 @@ import CustomText from './utils/CustomText';
 
 import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculator';
 import PersonalFinances from './components/PersonalFinances';
+import DepositSavingPeriod from './components/DepositSavingPeriod';
 
 import * as SplashScreen from 'expo-splash-screen';
 import {
@@ -36,10 +37,15 @@ function App() {
   const [salary1, setSalary1] = useState(null);
   const [salary2, setSalary2] = useState(null);
   const [maxBorrowableAmount, setMaxBorrowableAmount] = useState(null);
+
   const [displaySwap, setDisplaySwap] = useState(false);
   const [displaySwap2, setDisplaySwap2] = useState(false);
+  const [displaySwap3, setDisplaySwap3] = useState(false);
+
   const [displayWarning, setDisplayWarning] = useState(false);
   const [displayWarning2, setDisplayWarning2] = useState(false);
+  const [displayWarning3, setDisplayWarning3] = useState(false);
+
   const [estimatedPropertyValue, setEstimatedPropertyValue] = useState(0);
   const [allowRecalculation, setAllowRecalculation] = useState(true);
   const [rent1, setRent1] = useState('');
@@ -51,6 +57,8 @@ function App() {
   const [currentSavings2, setCurrentSavings2] = useState('');
   const [otherSavingGoals1, setOtherSavingGoals1] = useState('');
   const [otherSavingGoals2, setOtherSavingGoals2] = useState('');
+  const [savingPowerMonthly1, setSavingPowerMonthly1] = useState('');
+  const [savingPowerMonthly2, setSavingPowerMonthly2] = useState('');
 
   const handleHeaderClick = () => {
     if (borrowingSectionComplete) {
@@ -72,12 +80,28 @@ function App() {
     }
   };
 
+  const handleHeaderClick3 = () => {
+    if (depositSectionComplete) {
+      setDisplaySwap2(true);
+      setDisplayWarning2(false);
+    } else {
+      setDisplayWarning2(true);
+      setDisplaySwap2(false);
+    }
+  };
+
+
   const handleToggleComplete = () => {
     setDisplaySwap(false);
     setDisplayWarning(false);
   };
 
   const handleToggleComplete2 = () => {
+    setDisplaySwap2(false);
+    setDisplayWarning2(false);
+  };
+
+  const handleToggleComplete3 = () => {
     setDisplaySwap2(false);
     setDisplayWarning2(false);
   };
@@ -142,11 +166,9 @@ function App() {
             applicants={applicants}
             salary1={salary1}
             salary2={salary2}
-            maxBorrowableAmount={maxBorrowableAmount}
             displaySwap2={displaySwap2}
             displayWarning2={displayWarning2}
             handleToggleComplete2={handleToggleComplete2}
-            estimatedPropertyValue={estimatedPropertyValue}
             rent1={rent1}
             setRent1={setRent1}
             bills1={bills1}
@@ -165,6 +187,29 @@ function App() {
             setOtherSavingGoals1={setOtherSavingGoals1}
             otherSavingGoals2={otherSavingGoals2}
             setotherSavingGoals2={setOtherSavingGoals2}
+            savingPowerMonthly1={savingPowerMonthly1}
+            savingPowerMonthly2={savingPowerMonthly2}
+            setSavingPowerMonthly1={setSavingPowerMonthly1}
+            setSavingPowerMonthly2={setSavingPowerMonthly2}
+          />
+        </View>
+        <CustomText>{savingPowerMonthly1}</CustomText>
+        <CustomText>{savingPowerMonthly2}</CustomText>
+
+        <View style={[styles.main, styles.section, styles.center]}>
+          <DepositSavingPeriod
+            applicants={applicants}
+            maxBorrowableAmount={maxBorrowableAmount}
+            estimatedPropertyValue={estimatedPropertyValue}
+            displaySwap3={displaySwap3}
+            displayWarning3={displayWarning3}
+            handleToggleComplete3={handleToggleComplete3}
+            currentSavings1={currentSavings1}
+            currentSavings2={currentSavings2}
+            otherSavingGoals1={otherSavingGoals1}
+            otherSavingGoals2={otherSavingGoals2}
+            savingPowerMonthly1={savingPowerMonthly1}
+            savingPowerMonthly2={savingPowerMonthly2}
           />
         </View>
 
