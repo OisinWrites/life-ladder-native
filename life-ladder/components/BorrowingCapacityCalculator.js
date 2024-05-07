@@ -172,7 +172,7 @@ const BorrowingCapacityCalculator = ({
                     </View>
 
                     <View style={[styles.row, styles.marginLeft]}>
-                        { salary1 > 0 && salary2 > 0 ? (
+                    {(parseFloat(salary1) || 0) > 0 && (parseFloat(salary2) || 0) > 0 ? (
                             <>
                                 <CustomText>{'Combined Annual Salary:'}</CustomText>
                                 <CustomText style={styles.marginRight}>{handleFormattedDisplay(totalSalary)}</CustomText>

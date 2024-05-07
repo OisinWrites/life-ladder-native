@@ -66,3 +66,8 @@ specify an apk buildType in eas file
 eas build --platform android --profile apk
 download build article from expo dev (link provided in terminal after commands)
 from command prompt, navigate to apk file: adb install 'life-ladder-android'.apk
+
+
+Animation for slider
+
+npm install react-native-reanimated react-native-gesture-handler

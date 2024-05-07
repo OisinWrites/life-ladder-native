@@ -1,15 +1,14 @@
-export const formatNumber = value => {
-    
-    const stringValue = String(value);
-    const numericalValue = stringValue.replace(/[^\d.-]/g, '');
-    const formattedValue = numericalValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+export const formatNumber = (value) => {
+  const stringValue = String(value || '');
+  const numericalValue = stringValue.replace(/[^\d.-]/g, '');
+  const formattedValue = numericalValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-    return numericalValue > 0 ? `€${formattedValue}` : formattedValue;
+  return parseFloat(numericalValue) > 0 ? `€${formattedValue}` : formattedValue;
 };
 
 export const handleNumericChange = (value, setter) => {
-  // Convert to string and remove commas and non-numeric characters
-  let stringValue = String(value).replace(/,/g, '').replace(/[^\d.-]/g, '');
+  // Ensure value is a string and remove commas and non-numeric characters
+  let stringValue = String(value || '').replace(/,/g, '').replace(/[^\d.-]/g, '');
 
   // Ensure only one decimal point is allowed
   const decimalIndex = stringValue.indexOf('.');
@@ -34,12 +33,12 @@ export const handleNumericChange = (value, setter) => {
   setter(normalizedValue);
 };
 
-export const handleFormattedDisplay = value => {
-    return formatNumber(value || '');  
+export const handleFormattedDisplay = (value) => {
+  return formatNumber(value || '');
 };
 
 export const handleFormattedDisplayTwoDecimal = (value) => {
-    if (value === null) return '0.00';
-    const number = parseFloat(value);
-    return handleFormattedDisplay(number.toFixed(2));
+  if (value === null || value === undefined) return '0.00';
+  const number = parseFloat(value) || 0;
+  return handleFormattedDisplay(number.toFixed(2));
 };
