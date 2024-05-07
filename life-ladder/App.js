@@ -8,16 +8,16 @@ import { GlobalStylesProvider } from './utils/GlobalStylesContext';
 import CustomText from './utils/CustomText';
 import { handleFormattedDisplayTwoDecimal } from './utils/FormatNumber';
 
-import CustomNumericInput from './utils/CustomNumericInput';
-
 import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculator';
 import PersonalFinances from './components/PersonalFinances';
 import DepositSavingPeriod from './components/DepositSavingPeriod';
 
 import * as SplashScreen from 'expo-splash-screen';
-import { useFonts, Lato_400Regular } from '@expo-google-fonts/lato';
-let [fontsLoaded] = useFonts({ Lato_400Regular });
-if (!fontsLoaded) return null;
+import {
+  useFonts,
+  Lato_400Regular,
+  Lato_700Bold,
+} from '@expo-google-fonts/lato';
 
 SplashScreen.preventAutoHideAsync();
 
