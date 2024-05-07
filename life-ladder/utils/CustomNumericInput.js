@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Modal, Pressable } from 'react-native';
+import { View, StyleSheet, TextInput, Modal, Pressable } from 'react-native';
 import CustomKeyboard from './CustomKeyboard';
 import { useGlobalStyles } from './GlobalStylesContext';
 import keyboardStyles from '../styles/keyboardStyles';
@@ -53,8 +53,8 @@ const CustomNumericInput = ({ value, onChangeText, placeholder, style, ...props 
         visible={isKeyboardVisible}
         onRequestClose={handleClose}
       >
-        <Pressable style={keyboardStyles.modalBackground} onPress={handleClose}>
-          <Pressable activeOpacity={1} style={keyboardStyles.modalContainer}>
+        <Pressable style={styles.modalBackground} onPress={handleClose}>
+          <Pressable activeOpacity={1} style={styles.modalContainer}>
             <CustomKeyboard
               onKeyPress={handleKeyPress}
               onDelete={handleDelete}
@@ -69,5 +69,15 @@ const CustomNumericInput = ({ value, onChangeText, placeholder, style, ...props 
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  modalContainer: {
+    justifyContent: 'flex-end',
+  },
+});
 
 export default CustomNumericInput;

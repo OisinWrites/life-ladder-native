@@ -161,8 +161,7 @@ const BorrowingCapacityCalculator = ({
                                 styles.widthLimit,
                                 styles.marginLeft
                             ]}>   
-                                <CustomTextInput
-                                    inputMode='numeric'
+                            <CustomNumericInput
                                     style={[styles.bigblue, styles.h2, styles.bold, styles.widthLimit]}                             
                                     value={handleFormattedDisplay(salary2)}
                                     onChangeText={(text) => handleNumericChange(text, setSalary2)}
@@ -261,8 +260,7 @@ const BorrowingCapacityCalculator = ({
                             showInput && borrowingStyles.salaryInputs,
                             ]}>
                             {showInput && (
-                                <CustomTextInput
-                                    inputMode='numeric'
+                                <CustomNumericInput
                                     style={[styles.bigblue, styles.h2]}                    
                                     value={handleFormattedDisplay(maxBorrowableAmount)}
                                     onChangeText={(text) => handleNumericChange(text, setMaxBorrowableAmount)}

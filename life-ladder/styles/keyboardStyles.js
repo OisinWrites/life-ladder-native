@@ -13,7 +13,7 @@ const keyboardStyles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f0f0f0',
+        backgroundColor: '#282C34',
         padding: 10,
         position: 'absolute',
         bottom: 0,
@@ -28,14 +28,22 @@ const keyboardStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    greyBorder: {
+        borderWidth: 3,
+        borderColor: '#91B0C2',
+    },
+    greyBorderTop: {
+        borderTopWidth: 3,
+        borderColor: '#91B0C2',
+    },
     deleteKey: {
         backgroundColor: '#ff6961',
     },
     clearKey: {
-        backgroundColor: '#f4a261',
+        backgroundColor: '#3DB7FD',
     },
     submitKey: {
-        backgroundColor: '#4caf50',
+        backgroundColor: '#20A14A',
     },
     keyText: {
         color: '#ffffff',
@@ -53,7 +61,6 @@ const keyboardStyles = StyleSheet.create({
     modalBackground: {
         flex: 1,
         justifyContent: 'flex-end',
-        backgroundColor: 'rgba(0,0,0,0.5)',
     },
     inputDisplay: {
         width: '90%',
@@ -81,7 +88,6 @@ const keyboardStyles = StyleSheet.create({
     modalContainer: {
         flex: 1,
         justifyContent: 'flex-end',
-        backgroundColor: 'rgba(0,0,0,0.1)',
     },
 });
 

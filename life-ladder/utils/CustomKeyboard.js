@@ -17,8 +17,8 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
 
   return (
     <View style={keyboardStyles.keyboardWrapper}>
-        <View style={[keyboardStyles.keyboardContainer]}>
-            <View style={[borrowingStyles.salaryInputs, styles.marginTop, styles.widthLimit, styles.marginBottom ]}>
+        <View style={[keyboardStyles.keyboardContainer, keyboardStyles.greyBorderTop]}>
+            <View style={[borrowingStyles.salaryInputs, styles.marginTop, styles.widthLimit, styles.marginBottom,  keyboardStyles.greyBorder, ]}>
                 <CustomText style={[styles.bigblue, styles.h2, 
                     styles.bold, styles.widthLimit, 
                     styles.textRight, styles.fontFamily, 
@@ -28,7 +28,7 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
                 </CustomText>
             </View>
             <View style={styles.row}>
-                <View>
+                <View style={styles.marginRight}>
                     {rows.slice(0, 3).map((row, index) => (
                         <View key={index} style={styles.row}>
                         {row.map((key) => (
@@ -54,16 +54,16 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
                     </View>
                 </View>
                 <View style={styles.marginLeft}>
-                    <Pressable style={[keyboardStyles.key, keyboardStyles.submitKey]} onPress={onSubmit}>
+                    <Pressable style={[keyboardStyles.key, keyboardStyles.greyBorder, keyboardStyles.submitKey]} onPress={onSubmit}>
                         <CustomText style={keyboardStyles.keyText}>Submit</CustomText>
                     </Pressable>
-                    <Pressable style={[keyboardStyles.key, keyboardStyles.deleteKey]} onPress={onDelete}>
+                    <Pressable style={[keyboardStyles.key, keyboardStyles.greyBorder, keyboardStyles.deleteKey]} onPress={onDelete}>
                         <CustomText style={keyboardStyles.keyText}>Del</CustomText>
                     </Pressable>
-                    <Pressable style={[keyboardStyles.key, keyboardStyles.clearKey]} onPress={onClear}>
+                    <Pressable style={[keyboardStyles.key, keyboardStyles.greyBorder, keyboardStyles.clearKey]} onPress={onClear}>
                         <CustomText style={keyboardStyles.keyText}>Clear</CustomText>
                     </Pressable>
-                    <Pressable style={[keyboardStyles.key, keyboardStyles.closeKey]} onPress={() => { onClear(); onClose(); }}>
+                    <Pressable style={[keyboardStyles.key, keyboardStyles.greyBorder, keyboardStyles.closeKey]} onPress={() => { onClear(); onClose(); }}>
                         <CustomText style={keyboardStyles.keyText}>Exit</CustomText>
                     </Pressable>
                 </View>

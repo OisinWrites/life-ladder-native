@@ -4,7 +4,7 @@ import styles from '../styles/appStyles';
 import borrowingStyles from '../styles/borrowingStyles';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
 import CustomText from '../utils/CustomText';
-import CustomTextInput from '../utils/CustomTextInput';
+import CustomNumericInput from '../utils/CustomNumericInput';
 
 import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal } from '../utils/FormatNumber';
 
@@ -93,8 +93,7 @@ const DepositSavingPeriod = ({
                             styles.marginRight,
                             styles.marginLeft
                             ]}>
-                            <CustomTextInput
-                                inputMode='numeric'
+                            <CustomNumericInput
                                 style={[styles.bigblue, styles.h2]}                             
                                 value={handleFormattedDisplay(propertyPrice)}
                                 onChangeText={(text) => handleNumericChange(text, setPropertyPrice)}
@@ -110,8 +109,7 @@ const DepositSavingPeriod = ({
                             styles.marginRight,
                             styles.marginLeft
                             ]}>
-                            <CustomTextInput
-                                inputMode='numeric'
+                            <CustomNumericInput
                                 style={[styles.bigblue, styles.h2]}                             
                                 value={handleFormattedDisplay(mortgageDrawdown)}
                                 onChangeText={(text) => handleNumericChange(text, setMortgageDrawdown)}
