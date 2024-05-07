@@ -21,10 +21,10 @@ const keyboardStyles = StyleSheet.create({
         },
     key: {
         width: 80,
-        padding: 4,
-        marginBottom: 12,
+        height: 80,
+        marginBottom: 7,
         backgroundColor: '#03a1fc',
-        borderRadius: 20,
+        borderRadius: '50%',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -85,6 +85,14 @@ const keyboardStyles = StyleSheet.create({
         textAlign: 'right',
         paddingRight: 10,
     }),
+    largerInputValue: {
+        height: 60,
+        width: 300,
+    },
+    largerInputFont: {
+        fontSize: 40,
+        textAlign: 'right',
+    },
     modalContainer: {
         flex: 1,
         justifyContent: 'flex-end',

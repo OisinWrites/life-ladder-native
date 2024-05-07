@@ -149,6 +149,13 @@ const styles = StyleSheet.create({
       marginLeft: 6,
       fontSize: 15,
     },
+    largerCircle: {
+      height: 80,
+      width: 80,
+      fontSize: 60,
+      marginBottom: 6,
+      marginLeft: 6,
+    },
     circleSelected: {
       alignContent: 'center',
       height: 40,

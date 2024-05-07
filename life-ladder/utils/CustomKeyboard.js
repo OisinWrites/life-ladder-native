@@ -18,12 +18,11 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
   return (
     <View style={keyboardStyles.keyboardWrapper}>
         <View style={[keyboardStyles.keyboardContainer, keyboardStyles.greyBorderTop]}>
-            <View style={[borrowingStyles.salaryInputs, styles.marginTop, styles.widthLimit, styles.marginBottom,  keyboardStyles.greyBorder, ]}>
+            <View style={[borrowingStyles.salaryInputs, styles.marginTop, styles.widthLimit, styles.marginBottom,  keyboardStyles.greyBorder, keyboardStyles.largerInputValue ]}>
                 <CustomText style={[styles.bigblue, styles.h2, 
                     styles.bold, styles.widthLimit, 
                     styles.textRight, styles.fontFamily, 
-                    styles.paddingRight,
-                    keyboardStyles.defaultInput]}>                            
+                    styles.paddingRight, keyboardStyles.defaultInput, keyboardStyles.largerInputFont]}>                            
                     {inputValue}
                 </CustomText>
             </View>
@@ -33,7 +32,7 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
                         <View key={index} style={styles.row}>
                         {row.map((key) => (
                             <Pressable key={key} onPress={() => onKeyPress(key)}>
-                                <CustomText style={[ styles.textColorWhite, styles.bold, styles.centerText, styles.circleGrey]}>{key}</CustomText>
+                                <CustomText style={[ styles.textColorWhite, styles.bold, styles.centerText, styles.circleGrey, styles.largerCircle]}>{key}</CustomText>
                             </Pressable>
                             ))}
                         </View>
@@ -45,7 +44,7 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
                             key={key}
                             onPress={() => onKeyPress(key)}
                             >
-                                <CustomText style={[ styles.textColorWhite, styles.bold, styles.centerText, styles.circleGrey]}>{key}</CustomText>
+                                <CustomText style={[ styles.textColorWhite, styles.bold, styles.centerText, styles.circleGrey, styles.largerCircle]}>{key}</CustomText>
                             </Pressable>
                         ) : (
                             <View key={`empty-${index}`} style={keyboardStyles.keyEmpty} />
