@@ -25,6 +25,7 @@ const borrowingStyles = StyleSheet.create({
         borderWidth: 2,
         marginBottom: 2,
         backgroundColor: 'white',
+        height: 32,
     },
     quoteToggle: {
         borderRadius: 20,

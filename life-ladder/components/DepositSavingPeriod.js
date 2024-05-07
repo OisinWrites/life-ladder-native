@@ -33,10 +33,6 @@ const DepositSavingPeriod = ({
     useEffect(() => {
         setPropertyPrice(estimatedPropertyValue !== '' ? handleFormattedDisplayTwoDecimal(estimatedPropertyValue) : 0);
     }, [estimatedPropertyValue]);
-
-    useEffect(() => {
-        setMortgageDrawdown(handleFormattedDisplayTwoDecimal(estimatedPropertyValue * 0.9));
-    }, [estimatedPropertyValue]);
   
     function calculateRegistryFee(propertyPrice) {
         if (propertyPrice <= 50000) return 400;

@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
     fontSize,
     color:'#03a1fc !important',
     fontFamily: 'Lato-Regular',
-    textAlign: 'center',
+    textAlign: 'right',
+    paddingRight: 10,
   }),
 });
 

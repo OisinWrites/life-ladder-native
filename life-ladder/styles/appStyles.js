@@ -164,6 +164,12 @@ const styles = StyleSheet.create({
       justifyContent: 'flex-end',
       justifyContent: 'space-between',
     },
+    paddingRight: {
+      paddingRight: 10,
+    },
+    fontFamily: {
+      fontFamily: 'Lato-Regular',
+    },
 });
 
 export default styles

@@ -7,7 +7,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
 import SlidingToggle from '../utils/toggleAnimation';
 import CustomText from '../utils/CustomText';
 import CustomTextInput from '../utils/CustomTextInput';
-
+import CustomNumericInput from '../utils/CustomNumericInput';
 
 import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal } from '../utils/FormatNumber';
 
@@ -27,14 +27,16 @@ const BorrowingCapacityCalculator = ({
     displayWarning,
     handleToggleComplete,
     estimatedPropertyValue,
-    setAllowRecalculation
+    setAllowRecalculation,
+    multiplier,
+    setMultiplier,
 }) => {
-    const [multiplier, setMultiplier] = useState(3.5);
     const formattedMaxBorrowableAmount = maxBorrowableAmount !== null ? handleFormattedDisplayTwoDecimal(parseFloat(maxBorrowableAmount)) : null;
     const formattedEstimatedPropertyValue = estimatedPropertyValue !== null ? handleFormattedDisplayTwoDecimal(parseFloat(estimatedPropertyValue)) : null;
 
+    const [numericInput, setNumericInput] = useState('');
     const [showInput, setShowInput] = useState(false);
-    const [exemptionGiven, setExemptionGiven] = useState()
+    const [exemptionGiven, setExemptionGiven] = useState('No')
     const [totalSalary, setTotalSalary] = useState(0);
 
     const firstTimeBuyerOptions = [
@@ -90,6 +92,14 @@ const BorrowingCapacityCalculator = ({
         }
     }, [showInput, salary1, salary2, multiplier, applicants]);
 
+    useEffect(() => {
+        if (multiplier === 4.5 && exemptionGiven === 'No') {
+          setMultiplier(3.5);
+        } else if (multiplier === 4 && firstTimeBuyer === 'No') {
+          setMultiplier(3.5);
+        }
+    }, [firstTimeBuyer, exemptionGiven, multiplier]);
+
     return (
         <View style={styles.container}>
             {displaySwap ? (
@@ -133,9 +143,8 @@ const BorrowingCapacityCalculator = ({
                                 styles.widthLimit,
                                 styles.marginLeft
                             ]}>                            
-                                <CustomTextInput
-                                    inputMode='numeric'
-                                    style={[styles.bigblue, styles.h2, styles.widthLimit]}                             
+                                <CustomNumericInput
+                                    style={[styles.bigblue, styles.h2, styles.bold, styles.widthLimit]}                             
                                     value={handleFormattedDisplay(salary1)}
                                     onChangeText={(text) => handleNumericChange(text, setSalary1)}
                                 />       
@@ -154,7 +163,7 @@ const BorrowingCapacityCalculator = ({
                             ]}>   
                                 <CustomTextInput
                                     inputMode='numeric'
-                                    style={[styles.bigblue, styles.h2]}                             
+                                    style={[styles.bigblue, styles.h2, styles.bold, styles.widthLimit]}                             
                                     value={handleFormattedDisplay(salary2)}
                                     onChangeText={(text) => handleNumericChange(text, setSalary2)}
                                 />
@@ -167,7 +176,7 @@ const BorrowingCapacityCalculator = ({
                         { salary1 > 0 && salary2 > 0 ? (
                             <>
                                 <CustomText>{'Combined Annual Salary:'}</CustomText>
-                                <CustomText>{handleFormattedDisplay(totalSalary)}</CustomText>
+                                <CustomText style={styles.marginRight}>{handleFormattedDisplay(totalSalary)}</CustomText>
                             </>
                          ) : null}
                     </View>
@@ -227,16 +236,16 @@ const BorrowingCapacityCalculator = ({
                             </View>
                         </View>
 
-                    <View style={[styles.row, styles.marginLeft, styles.marginTop]}>
+                    <View style={[styles.row, styles.marginLeft, styles.marginTop, styles.marginBottomTen]}>
                         <CustomText>Max Loan:</CustomText>
-                        <CustomText>{formattedMaxBorrowableAmount}</CustomText>
+                        <CustomText style={styles.marginRight}>{formattedMaxBorrowableAmount}</CustomText>
                     </View>
                     </>
                     }
 
-                    <View style={[styles.row, styles.marginLeft, styles.marginTop]}>
-                        <CustomText>Property Value @ 90% LTV: </CustomText>
-                        <CustomText>{formattedEstimatedPropertyValue}</CustomText>
+                    <View style={[styles.row, styles.marginLeft, styles.marginTop, styles.marginBottomTen]}>
+                        <CustomText>Property Value @ 80% LTV: </CustomText>
+                        <CustomText style={styles.marginRight}>{formattedEstimatedPropertyValue}</CustomText>
                     </View>
                     
                     <View style={[styles.row, styles.center, styles.marginTop]}>

@@ -78,13 +78,12 @@ const PersonalFinances= ({
                     
                     <View style={styles.row}>  
 
-                        <View style={styles.marginRight}>
+                        <View>
                             <View style={[styles.row, styles.center]}>
                                 <CustomText>Monthly Rent:</CustomText>
                                 <View style={[
                                     borrowingStyles.salaryInputs,
                                     styles.widthLimit,
-                                    styles.marginRight,
                                     styles.marginLeft
                                     ]}>
                                     <CustomTextInput
@@ -101,7 +100,6 @@ const PersonalFinances= ({
                                 <View style={[
                                     borrowingStyles.salaryInputs,
                                     styles.widthLimit,
-                                    styles.marginRight,
                                     styles.marginLeft
                                     ]}>
                                     <CustomTextInput
@@ -118,7 +116,6 @@ const PersonalFinances= ({
                                 <View style={[
                                     borrowingStyles.salaryInputs,
                                     styles.widthLimit,
-                                    styles.marginRight,
                                     styles.marginLeft
                                     ]}>
                                     <CustomTextInput
@@ -135,7 +132,6 @@ const PersonalFinances= ({
                                 <View style={[
                                     borrowingStyles.salaryInputs,
                                     styles.widthLimit,
-                                    styles.marginRight,
                                     styles.marginLeft
                                     ]}>
                                     <CustomTextInput
@@ -149,7 +145,7 @@ const PersonalFinances= ({
 
                             <View style={[styles.row, styles.marginVertical]}>
                                 <CustomText>Monthly Savings:</CustomText>
-                                <CustomText style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplayTwoDecimal(savingPowerMonthly1)}</CustomText>
+                                <CustomText style={[styles.textRight, styles.marginLeft, styles.marginRight]}>{handleFormattedDisplayTwoDecimal(savingPowerMonthly1)}</CustomText>
                             </View>
 
                             <View style={[styles.row, styles.center]}>
@@ -157,7 +153,6 @@ const PersonalFinances= ({
                                 <View style={[
                                     borrowingStyles.salaryInputs,
                                     styles.widthLimit,
-                                    styles.marginRight,
                                     styles.marginLeft
                                     ]}>
                                     <CustomTextInput
@@ -174,7 +169,6 @@ const PersonalFinances= ({
                                 <View style={[
                                     borrowingStyles.salaryInputs,
                                     styles.widthLimit,
-                                    styles.marginRight,
                                     styles.marginLeft
                                     ]}>
                                     <CustomTextInput
@@ -218,13 +212,12 @@ const PersonalFinances= ({
                             Applicant 2's Details
                         </CustomText>
                         <View style={styles.row}>
-                            <View style={styles.marginRight}>
+                            <View>
                                 <View style={[styles.row, styles.center]}>
                                     <CustomText>Monthly Rent:</CustomText>
                                     <View style={[
                                         borrowingStyles.salaryInputs,
                                         styles.widthLimit,
-                                        styles.marginRight,
                                         styles.marginLeft
                                         ]}>
                                         <CustomTextInput
@@ -241,7 +234,6 @@ const PersonalFinances= ({
                                     <View style={[
                                         borrowingStyles.salaryInputs,
                                         styles.widthLimit,
-                                        styles.marginRight,
                                         styles.marginLeft
                                         ]}>
                                         <CustomTextInput
@@ -258,7 +250,6 @@ const PersonalFinances= ({
                                     <View style={[
                                         borrowingStyles.salaryInputs,
                                         styles.widthLimit,
-                                        styles.marginRight,
                                         styles.marginLeft
                                         ]}>
                                         <CustomTextInput
@@ -275,7 +266,6 @@ const PersonalFinances= ({
                                     <View style={[
                                         borrowingStyles.salaryInputs,
                                         styles.widthLimit,
-                                        styles.marginRight,
                                         styles.marginLeft
                                         ]}>
                                         <CustomTextInput
@@ -289,7 +279,7 @@ const PersonalFinances= ({
 
                                 <View style={[styles.row, styles.marginVertical]}>
                                     <CustomText>Monthly Savings:</CustomText>
-                                    <CustomText style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplayTwoDecimal(savingPowerMonthly2)}</CustomText>
+                                    <CustomText style={[styles.textRight, styles.marginLeft, styles.marginRight]}>{handleFormattedDisplayTwoDecimal(savingPowerMonthly2)}</CustomText>
                                 </View>
 
                                 <View style={[styles.row, styles.center]}>
@@ -297,7 +287,6 @@ const PersonalFinances= ({
                                     <View style={[
                                         borrowingStyles.salaryInputs,
                                         styles.widthLimit,
-                                        styles.marginRight,
                                         styles.marginLeft
                                         ]}>
                                         <CustomTextInput
@@ -314,7 +303,6 @@ const PersonalFinances= ({
                                     <View style={[
                                         borrowingStyles.salaryInputs,
                                         styles.widthLimit,
-                                        styles.marginRight,
                                         styles.marginLeft
                                         ]}>
                                         <CustomTextInput

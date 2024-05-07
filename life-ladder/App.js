@@ -8,6 +8,7 @@ import { GlobalStylesProvider } from './utils/GlobalStylesContext';
 import CustomText from './utils/CustomText';
 import { handleFormattedDisplayTwoDecimal } from './utils/FormatNumber';
 
+import CustomNumericInput from './utils/CustomNumericInput';
 
 import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculator';
 import PersonalFinances from './components/PersonalFinances';
@@ -28,10 +29,8 @@ const normalizeNumber = (value) => {
 };
 
 function App() {
-  const [fontsLoaded] = useFonts({
-    Lato_400Regular,
-    Lato_700Bold,
-  });
+  const [fontsLoaded] = useFonts({Lato_400Regular, Lato_700Bold,});
+  const [numericInput, setNumericInput] = useState('');
 
   const [applicants, setApplicants] = useState(1);
   const [firstTimeBuyer, setFirstTimeBuyer] = useState('No');
@@ -50,8 +49,11 @@ function App() {
   const [estimatedPropertyValue, setEstimatedPropertyValue] = useState(0);
   const [allowRecalculation, setAllowRecalculation] = useState(true);
   const [rent1, setRent1] = useState('');
+  const [rent2, setRent2] = useState('');
   const [bills1, setBills1] = useState('');
+  const [bills2, setBills2] = useState('');
   const [weeklyDiscretionary1, setWeeklyDiscretionary1] = useState('');
+  const [weeklyDiscretionary2, setWeeklyDiscretionary2] = useState('');
   const [annualBills1, setAnnualBills1] = useState('');
   const [annualBills2, setAnnualBills2] = useState('');
   const [currentSavings1, setCurrentSavings1] = useState('');
@@ -61,6 +63,7 @@ function App() {
   const [savingPowerMonthly1, setSavingPowerMonthly1] = useState('');
   const [savingPowerMonthly2, setSavingPowerMonthly2] = useState('');
   const [mortgageDrawdown, setMortgageDrawdown] = useState(maxBorrowableAmount !== '' ? handleFormattedDisplayTwoDecimal(maxBorrowableAmount) : 0);
+  const [multiplier, setMultiplier] = useState(3.5);
     
   const handleHeaderClick = () => {
     if (borrowingSectionComplete) {
@@ -112,8 +115,6 @@ function App() {
                                    &&
                                    (applicants === 1 || (applicants === 2 && normalizeNumber(salary2) !== null && normalizeNumber(salary2) !== 0));
 
-  const multiplier = firstTimeBuyer === 'Yes' ? 4 : 3.5;
-
   useEffect(() => {
     if (allowRecalculation) {
       let totalSalary = parseFloat(salary1) || 0;
@@ -127,7 +128,7 @@ function App() {
 
   useEffect(() => {
     if (maxBorrowableAmount) {
-      const calculatedValue = (maxBorrowableAmount / 9) * 10;
+      const calculatedValue = (maxBorrowableAmount / 8) * 10;
       setEstimatedPropertyValue(calculatedValue);
     } else {
       setEstimatedPropertyValue(0);
@@ -160,6 +161,8 @@ function App() {
             handleToggleComplete={handleToggleComplete}
             estimatedPropertyValue={estimatedPropertyValue}
             setAllowRecalculation={setAllowRecalculation}
+            multiplier={multiplier}
+            setMultiplier={setMultiplier}
           />
         </View>
 
@@ -172,11 +175,17 @@ function App() {
             displayWarning2={displayWarning2}
             handleToggleComplete2={handleToggleComplete2}
             rent1={rent1}
+            rent2={rent2}
             setRent1={setRent1}
+            setRent2={setRent2}
             bills1={bills1}
             setBills1={setBills1}
+            bills2={bills2}
+            setBills2={setBills2}
             weeklyDiscretionary1={weeklyDiscretionary1}
+            weeklyDiscretionary2={weeklyDiscretionary2}
             setWeeklyDiscretionary1={setWeeklyDiscretionary1}
+            setWeeklyDiscretionary2={setWeeklyDiscretionary2}
             annualBills1={annualBills1}
             setAnnualBills1={setAnnualBills1}
             annualBills2={annualBills2}
@@ -188,7 +197,7 @@ function App() {
             otherSavingGoals1={otherSavingGoals1}
             setOtherSavingGoals1={setOtherSavingGoals1}
             otherSavingGoals2={otherSavingGoals2}
-            setotherSavingGoals2={setOtherSavingGoals2}
+            setOtherSavingGoals2={setOtherSavingGoals2}
             savingPowerMonthly1={savingPowerMonthly1}
             savingPowerMonthly2={savingPowerMonthly2}
             setSavingPowerMonthly1={setSavingPowerMonthly1}
