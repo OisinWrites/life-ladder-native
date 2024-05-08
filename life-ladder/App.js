@@ -12,14 +12,12 @@ import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculato
 import PersonalFinances from './components/PersonalFinances';
 import DepositSavingPeriod from './components/DepositSavingPeriod';
 
-import * as SplashScreen from 'expo-splash-screen';
 import {
   useFonts,
   Lato_400Regular,
   Lato_700Bold,
 } from '@expo-google-fonts/lato';
 
-SplashScreen.preventAutoHideAsync();
 
 const normalizeNumber = (value) => {
   const parsedValue = parseFloat(value);
