@@ -16,7 +16,7 @@ const borrowingStyles = StyleSheet.create({
         alignContent: 'center',
     },
     larger: {
-        fontSize: 16,
+        fontSize: 25,
     },
     salaryInputs: {
         paddingVertical: 3,
@@ -25,7 +25,6 @@ const borrowingStyles = StyleSheet.create({
         borderWidth: 2,
         marginBottom: 2,
         backgroundColor: 'white',
-        height: 32,
     },
     quoteToggle: {
         borderRadius: 20,

@@ -1,15 +1,28 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Modal, Pressable } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, StyleSheet, TextInput, Modal, Pressable, ScrollView } from 'react-native';
 import CustomKeyboard from './CustomKeyboard';
 import { useGlobalStyles } from './GlobalStylesContext';
 import keyboardStyles from '../styles/keyboardStyles';
 
-const CustomNumericInput = ({ value, onChangeText, placeholder, style, ...props }) => {
+const CustomNumericInput = ({ value, onChangeText, placeholder, style, scrollRef, ...props }) => {
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const { defaultFontSize, placeholderOpacity } = useGlobalStyles();
+  const inputRef = useRef(null);
 
   const handleToggleKeyboard = () => {
     setIsKeyboardVisible(!isKeyboardVisible);
+    
+    if (scrollRef && scrollRef.current && inputRef.current) {
+      inputRef.current.measureLayout(
+        scrollRef.current,
+        (left, top) => {
+          scrollRef.current.scrollTo({ y: top - 40, animated: true });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
   };
 
   const handleKeyPress = (key) => {
@@ -35,7 +48,7 @@ const CustomNumericInput = ({ value, onChangeText, placeholder, style, ...props 
   };
 
   return (
-    <View style={keyboardStyles.container}>
+    <View style={keyboardStyles.container} ref={inputRef}>
       <Pressable onPress={handleToggleKeyboard}>
         <TextInput
           {...props}
@@ -44,7 +57,7 @@ const CustomNumericInput = ({ value, onChangeText, placeholder, style, ...props 
           placeholderTextColor={`rgba(3, 161, 252, ${placeholderOpacity})`}
           placeholder={placeholder}
           inputMode="numeric"
-          readOnly={false} // Disable default keyboard
+          editable ={false} // Disable default keyboard
         />
       </Pressable>
       <Modal
@@ -53,18 +66,20 @@ const CustomNumericInput = ({ value, onChangeText, placeholder, style, ...props 
         visible={isKeyboardVisible}
         onRequestClose={handleClose}
       >
-        <Pressable style={styles.modalBackground} onPress={handleClose}>
-          <Pressable activeOpacity={1} style={styles.modalContainer}>
-            <CustomKeyboard
-              onKeyPress={handleKeyPress}
-              onDelete={handleDelete}
-              onClear={handleClear}
-              onSubmit={handleSubmit}
-              onClose={handleClose}
-              inputValue={value}
-            />
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+          <Pressable style={styles.modalBackground} onPress={handleClose}>
+            <Pressable activeOpacity={1} style={styles.modalContainer}>
+              <CustomKeyboard
+                onKeyPress={handleKeyPress}
+                onDelete={handleDelete}
+                onClear={handleClear}
+                onSubmit={handleSubmit}
+                onClose={handleClose}
+                inputValue={value}
+              />
+            </Pressable>
           </Pressable>
-        </Pressable>
+        </ScrollView>
       </Modal>
     </View>
   );

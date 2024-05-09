@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import CustomText from './CustomText';
 import {
   View,
   Pressable,
@@ -48,9 +49,9 @@ const SlidingToggle = ({ options = [], defaultOption, onSelect }) => {
             style={sliderStyle.toggleOption}
             onPress={() => toggleSelection(option.value)}
           >
-            <Text style={selected === option.label ? sliderStyle.activeText : sliderStyle.inactiveText}>
+            <CustomText style={selected === option.label ? sliderStyle.activeText : sliderStyle.inactiveText}>
               {option.label}
-            </Text>
+            </CustomText>
           </Pressable>
         ))}
       </View>

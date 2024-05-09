@@ -7,7 +7,6 @@ const keyboardStyles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         width: '100%',
-        padding: 10,
     },
     keyboardContainer: {
         flexDirection: 'column',
@@ -24,7 +23,7 @@ const keyboardStyles = StyleSheet.create({
         height: 80,
         marginBottom: 7,
         backgroundColor: '#03a1fc',
-        borderRadius: '50%',
+        borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -48,7 +47,6 @@ const keyboardStyles = StyleSheet.create({
     keyText: {
         color: '#ffffff',
         fontSize: 18,
-        fontWeight: 'bold',
     },
     keyEmpty: {
         width: '30%',
@@ -76,7 +74,6 @@ const keyboardStyles = StyleSheet.create({
     inputText: {
         color: '#03a1fc',
         fontSize: 24,
-        fontWeight: 'bold',
     },
     defaultInput: (fontSize) => ({
         fontSize,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable } from 'react-native';
 import styles from '../styles/appStyles'
 import keyboardStyles from '../styles/keyboardStyles';
 import borrowingStyles from '../styles/borrowingStyles';
@@ -18,13 +18,15 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
   return (
     <View style={keyboardStyles.keyboardWrapper}>
         <View style={[keyboardStyles.keyboardContainer, keyboardStyles.greyBorderTop]}>
-            <View style={[borrowingStyles.salaryInputs, styles.marginTop, styles.widthLimit, styles.marginBottom,  keyboardStyles.greyBorder, keyboardStyles.largerInputValue ]}>
-                <CustomText style={[styles.bigblue, styles.h2, 
-                    styles.bold, styles.widthLimit, 
-                    styles.textRight, styles.fontFamily, 
-                    styles.paddingRight, keyboardStyles.defaultInput, keyboardStyles.largerInputFont]}>                            
-                    {inputValue}
-                </CustomText>
+            <View style={[borrowingStyles.salaryInputs, styles.marginTop, styles.widthLimit, styles.marginBottom,  keyboardStyles.greyBorder, keyboardStyles.largerInputValue, styles.borderRadiusSemi ]}>
+                <View>
+                    <CustomText style={[
+                        styles.bigblue, styles.h2, 
+                        styles.bold, styles.paddingRight, 
+                        keyboardStyles.defaultInput, keyboardStyles.largerInputFont]}>                            
+                        {inputValue}
+                    </CustomText>
+                </View>
             </View>
             <View style={styles.row}>
                 <View style={styles.marginRight}>
@@ -32,7 +34,7 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
                         <View key={index} style={styles.row}>
                         {row.map((key) => (
                             <Pressable key={key} onPress={() => onKeyPress(key)}>
-                                <CustomText style={[ styles.textColorWhite, styles.bold, styles.centerText, styles.circleGrey, styles.largerCircle]}>{key}</CustomText>
+                                <CustomText style={[ styles.textColorWhite, styles.centerText, styles.circleGrey, styles.largerCircle]}>{key}</CustomText>
                             </Pressable>
                             ))}
                         </View>
@@ -44,7 +46,7 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
                             key={key}
                             onPress={() => onKeyPress(key)}
                             >
-                                <CustomText style={[ styles.textColorWhite, styles.bold, styles.centerText, styles.circleGrey, styles.largerCircle]}>{key}</CustomText>
+                                <CustomText style={[ styles.textColorWhite, styles.centerText, styles.circleGrey, styles.largerCircle]}>{key}</CustomText>
                             </Pressable>
                         ) : (
                             <View key={`empty-${index}`} style={keyboardStyles.keyEmpty} />

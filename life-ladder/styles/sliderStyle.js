@@ -34,12 +34,10 @@ const sliderStyle = StyleSheet.create({
     },
     activeText: {
       color: '#03a1fc',
-      fontWeight: 'bold',
       fontSize: 20,
     },
     inactiveText: {
       color: 'white',
-      fontWeight: 'bold',
       fontSize: 18,
     },
   });

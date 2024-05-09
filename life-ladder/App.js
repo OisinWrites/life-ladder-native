@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import { StatusBar, Platform, NativeModules } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Pressable, Image, ScrollView } from 'react-native';
 import styles from './styles/appStyles';
 import lifeladderheader from './assets/images/lifeladderheader.png';
@@ -12,12 +12,18 @@ import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculato
 import PersonalFinances from './components/PersonalFinances';
 import DepositSavingPeriod from './components/DepositSavingPeriod';
 
+import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import * as SplashScreen from 'expo-splash-screen';
 import {
   useFonts,
   Lato_400Regular,
   Lato_700Bold,
 } from '@expo-google-fonts/lato';
 
+SplashScreen.preventAutoHideAsync();
+
+const { StatusBarManager } = NativeModules;
 
 const normalizeNumber = (value) => {
   const parsedValue = parseFloat(value);
@@ -25,8 +31,13 @@ const normalizeNumber = (value) => {
 };
 
 function App() {
-  const [fontsLoaded] = useFonts({Lato_400Regular, Lato_700Bold,});
-  const [numericInput, setNumericInput] = useState('');
+  const scrollRef = useRef(null);
+  const insets = SafeAreaView;
+
+  const [fontsLoaded] = useFonts({
+    Lato_400Regular,
+    Lato_700Bold,
+  });
 
   const [applicants, setApplicants] = useState(1);
   const [firstTimeBuyer, setFirstTimeBuyer] = useState('No');
@@ -108,8 +119,8 @@ function App() {
   };
 
   const borrowingSectionComplete = (normalizeNumber(salary1) !== null && normalizeNumber(salary1) !== 0)
-                                   &&
-                                   (applicants === 1 || (applicants === 2 && normalizeNumber(salary2) !== null && normalizeNumber(salary2) !== 0));
+    &&
+    (applicants === 1 || (applicants === 2 && normalizeNumber(salary2) !== null && normalizeNumber(salary2) !== 0));
 
   useEffect(() => {
     if (allowRecalculation) {
@@ -131,101 +142,131 @@ function App() {
     }
   }, [maxBorrowableAmount]);
 
-  return (
-    <ScrollView>
-      <GlobalStylesProvider>
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      StatusBar.setHidden(true);
+      // To make fullscreen immersive mode on Android
+      const setFullscreen = async () => {
+        try {
+          await StatusBarManager.setFullscreen(true);
+        } catch (e) {
+          console.log(e);
+        }
+      };
+      setFullscreen();
+    }
+  }, []);
 
-        <Pressable style={[styles.appHeader, styles.fullHeight]} onPress={handleHeaderClick}>
-          <Image source={lifeladderheader} style={styles.logoHeader} />
-          <CustomText style={[styles.subHeaderText, styles.h2]}>Mortgage and Savings Calculator</CustomText>
-        </Pressable>
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync(); // Hide the splash screen when fonts are loaded
+    }
+  }, [fontsLoaded]);
 
-        <View style={[styles.main, styles.section, styles.center]}>
-          <BorrowingCapacityCalculator
-            applicants={applicants}
-            setApplicants={setApplicants}
-            firstTimeBuyer={firstTimeBuyer}
-            setFirstTimeBuyer={setFirstTimeBuyer}
-            salary1={salary1}
-            setSalary1={setSalary1}
-            salary2={salary2}
-            setSalary2={setSalary2}
-            maxBorrowableAmount={maxBorrowableAmount}
-            setMaxBorrowableAmount={setMaxBorrowableAmount}
-            displaySwap={displaySwap}
-            displayWarning={displayWarning}
-            handleToggleComplete={handleToggleComplete}
-            estimatedPropertyValue={estimatedPropertyValue}
-            setAllowRecalculation={setAllowRecalculation}
-            multiplier={multiplier}
-            setMultiplier={setMultiplier}
-          />
-        </View>
+  if (!fontsLoaded) {
+    return null; // Optionally, return a fallback view
+  }
 
-        <View style={[styles.main, styles.section, styles.center]}>
-          <PersonalFinances
-            applicants={applicants}
-            salary1={salary1}
-            salary2={salary2}
-            displaySwap2={displaySwap2}
-            displayWarning2={displayWarning2}
-            handleToggleComplete2={handleToggleComplete2}
-            rent1={rent1}
-            rent2={rent2}
-            setRent1={setRent1}
-            setRent2={setRent2}
-            bills1={bills1}
-            setBills1={setBills1}
-            bills2={bills2}
-            setBills2={setBills2}
-            weeklyDiscretionary1={weeklyDiscretionary1}
-            weeklyDiscretionary2={weeklyDiscretionary2}
-            setWeeklyDiscretionary1={setWeeklyDiscretionary1}
-            setWeeklyDiscretionary2={setWeeklyDiscretionary2}
-            annualBills1={annualBills1}
-            setAnnualBills1={setAnnualBills1}
-            annualBills2={annualBills2}
-            setAnnualBills2={setAnnualBills2}
-            currentSavings1={currentSavings1}
-            setCurrentSavings1={setCurrentSavings1}
-            currentSavings2={currentSavings2}
-            setCurrentSavings2={setCurrentSavings2}
-            otherSavingGoals1={otherSavingGoals1}
-            setOtherSavingGoals1={setOtherSavingGoals1}
-            otherSavingGoals2={otherSavingGoals2}
-            setOtherSavingGoals2={setOtherSavingGoals2}
-            savingPowerMonthly1={savingPowerMonthly1}
-            savingPowerMonthly2={savingPowerMonthly2}
-            setSavingPowerMonthly1={setSavingPowerMonthly1}
-            setSavingPowerMonthly2={setSavingPowerMonthly2}
-          />
-        </View>
-        <CustomText>{savingPowerMonthly1}</CustomText>
-        <CustomText>{savingPowerMonthly2}</CustomText>
+    return (
+      <SafeAreaProvider style={[styles.safeArea, { paddingTop: insets.top }]}>
 
-        <View style={[styles.main, styles.section, styles.center]}>
-          <DepositSavingPeriod
-            applicants={applicants}
-            maxBorrowableAmount={maxBorrowableAmount}
-            estimatedPropertyValue={estimatedPropertyValue}
-            displaySwap3={displaySwap3}
-            displayWarning3={displayWarning3}
-            handleToggleComplete3={handleToggleComplete3}
-            currentSavings1={currentSavings1}
-            currentSavings2={currentSavings2}
-            otherSavingGoals1={otherSavingGoals1}
-            otherSavingGoals2={otherSavingGoals2}
-            savingPowerMonthly1={savingPowerMonthly1}
-            savingPowerMonthly2={savingPowerMonthly2}
-            mortgageDrawdown={mortgageDrawdown}
-            setMortgageDrawdown={setMortgageDrawdown}
-          />
-        </View>
+        <ScrollView ref={scrollRef}>
+          <GlobalStylesProvider>
 
-      </GlobalStylesProvider>
-    </ScrollView>
-  );
-}
+            <Pressable style={[styles.appHeader, styles.fullHeight, styles.fullScreen ]} onPress={handleHeaderClick}>
+              <Image source={lifeladderheader} style={styles.logoHeader} />
+              <CustomText style={[styles.subHeaderText, styles.h2]}>Mortgage and Savings Calculator</CustomText>
+            </Pressable>
+
+            <View style={[styles.main, styles.section, styles.center ]}>
+              <BorrowingCapacityCalculator
+                applicants={applicants}
+                setApplicants={setApplicants}
+                firstTimeBuyer={firstTimeBuyer}
+                setFirstTimeBuyer={setFirstTimeBuyer}
+                salary1={salary1}
+                setSalary1={setSalary1}
+                salary2={salary2}
+                setSalary2={setSalary2}
+                maxBorrowableAmount={maxBorrowableAmount}
+                setMaxBorrowableAmount={setMaxBorrowableAmount}
+                displaySwap={displaySwap}
+                displayWarning={displayWarning}
+                handleToggleComplete={handleToggleComplete}
+                estimatedPropertyValue={estimatedPropertyValue}
+                setAllowRecalculation={setAllowRecalculation}
+                multiplier={multiplier}
+                setMultiplier={setMultiplier}
+                scrollRef={scrollRef}
+              />
+            </View>
+
+            <View style={[styles.main, styles.section, styles.center]}>
+              <PersonalFinances
+                applicants={applicants}
+                salary1={salary1}
+                salary2={salary2}
+                displaySwap2={displaySwap2}
+                displayWarning2={displayWarning2}
+                handleToggleComplete2={handleToggleComplete2}
+                rent1={rent1}
+                rent2={rent2}
+                setRent1={setRent1}
+                setRent2={setRent2}
+                bills1={bills1}
+                setBills1={setBills1}
+                bills2={bills2}
+                setBills2={setBills2}
+                weeklyDiscretionary1={weeklyDiscretionary1}
+                weeklyDiscretionary2={weeklyDiscretionary2}
+                setWeeklyDiscretionary1={setWeeklyDiscretionary1}
+                setWeeklyDiscretionary2={setWeeklyDiscretionary2}
+                annualBills1={annualBills1}
+                setAnnualBills1={setAnnualBills1}
+                annualBills2={annualBills2}
+                setAnnualBills2={setAnnualBills2}
+                currentSavings1={currentSavings1}
+                setCurrentSavings1={setCurrentSavings1}
+                currentSavings2={currentSavings2}
+                setCurrentSavings2={setCurrentSavings2}
+                otherSavingGoals1={otherSavingGoals1}
+                setOtherSavingGoals1={setOtherSavingGoals1}
+                otherSavingGoals2={otherSavingGoals2}
+                setOtherSavingGoals2={setOtherSavingGoals2}
+                savingPowerMonthly1={savingPowerMonthly1}
+                savingPowerMonthly2={savingPowerMonthly2}
+                setSavingPowerMonthly1={setSavingPowerMonthly1}
+                setSavingPowerMonthly2={setSavingPowerMonthly2}
+              />
+            </View>
+            <CustomText>{savingPowerMonthly1}</CustomText>
+            <CustomText>{savingPowerMonthly2}</CustomText>
+
+            <View style={[styles.main, styles.section, styles.center]}>
+              <DepositSavingPeriod
+                applicants={applicants}
+                maxBorrowableAmount={maxBorrowableAmount}
+                estimatedPropertyValue={estimatedPropertyValue}
+                displaySwap3={displaySwap3}
+                displayWarning3={displayWarning3}
+                handleToggleComplete3={handleToggleComplete3}
+                currentSavings1={currentSavings1}
+                currentSavings2={currentSavings2}
+                otherSavingGoals1={otherSavingGoals1}
+                otherSavingGoals2={otherSavingGoals2}
+                savingPowerMonthly1={savingPowerMonthly1}
+                savingPowerMonthly2={savingPowerMonthly2}
+                mortgageDrawdown={mortgageDrawdown}
+                setMortgageDrawdown={setMortgageDrawdown}
+              />
+            </View>
+
+          </GlobalStylesProvider>
+        </ScrollView>
+
+      </SafeAreaProvider>
+    );
+  }
 
 export default App;
 

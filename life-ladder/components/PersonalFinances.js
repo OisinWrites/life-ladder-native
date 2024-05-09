@@ -64,7 +64,7 @@ const PersonalFinances= ({
                 <View style={styles.marginBottom}>
                     <CustomText style={[styles.centerText, styles.header]}>Personal Finances</CustomText>
                     {displayWarning2 && 
-                        <CustomText style={[styles.textColorGreen, styles.centerText, styles.bold ]}>
+                        <CustomText style={[styles.textColorGreen, styles.centerText ]}>
                             Complete this section before moving on
                         </CustomText>
                     }
@@ -72,7 +72,7 @@ const PersonalFinances= ({
 
                 <View style={styles.marginBottom}>
                     {applicants === 2 && (
-                        <CustomText style={[styles.centerText, styles.h2, styles.marginBottom]}>
+                        <CustomText style={[styles.centerText , styles.marginBottom]}>
                             Applicant 1's Details</CustomText>
                     )}
                     
@@ -87,8 +87,8 @@ const PersonalFinances= ({
                                     styles.marginLeft
                                     ]}>
                                     <CustomNumericInput
-                                        
-                                        style={[styles.bigblue, styles.h2]}                             
+                                        placeholder='monthly'
+                                        style={[styles.bigblue ]}                             
                                         value={handleFormattedDisplay(rent1)}
                                         onChangeText={(text) => handleNumericChange(text, setRent1)}
                                     />       
@@ -104,7 +104,7 @@ const PersonalFinances= ({
                                     ]}>
                                     <CustomNumericInput
                                         
-                                        style={[styles.bigblue, styles.h2]}                             
+                                        style={[styles.bigblue ]}                             
                                         value={handleFormattedDisplay(bills1)}
                                         onChangeText={(text) => handleNumericChange(text, setBills1)}
                                     />       
@@ -120,7 +120,7 @@ const PersonalFinances= ({
                                     ]}>
                                     <CustomNumericInput
                                         
-                                        style={[styles.bigblue, styles.h2]}                             
+                                        style={[styles.bigblue ]}                             
                                         value={handleFormattedDisplay(weeklyDiscretionary1)}
                                         onChangeText={(text) => handleNumericChange(text, setWeeklyDiscretionary1)}
                                     />       
@@ -136,7 +136,7 @@ const PersonalFinances= ({
                                     ]}>
                                     <CustomNumericInput
                                         
-                                        style={[styles.bigblue, styles.h2]}                             
+                                        style={[styles.bigblue ]}                             
                                         value={handleFormattedDisplay(annualBills1)}
                                         onChangeText={(text) => handleNumericChange(text, setAnnualBills1)}
                                     />       
@@ -155,9 +155,8 @@ const PersonalFinances= ({
                                     styles.widthLimit,
                                     styles.marginLeft
                                     ]}>
-                                    <CustomNumericInput
-                                        
-                                        style={[styles.bigblue, styles.h2]}                             
+                                    <CustomNumericInput                                        
+                                        style={[styles.bigblue ]}                             
                                         value={handleFormattedDisplay(currentSavings1)}
                                         onChangeText={(text) => handleNumericChange(text, setCurrentSavings1)}
                                     />       
@@ -171,9 +170,8 @@ const PersonalFinances= ({
                                     styles.widthLimit,
                                     styles.marginLeft
                                     ]}>
-                                    <CustomNumericInput
-                                        
-                                        style={[styles.bigblue, styles.h2]}                             
+                                    <CustomNumericInput                                        
+                                        style={[styles.bigblue ]}                             
                                         value={handleFormattedDisplay(otherSavingGoals1)}
                                         onChangeText={(text) => handleNumericChange(text, setOtherSavingGoals1)}
                                     />       
@@ -208,7 +206,7 @@ const PersonalFinances= ({
 
                 { applicants === 2 && (
                     <View style={styles.marginBottom}>
-                        <CustomText style={[styles.centerText, styles.h2, styles.marginBottom]}>
+                        <CustomText style={[styles.centerText, styles.marginBottom]}>
                             Applicant 2's Details
                         </CustomText>
                         <View style={styles.row}>
@@ -222,7 +220,7 @@ const PersonalFinances= ({
                                         ]}>
                                         <CustomNumericInput
                                             
-                                            style={[styles.bigblue, styles.h2]}                             
+                                            style={[styles.bigblue ]}                             
                                             value={handleFormattedDisplay(rent2)}
                                             onChangeText={(text) => handleNumericChange(text, setRent2)}
                                         />       
@@ -238,7 +236,7 @@ const PersonalFinances= ({
                                         ]}>
                                         <CustomNumericInput
                                             
-                                            style={[styles.bigblue, styles.h2]}                             
+                                            style={[styles.bigblue ]}                             
                                             value={handleFormattedDisplay(bills2)}
                                             onChangeText={(text) => handleNumericChange(text, setBills2)}
                                         />       
@@ -254,7 +252,7 @@ const PersonalFinances= ({
                                         ]}>
                                         <CustomNumericInput
                                             
-                                            style={[styles.bigblue, styles.h2]}                             
+                                            style={[styles.bigblue ]}                             
                                             value={handleFormattedDisplay(weeklyDiscretionary2)}
                                             onChangeText={(text) => handleNumericChange(text, setWeeklyDiscretionary2)}
                                         />       
@@ -270,7 +268,7 @@ const PersonalFinances= ({
                                         ]}>
                                         <CustomNumericInput
                                             
-                                            style={[styles.bigblue, styles.h2]}                             
+                                            style={[styles.bigblue ]}                             
                                             value={handleFormattedDisplay(annualBills2)}
                                             onChangeText={(text) => handleNumericChange(text, setAnnualBills2)}
                                         />       
@@ -291,7 +289,7 @@ const PersonalFinances= ({
                                         ]}>
                                         <CustomNumericInput
                                             
-                                            style={[styles.bigblue, styles.h2]}                             
+                                            style={[styles.bigblue ]}                             
                                             value={handleFormattedDisplay(currentSavings2)}
                                             onChangeText={(text) => handleNumericChange(text, setCurrentSavings2)}
                                         />       
@@ -307,7 +305,7 @@ const PersonalFinances= ({
                                         ]}>
                                         <CustomNumericInput
                                             
-                                            style={[styles.bigblue, styles.h2]}                             
+                                            style={[styles.bigblue ]}                             
                                             value={handleFormattedDisplay(otherSavingGoals2)}
                                             onChangeText={(text) => handleNumericChange(text, setOtherSavingGoals2)}
                                         />       

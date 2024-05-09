@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, Animated, TextInput } from 'react-native';
+import { View, Pressable, Animated } from 'react-native';
 import borrowingStyles from '../styles/borrowingStyles';
 import styles from '../styles/appStyles';
 import sliderStyle from '../styles/sliderStyle';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
 import SlidingToggle from '../utils/toggleAnimation';
 import CustomText from '../utils/CustomText';
-import CustomTextInput from '../utils/CustomTextInput';
 import CustomNumericInput from '../utils/CustomNumericInput';
 
 import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal } from '../utils/FormatNumber';
@@ -30,11 +29,11 @@ const BorrowingCapacityCalculator = ({
     setAllowRecalculation,
     multiplier,
     setMultiplier,
+    scrollRef
 }) => {
     const formattedMaxBorrowableAmount = maxBorrowableAmount !== null ? handleFormattedDisplayTwoDecimal(parseFloat(maxBorrowableAmount)) : null;
     const formattedEstimatedPropertyValue = estimatedPropertyValue !== null ? handleFormattedDisplayTwoDecimal(parseFloat(estimatedPropertyValue)) : null;
 
-    const [numericInput, setNumericInput] = useState('');
     const [showInput, setShowInput] = useState(false);
     const [exemptionGiven, setExemptionGiven] = useState('No')
     const [totalSalary, setTotalSalary] = useState(0);
@@ -114,7 +113,7 @@ const BorrowingCapacityCalculator = ({
                     <View style={styles.marginBottom}>
                         <CustomText style={[styles.centerText, styles.header]}>Borrowing Capacity Calculator</CustomText>
                         {displayWarning && 
-                            <CustomText style={[styles.textColorGreen, styles.centerText, styles.bold ]}>
+                            <CustomText style={[styles.textColorGreen, styles.centerText ]}>
                                 Complete this section before moving on
                             </CustomText>
                         }
@@ -126,9 +125,9 @@ const BorrowingCapacityCalculator = ({
                         </CustomText>
                         <View style={[styles.sliderContainer, styles.sendRight]}>
                             <SlidingToggle
-                            options={applicantOptions}
-                            defaultOption={applicants}
-                            onSelect={(value) => setApplicants(value)}
+                                options={applicantOptions}
+                                defaultOption={applicants}
+                                onSelect={(value) => setApplicants(value)}
                             />
                         </View>
                     </View>
@@ -144,8 +143,10 @@ const BorrowingCapacityCalculator = ({
                                 styles.marginLeft
                             ]}>                            
                                 <CustomNumericInput
-                                    style={[styles.bigblue, styles.h2, styles.bold, styles.widthLimit]}                             
+                                    scrollRef={scrollRef}
+                                    style={[styles.bigblue, styles.h2, styles.widthLimit]}                             
                                     value={handleFormattedDisplay(salary1)}
+                                    placeholder='annual         '
                                     onChangeText={(text) => handleNumericChange(text, setSalary1)}
                                 />       
                             </View>
@@ -162,7 +163,8 @@ const BorrowingCapacityCalculator = ({
                                 styles.marginLeft
                             ]}>   
                             <CustomNumericInput
-                                    style={[styles.bigblue, styles.h2, styles.bold, styles.widthLimit]}                             
+                                    scrollRef={scrollRef}
+                                    style={[styles.bigblue, styles.h2, styles.widthLimit]}                             
                                     value={handleFormattedDisplay(salary2)}
                                     onChangeText={(text) => handleNumericChange(text, setSalary2)}
                                 />
@@ -212,22 +214,22 @@ const BorrowingCapacityCalculator = ({
                         <View style={[styles.center, styles.row, styles.marginLeft]}>
                             <CustomText style={[styles.marginRight]}>Borrowing Rate:</CustomText>
                             <View style={[styles.row, styles.widthLimit, styles.sendRight]}>
-                                <Pressable onPress={() => setMultiplier(3.5)}>
-                                    <CustomText style={[styles.textColorWhite, styles.bold, styles.centerText,
+                                <Pressable style={styles.center} onPress={() => setMultiplier(3.5)}>
+                                    <CustomText style={[styles.textColorWhite, styles.centerText, styles.lineHeight,
                                         multiplier === 3.5 ? styles.circleSelected : styles.circleGrey
                                     ]}>
                                         3.5x</CustomText>
                                 </Pressable>
                                 { firstTimeBuyer === 'Yes' && (
                                 <Pressable onPress={() => setMultiplier(4)}>
-                                    <CustomText style={[styles.textColorWhite, styles.bold, styles.centerText,
+                                    <CustomText style={[styles.textColorWhite, styles.centerText, styles.lineHeight,
                                         multiplier === 4 ? styles.circleSelected : styles.circleGrey
                                     ]}>
                                         4x</CustomText>
                                 </Pressable>)}
                                 { exemptionGiven === 'Yes' && (
                                 <Pressable onPress={() => setMultiplier(4.5)}>
-                                    <CustomText style={[styles.textColorWhite, styles.bold, styles.centerText,
+                                    <CustomText style={[styles.textColorWhite, styles.centerText, styles.lineHeight,
                                         multiplier === 4.5 ? styles.circleSelected : styles.circleGrey
                                     ]}>
                                         4.5x</CustomText>
@@ -251,7 +253,7 @@ const BorrowingCapacityCalculator = ({
                         <View style={[borrowingStyles.quoteToggle]}>
                             <Pressable onPress={() => {setShowInput(prev => !prev);
                                  setAllowRecalculation(prev => !prev);}}>
-                                <CustomText style={[styles.textColorWhite, styles.bold, styles.centerText]}>
+                                <CustomText style={[styles.textColorWhite, styles.centerText]}>
                                     {showInput ? 'Revert to Salary Multiplier?' : 'Use your own Mortgage Quote?'}
                                 </CustomText>                                
                             </Pressable>
@@ -263,6 +265,7 @@ const BorrowingCapacityCalculator = ({
                                 <CustomNumericInput
                                     style={[styles.bigblue, styles.h2]}                    
                                     value={handleFormattedDisplay(maxBorrowableAmount)}
+                                    scrollRef={scrollRef}
                                     onChangeText={(text) => handleNumericChange(text, setMaxBorrowableAmount)}
                                     placeholder="enter mortgage quote"
                                 />
