@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
       color: 'white',
     },
     subHeaderText: {
-      marginBottom: 40,
+      marginTop: 180,
       color: 'white',
     },
     appLink: {
@@ -68,6 +68,9 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       marginBottom: 2,
+    },
+    fixedRowHeight: {
+      height: 40,
     },
     centerText: {
       textAlign: 'center',
@@ -142,8 +145,8 @@ const styles = StyleSheet.create({
     },
     circleGrey: {
       alignContent: 'center',
-      height: 40,
-      width: 40,
+      height: 38,
+      width: 38,
       backgroundColor: '#91b0c2',
       borderRadius: 100,
       marginLeft: 6,
@@ -158,8 +161,8 @@ const styles = StyleSheet.create({
     },
     circleSelected: {
       textAlign: 'center',
-      height: 40,
-      width: 40,
+      height: 38,
+      width: 38,
       borderColor:  '#91b0c2',
       borderWidth: 3,
       borderRadius: 100,
@@ -168,7 +171,7 @@ const styles = StyleSheet.create({
       fontSize: 15,
     },
     lineHeight: {
-      lineHeight: 40,
+      lineHeight: 35,
     },
     justifyCenter: {
       justifyContent: 'flex-end',

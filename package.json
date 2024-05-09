@@ -8,6 +8,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-native-fontawesome": "^0.3.0",
     "expo": "^50.0.17",
+    "react-native-immersive": "^2.0.0",
     "react-native-vector-icons": "^10.1.0"
   }
 }

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Pressable, Animated } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Pressable } from 'react-native';
 import borrowingStyles from '../styles/borrowingStyles';
 import styles from '../styles/appStyles';
 import sliderStyle from '../styles/sliderStyle';
@@ -29,7 +29,8 @@ const BorrowingCapacityCalculator = ({
     setAllowRecalculation,
     multiplier,
     setMultiplier,
-    scrollRef
+    scrollRef,
+    onKeyboardVisibleChange,
 }) => {
     const formattedMaxBorrowableAmount = maxBorrowableAmount !== null ? handleFormattedDisplayTwoDecimal(parseFloat(maxBorrowableAmount)) : null;
     const formattedEstimatedPropertyValue = estimatedPropertyValue !== null ? handleFormattedDisplayTwoDecimal(parseFloat(estimatedPropertyValue)) : null;
@@ -37,6 +38,14 @@ const BorrowingCapacityCalculator = ({
     const [showInput, setShowInput] = useState(false);
     const [exemptionGiven, setExemptionGiven] = useState('No')
     const [totalSalary, setTotalSalary] = useState(0);
+
+    const salary1Ref = useRef(null);
+    const salary2Ref = useRef(null);
+    const maxBorrowableAmountRef = useRef(null);
+
+    const focusInput = () => {
+        inputRef.current.focus();
+    };
 
     const firstTimeBuyerOptions = [
         {
@@ -99,6 +108,16 @@ const BorrowingCapacityCalculator = ({
         }
     }, [firstTimeBuyer, exemptionGiven, multiplier]);
 
+    const handleNext = (currentRef) => {
+        if (currentRef === salary1Ref && applicants === 2) {
+          salary2Ref.current && salary2Ref.current.handleToggleKeyboard();
+        } else if (currentRef === salary2Ref) {
+          maxBorrowableAmountRef.current && maxBorrowableAmountRef.current.handleToggleKeyboard();
+        } else {
+          currentRef.current && currentRef.current.handleToggleKeyboard();
+        }
+    };
+
     return (
         <View style={styles.container}>
             {displaySwap ? (
@@ -109,7 +128,7 @@ const BorrowingCapacityCalculator = ({
                 </View>
             ) : (
                 <View>
-                    
+                                                
                     <View style={styles.marginBottom}>
                         <CustomText style={[styles.centerText, styles.header]}>Borrowing Capacity Calculator</CustomText>
                         {displayWarning && 
@@ -119,7 +138,7 @@ const BorrowingCapacityCalculator = ({
                         }
                     </View>
 
-                    <View style={[styles.row, styles.center, styles.marginLeft]}>
+                    <View style={[styles.row, styles.fixedRowHeight, styles.center, styles.marginLeft]}>
                         <CustomText style={[styles.marginRight]}>
                             Number of Applicants:
                         </CustomText>
@@ -133,7 +152,7 @@ const BorrowingCapacityCalculator = ({
                     </View>
 
                     <View>
-                        <View style={[styles.row, styles.center, styles.marginLeft]}>
+                        <View style={[styles.row, styles.fixedRowHeight, styles.center, styles.marginLeft]}>                            
                             <CustomText>
                                 {applicants === 2 ? ("Applicant 1's Annual Salary") : ("Your Annual Salary")}:
                             </CustomText>
@@ -143,17 +162,18 @@ const BorrowingCapacityCalculator = ({
                                 styles.marginLeft
                             ]}>                            
                                 <CustomNumericInput
+                                    onKeyboardVisibleChange={onKeyboardVisibleChange}
                                     scrollRef={scrollRef}
-                                    style={[styles.bigblue, styles.h2, styles.widthLimit]}                             
-                                    value={handleFormattedDisplay(salary1)}
-                                    placeholder='annual         '
+                                    ref={salary1Ref}
+                                    onNext={() => handleNext(salary1Ref)}
+                                    style={styles.bigblue}                             
+                                    value={handleFormattedDisplay(salary1)}                                    
                                     onChangeText={(text) => handleNumericChange(text, setSalary1)}
                                 />       
                             </View>
                         </View>
                         {applicants === 2 && (
-                        <View style={[styles.row, styles.center, styles.marginLeft]}>
-    
+                        <View style={[styles.row, styles.fixedRowHeight, styles.center, styles.marginLeft]}>    
                             <CustomText>
                                 Applicant 2's Annual Salary:
                             </CustomText>
@@ -163,111 +183,115 @@ const BorrowingCapacityCalculator = ({
                                 styles.marginLeft
                             ]}>   
                             <CustomNumericInput
-                                    scrollRef={scrollRef}
-                                    style={[styles.bigblue, styles.h2, styles.widthLimit]}                             
-                                    value={handleFormattedDisplay(salary2)}
-                                    onChangeText={(text) => handleNumericChange(text, setSalary2)}
-                                />
+                                onKeyboardVisibleChange={onKeyboardVisibleChange}
+                                scrollRef={scrollRef}
+                                ref={salary2Ref}
+                                style={[styles.bigblue]}                             
+                                value={handleFormattedDisplay(salary2)}
+                                onChangeText={(text) => handleNumericChange(text, setSalary2)}
+                                onNext={() => handleNext(salary2Ref)}
+                            />
                             </View>
                         </View>
                         )}
                     </View>
 
-                    <View style={[styles.row, styles.marginLeft]}>
                     {(parseFloat(salary1) || 0) > 0 && (parseFloat(salary2) || 0) > 0 ? (
-                            <>
-                                <CustomText>{'Combined Annual Salary:'}</CustomText>
-                                <CustomText style={styles.marginRight}>{handleFormattedDisplay(totalSalary)}</CustomText>
-                            </>
-                         ) : null}
+                    <View style={[styles.row, styles.fixedRowHeight, styles.center, styles.marginLeft]}>                        
+                        <CustomText>{'Combined Annual Salary:'}</CustomText>
+                        <CustomText style={styles.marginRight}>{handleFormattedDisplay(totalSalary)}</CustomText>
                     </View>
-
+                         ) : null}
                     
                     { !showInput &&
-                        <>
-                        <View style={[styles.row, styles.center, styles.marginLeft]}>
-                            <CustomText style={[styles.marginRight]}>
-                                {applicants === 2 ? 'Both first-time buyers?' : 'First-time buyer?'}
-                            </CustomText>
-                            <View style={[sliderStyle.container, styles.sendRight, styles.marginLeft]}>
-                                <SlidingToggle
-                                    options={firstTimeBuyerOptions}
-                                    defaultOption={firstTimeBuyer}
-                                    onSelect={(value) => setFirstTimeBuyer(value)}
-                                    />
+                        <View>
+                            <View style={[styles.row, styles.fixedRowHeight, styles.center, styles.marginLeft]}>                                
+                                <CustomText style={[styles.marginRight]}>
+                                    {applicants === 2 ? 'Both first-time buyers?' : 'First-time buyer?'}
+                                </CustomText>
+                                <View style={[sliderStyle.container, styles.sendRight, styles.marginLeft]}>
+                                    <SlidingToggle
+                                        options={firstTimeBuyerOptions}
+                                        defaultOption={firstTimeBuyer}
+                                        onSelect={(value) => setFirstTimeBuyer(value)}
+                                        />
+                                </View>
+                            </View>
+
+                            <View style={[styles.row, styles.fixedRowHeight, styles.center, styles.marginLeft]}>
+                                <CustomText style={[styles.marginRight]}>Borrowing Rate Exemption:</CustomText>
+                                <View style={[sliderStyle.container, styles.sendRight, styles.marginLeft]}>
+                                    <SlidingToggle
+                                        options={exemptionGivenOptions}
+                                        defaultOption={'No'}
+                                        onSelect={(value) => setExemptionGiven(value)}
+                                        />
+                                </View>
+                            </View>
+
+                            <View style={[styles.row, styles.fixedRowHeight, styles.center, styles.marginLeft]}>
+                                <CustomText style={[styles.marginRight]}>Borrowing Rate:</CustomText>
+                                <View style={[styles.container, styles.row, styles.sendRight, styles.marginLeft]}>
+                                    
+                                        <Pressable style={[styles.center, styles.sendRight]} onPress={() => setMultiplier(3.5)}>
+                                            <CustomText style={[styles.textColorWhite, styles.centerText, styles.lineHeight,
+                                                multiplier === 3.5 ? styles.circleSelected : styles.circleGrey
+                                            ]}>
+                                                3.5x</CustomText>
+                                        </Pressable>
+                                        { firstTimeBuyer === 'Yes' && (
+                                        <Pressable onPress={() => setMultiplier(4)}>
+                                            <CustomText style={[styles.textColorWhite, styles.centerText, styles.lineHeight,
+                                                multiplier === 4 ? styles.circleSelected : styles.circleGrey
+                                            ]}>
+                                                4x</CustomText>
+                                        </Pressable>)}
+                                        { exemptionGiven === 'Yes' && (
+                                        <Pressable onPress={() => setMultiplier(4.5)}>
+                                            <CustomText style={[styles.textColorWhite, styles.centerText, styles.lineHeight,
+                                                multiplier === 4.5 ? styles.circleSelected : styles.circleGrey
+                                            ]}>
+                                                4.5x</CustomText>
+                                        </Pressable>)}
+                                    
+                                </View>
+                            </View>
+
+                            <View style={[styles.row, styles.fixedRowHeight, styles.center, styles.marginLeft]}>
+                                <CustomText>Max Loan:</CustomText>
+                                <CustomText style={styles.marginRight}>{formattedMaxBorrowableAmount}</CustomText>
                             </View>
                         </View>
-
-                        <View style={[styles.row, styles.center, styles.marginLeft]}>
-                            <CustomText style={[styles.marginRight]}>
-                                Borrowing Rate Exemption:
-                            </CustomText>
-                            <View style={[sliderStyle.container, styles.sendRight, styles.marginLeft]}>
-                                <SlidingToggle
-                                    options={exemptionGivenOptions}
-                                    defaultOption={'No'}
-                                    onSelect={(value) => setExemptionGiven(value)}
-                                    />
-                            </View>
-                        </View>
-
-                        <View style={[styles.center, styles.row, styles.marginLeft]}>
-                            <CustomText style={[styles.marginRight]}>Borrowing Rate:</CustomText>
-                            <View style={[styles.row, styles.widthLimit, styles.sendRight]}>
-                                <Pressable style={styles.center} onPress={() => setMultiplier(3.5)}>
-                                    <CustomText style={[styles.textColorWhite, styles.centerText, styles.lineHeight,
-                                        multiplier === 3.5 ? styles.circleSelected : styles.circleGrey
-                                    ]}>
-                                        3.5x</CustomText>
-                                </Pressable>
-                                { firstTimeBuyer === 'Yes' && (
-                                <Pressable onPress={() => setMultiplier(4)}>
-                                    <CustomText style={[styles.textColorWhite, styles.centerText, styles.lineHeight,
-                                        multiplier === 4 ? styles.circleSelected : styles.circleGrey
-                                    ]}>
-                                        4x</CustomText>
-                                </Pressable>)}
-                                { exemptionGiven === 'Yes' && (
-                                <Pressable onPress={() => setMultiplier(4.5)}>
-                                    <CustomText style={[styles.textColorWhite, styles.centerText, styles.lineHeight,
-                                        multiplier === 4.5 ? styles.circleSelected : styles.circleGrey
-                                    ]}>
-                                        4.5x</CustomText>
-                                </Pressable>)}
-                            </View>
-                        </View>
-
-                    <View style={[styles.row, styles.marginLeft, styles.marginTop, styles.marginBottomTen]}>
-                        <CustomText>Max Loan:</CustomText>
-                        <CustomText style={styles.marginRight}>{formattedMaxBorrowableAmount}</CustomText>
-                    </View>
-                    </>
                     }
 
-                    <View style={[styles.row, styles.marginLeft, styles.marginTop, styles.marginBottomTen]}>
+                    <View style={[styles.row, styles.fixedRowHeight, styles.center, styles.marginLeft]}>
                         <CustomText>Property Value @ 80% LTV: </CustomText>
                         <CustomText style={styles.marginRight}>{formattedEstimatedPropertyValue}</CustomText>
                     </View>
                     
-                    <View style={[styles.row, styles.center, styles.marginTop]}>
-                        <View style={[borrowingStyles.quoteToggle]}>
+                    <View style={[styles.row, styles.fixedRowHeight, styles.centerText, styles.lineHeight]}>
+                            
                             <Pressable onPress={() => {setShowInput(prev => !prev);
                                  setAllowRecalculation(prev => !prev);}}>
-                                <CustomText style={[styles.textColorWhite, styles.centerText]}>
-                                    {showInput ? 'Revert to Salary Multiplier?' : 'Use your own Mortgage Quote?'}
-                                </CustomText>                                
+                                <View style={[borrowingStyles.quoteToggle, styles.centerText, styles.fixedRowHeight]}>
+                                    <CustomText style={[styles.textColorWhite, styles.marginVertical]}>
+                                        {showInput ? 'Revert to calculator?' : 'Use a manual quote?'}
+                                    </CustomText>   
+                                </View>                             
                             </Pressable>
-                        </View>
-                        <View style={[styles.widthLimit, styles.marginLeft,
+                        
+                        <View style={[ styles.marginLeft, styles.widthLimit,
                             showInput && borrowingStyles.salaryInputs,
                             ]}>
                             {showInput && (
                                 <CustomNumericInput
-                                    style={[styles.bigblue, styles.h2]}                    
+                                    onKeyboardVisibleChange={onKeyboardVisibleChange}
+                                    style={[styles.bigblue]}                    
                                     value={handleFormattedDisplay(maxBorrowableAmount)}
                                     scrollRef={scrollRef}
+                                    ref={maxBorrowableAmountRef}
+                                    onNext={() => handleNext(maxBorrowableAmountRef)}
                                     onChangeText={(text) => handleNumericChange(text, setMaxBorrowableAmount)}
-                                    placeholder="enter mortgage quote"
                                 />
                             )}    
                         </View>

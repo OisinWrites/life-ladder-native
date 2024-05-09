@@ -12,7 +12,7 @@ import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculato
 import PersonalFinances from './components/PersonalFinances';
 import DepositSavingPeriod from './components/DepositSavingPeriod';
 
-import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import * as SplashScreen from 'expo-splash-screen';
 import {
@@ -33,6 +33,7 @@ const normalizeNumber = (value) => {
 function App() {
   const scrollRef = useRef(null);
   const insets = SafeAreaView;
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const [fontsLoaded] = useFonts({
     Lato_400Regular,
@@ -145,7 +146,6 @@ function App() {
   useEffect(() => {
     if (Platform.OS === 'android') {
       StatusBar.setHidden(true);
-      // To make fullscreen immersive mode on Android
       const setFullscreen = async () => {
         try {
           await StatusBarManager.setFullscreen(true);
@@ -198,6 +198,7 @@ function App() {
                 multiplier={multiplier}
                 setMultiplier={setMultiplier}
                 scrollRef={scrollRef}
+                onKeyboardVisibleChange={setIsKeyboardVisible}
               />
             </View>
 
@@ -237,6 +238,8 @@ function App() {
                 savingPowerMonthly2={savingPowerMonthly2}
                 setSavingPowerMonthly1={setSavingPowerMonthly1}
                 setSavingPowerMonthly2={setSavingPowerMonthly2}
+                scrollRef={scrollRef}
+                onKeyboardVisibleChange={setIsKeyboardVisible}
               />
             </View>
             <CustomText>{savingPowerMonthly1}</CustomText>
@@ -258,8 +261,25 @@ function App() {
                 savingPowerMonthly2={savingPowerMonthly2}
                 mortgageDrawdown={mortgageDrawdown}
                 setMortgageDrawdown={setMortgageDrawdown}
+                scrollRef={scrollRef}
+                onKeyboardVisibleChange={setIsKeyboardVisible}
               />
             </View>
+
+            <View>
+              {isKeyboardVisible && (
+                <View style={[styles.center, styles.row, { backgroundColor: 'yellow', padding: 10 }]}>
+                  <CustomText style={{ color: 'red', fontWeight: 'bold' }}>
+                    Custom Keyboard is Active
+                  </CustomText>
+                </View>
+              )}
+            </View>
+
+            {isKeyboardVisible && (
+              <View style={[styles.fullScreen]}>
+              </View>
+            )}
 
           </GlobalStylesProvider>
         </ScrollView>

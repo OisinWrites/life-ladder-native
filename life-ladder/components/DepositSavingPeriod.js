@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View } from 'react-native';
 import styles from '../styles/appStyles';
 import borrowingStyles from '../styles/borrowingStyles';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
 import CustomText from '../utils/CustomText';
 import CustomNumericInput from '../utils/CustomNumericInput';
 
@@ -23,8 +22,14 @@ const DepositSavingPeriod = ({
     savingPowerMonthly1,
     savingPowerMonthly2,
     mortgageDrawdown,
-    setMortgageDrawdown
+    setMortgageDrawdown,
+    scrollRef,
+    onKeyboardVisibleChange,
 }) => {
+
+    
+    const propertyPriceRef = useRef(null);
+    const drawdownRef = useRef(null);
 
     const [propertyPrice, setPropertyPrice] = useState(
         estimatedPropertyValue !== '' ? handleFormattedDisplayTwoDecimal(estimatedPropertyValue) || 0 : 0
@@ -65,6 +70,15 @@ const DepositSavingPeriod = ({
     const propertyTax = calculatePropertyTax(propertyPrice);
     const totalAdditionalCosts = stampDuty + solicitorFees + valuerReport + surveyorReport + insuranceCosts + registryFee + propertyTax;
 
+    const handleNext = (currentRef) => {
+        if (currentRef === salary1Ref && applicants === 2) {
+          salary2Ref.current && salary2Ref.current.handleToggleKeyboard();
+        } else if (currentRef === salary2Ref) {
+          maxBorrowableAmountRef.current && maxBorrowableAmountRef.current.handleToggleKeyboard();
+        } else {
+          currentRef.current && currentRef.current.handleToggleKeyboard();
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -94,6 +108,10 @@ const DepositSavingPeriod = ({
                             styles.marginLeft
                             ]}>
                             <CustomNumericInput
+                                onKeyboardVisibleChange={onKeyboardVisibleChange}
+                                scrollRef={scrollRef}
+                                ref={propertyPriceRef}
+                                onNext={() => handleNext(propertyPriceRef)}
                                 style={[styles.bigblue, styles.h2]}                             
                                 value={handleFormattedDisplay(propertyPrice)}
                                 onChangeText={(text) => handleNumericChange(text, setPropertyPrice)}
@@ -110,6 +128,10 @@ const DepositSavingPeriod = ({
                             styles.marginLeft
                             ]}>
                             <CustomNumericInput
+                                scrollRef={scrollRef}
+                                ref={drawdownRef}
+                                onNext={() => handleNext(drawdownRef)}
+                                onKeyboardVisibleChange={onKeyboardVisibleChange}
                                 style={[styles.bigblue, styles.h2]}                             
                                 value={handleFormattedDisplay(mortgageDrawdown)}
                                 onChangeText={(text) => handleNumericChange(text, setMortgageDrawdown)}

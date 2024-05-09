@@ -23,15 +23,14 @@ const borrowingStyles = StyleSheet.create({
         borderRadius: 20,
         borderColor: '#91b0c2',
         borderWidth: 2,
-        marginBottom: 2,
         backgroundColor: 'white',
+        height: 40,
     },
     quoteToggle: {
         borderRadius: 20,
         backgroundColor: '#91b0c2',
         paddingTop: 5,
         marginBottom: 2,
-        height: 33,
         paddingHorizontal: 8,
     },
     manualInput: {

@@ -1,16 +1,23 @@
-import React, { useState, useRef } from 'react';
-import { View, StyleSheet, TextInput, Modal, Pressable, ScrollView } from 'react-native';
+import React, { useState, useRef, useImperativeHandle, forwardRef, useEffect } from 'react';
+import { View, StyleSheet, TextInput, Modal, Pressable, ScrollView, StatusBar } from 'react-native';
 import CustomKeyboard from './CustomKeyboard';
 import { useGlobalStyles } from './GlobalStylesContext';
 import keyboardStyles from '../styles/keyboardStyles';
 
-const CustomNumericInput = ({ value, onChangeText, placeholder, style, scrollRef, ...props }) => {
+const CustomNumericInput = forwardRef(({
+  value, onChangeText, placeholder, 
+  style, scrollRef, onNext, 
+  onKeyboardVisibleChange, ...props }, ref) => {
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const { defaultFontSize, placeholderOpacity } = useGlobalStyles();
   const inputRef = useRef(null);
 
   const handleToggleKeyboard = () => {
-    setIsKeyboardVisible(!isKeyboardVisible);
+    const newVisibility = !isKeyboardVisible;
+    setIsKeyboardVisible(newVisibility);
+    if (onKeyboardVisibleChange) {
+      onKeyboardVisibleChange(newVisibility);
+    }
     
     if (scrollRef && scrollRef.current && inputRef.current) {
       inputRef.current.measureLayout(
@@ -24,6 +31,13 @@ const CustomNumericInput = ({ value, onChangeText, placeholder, style, scrollRef
       );
     }
   };
+
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      handleToggleKeyboard(true);
+    },
+    handleToggleKeyboard,
+  }));
 
   const handleKeyPress = (key) => {
     const newValue = value + key;
@@ -41,11 +55,35 @@ const CustomNumericInput = ({ value, onChangeText, placeholder, style, scrollRef
 
   const handleSubmit = () => {
     setIsKeyboardVisible(false);
+    if (onKeyboardVisibleChange) {
+      onKeyboardVisibleChange(false);
+    }
   };
 
   const handleClose = () => {
     setIsKeyboardVisible(false);
+    if (onKeyboardVisibleChange) {
+      onKeyboardVisibleChange(false);
+    }
   };
+
+  const handleNext = () => {
+    if (onNext) {
+        setIsKeyboardVisible(false);
+      if (onKeyboardVisibleChange) {
+        onKeyboardVisibleChange(false);
+      };
+      onNext();
+    }
+  };
+
+  useEffect(() => {
+    // Hide the status bar when the custom keyboard is visible
+    setIsKeyboardVisible((prevVisibility) => {
+      StatusBar.setHidden(prevVisibility);
+      return prevVisibility;
+    });
+  }, [isKeyboardVisible]);
 
   return (
     <View style={keyboardStyles.container} ref={inputRef}>
@@ -75,6 +113,7 @@ const CustomNumericInput = ({ value, onChangeText, placeholder, style, scrollRef
                 onClear={handleClear}
                 onSubmit={handleSubmit}
                 onClose={handleClose}
+                onNext={handleNext}
                 inputValue={value}
               />
             </Pressable>
@@ -83,7 +122,7 @@ const CustomNumericInput = ({ value, onChangeText, placeholder, style, scrollRef
       </Modal>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   modalBackground: {

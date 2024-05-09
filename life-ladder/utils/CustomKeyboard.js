@@ -5,7 +5,7 @@ import keyboardStyles from '../styles/keyboardStyles';
 import borrowingStyles from '../styles/borrowingStyles';
 import CustomText from './CustomText';
 
-const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inputValue, }) => {
+const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inputValue, onNext }) => {
   const keys = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', '.' ];
 
   const rows = [
@@ -24,7 +24,7 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
                         styles.bigblue, styles.h2, 
                         styles.bold, styles.paddingRight, 
                         keyboardStyles.defaultInput, keyboardStyles.largerInputFont]}>                            
-                        {inputValue}
+                        {inputValue || ' '}
                     </CustomText>
                 </View>
             </View>
@@ -55,6 +55,9 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
                     </View>
                 </View>
                 <View style={styles.marginLeft}>
+                    <Pressable style={[keyboardStyles.key, keyboardStyles.greyBorder, keyboardStyles.nextKey]} onPress={onNext}>
+                        <CustomText style={keyboardStyles.keyText}>Next</CustomText>
+                    </Pressable>
                     <Pressable style={[keyboardStyles.key, keyboardStyles.greyBorder, keyboardStyles.submitKey]} onPress={onSubmit}>
                         <CustomText style={keyboardStyles.keyText}>Submit</CustomText>
                     </Pressable>

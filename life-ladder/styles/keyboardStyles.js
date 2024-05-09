@@ -41,6 +41,9 @@ const keyboardStyles = StyleSheet.create({
     clearKey: {
         backgroundColor: '#3DB7FD',
     },
+    nextKey: {
+        backgroundColor: '#20A14A',
+    },
     submitKey: {
         backgroundColor: '#20A14A',
     },
@@ -78,7 +81,6 @@ const keyboardStyles = StyleSheet.create({
     defaultInput: (fontSize) => ({
         fontSize,
         color:'#03a1fc',
-        fontFamily: 'Lato-Regular',
         textAlign: 'right',
         paddingRight: 10,
     }),
