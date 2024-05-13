@@ -1,4 +1,8 @@
 export const formatNumber = (value) => {
+  if (value === null || value === undefined) {
+    return '';
+  }
+  
   const stringValue = String(value || '');
   const numericalValue = stringValue.replace(/[^\d.-]/g, '');
   const formattedValue = numericalValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -42,3 +46,16 @@ export const handleFormattedDisplayTwoDecimal = (value) => {
   const number = parseFloat(value) || 0;
   return handleFormattedDisplay(number.toFixed(2));
 };
+
+export const parseFormattedNumber = (formattedValue) => {
+  if (formattedValue === null || formattedValue === undefined) {
+    return 0;
+  }
+
+  const stringValue = String(formattedValue);
+
+  const cleanNumberString = stringValue.replace(/[^\d.-]/g, '');
+
+  return parseFloat(cleanNumberString) || 0;
+};
+

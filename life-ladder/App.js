@@ -42,7 +42,7 @@ function App() {
 
   const [applicants, setApplicants] = useState(1);
   const [firstTimeBuyer, setFirstTimeBuyer] = useState('No');
-  const [salary1, setSalary1] = useState(null);
+  const [salary1, setSalary1] = useState(50000);
   const [salary2, setSalary2] = useState(null);
   const [maxBorrowableAmount, setMaxBorrowableAmount] = useState(null);
 
@@ -70,7 +70,7 @@ function App() {
   const [otherSavingGoals2, setOtherSavingGoals2] = useState('');
   const [savingPowerMonthly1, setSavingPowerMonthly1] = useState('');
   const [savingPowerMonthly2, setSavingPowerMonthly2] = useState('');
-  const [mortgageDrawdown, setMortgageDrawdown] = useState(maxBorrowableAmount !== '' ? handleFormattedDisplayTwoDecimal(maxBorrowableAmount) : 0);
+  const [mortgageDrawdown, setMortgageDrawdown] = useState(estimatedPropertyValue * 0.8);
   const [multiplier, setMultiplier] = useState(3.5);
     
   const handleHeaderClick = () => {
@@ -122,6 +122,11 @@ function App() {
   const borrowingSectionComplete = (normalizeNumber(salary1) !== null && normalizeNumber(salary1) !== 0)
     &&
     (applicants === 1 || (applicants === 2 && normalizeNumber(salary2) !== null && normalizeNumber(salary2) !== 0));
+  
+  useEffect(() => {
+    // Update mortgageDrawdown whenever estimatedPropertyValue changes
+    setMortgageDrawdown(estimatedPropertyValue * 0.8);
+  }, [estimatedPropertyValue]);
 
   useEffect(() => {
     if (allowRecalculation) {
@@ -133,7 +138,7 @@ function App() {
       setMaxBorrowableAmount(calculatedAmount);
     }
   }, [salary1, salary2, applicants, multiplier, allowRecalculation]);
-
+  
   useEffect(() => {
     if (maxBorrowableAmount) {
       const calculatedValue = (maxBorrowableAmount / 8) * 10;
@@ -177,7 +182,9 @@ function App() {
               <Image source={lifeladderheader} style={styles.logoHeader} />
               <CustomText style={[styles.subHeaderText, styles.h2]}>Mortgage and Savings Calculator</CustomText>
             </Pressable>
-
+            <CustomText>estimatedPropertyValue: {estimatedPropertyValue}</CustomText>
+            <CustomText>MortgageDrawdown: {mortgageDrawdown}</CustomText>
+            <CustomText>maxBorrowableAmount: {maxBorrowableAmount}</CustomText>
             <View style={[styles.main, styles.section, styles.center ]}>
               <BorrowingCapacityCalculator
                 applicants={applicants}
@@ -264,16 +271,6 @@ function App() {
                 scrollRef={scrollRef}
                 onKeyboardVisibleChange={setIsKeyboardVisible}
               />
-            </View>
-
-            <View>
-              {isKeyboardVisible && (
-                <View style={[styles.center, styles.row, { backgroundColor: 'yellow', padding: 10 }]}>
-                  <CustomText style={{ color: 'red', fontWeight: 'bold' }}>
-                    Custom Keyboard is Active
-                  </CustomText>
-                </View>
-              )}
             </View>
 
             {isKeyboardVisible && (

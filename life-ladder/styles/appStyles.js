@@ -52,6 +52,9 @@ const styles = StyleSheet.create({
     header: {
       fontSize: 22,
     },
+    latoFont: {
+      fontFamily: 'Lato_400Regular',
+    },
     input: {
       height: 25,
       borderColor: '#f2f9fc',
@@ -130,6 +133,9 @@ const styles = StyleSheet.create({
     bigblue: {
       color:'#03a1fc',
     },
+    grey: {
+      color: '#91B0C2',
+    },
     widthFull: {
       width: '100%',
     },
@@ -179,6 +185,9 @@ const styles = StyleSheet.create({
     },
     paddingRight: {
       paddingRight: 10,
+    },
+    larger: {
+      fontSize: 20,
     },
 });
 

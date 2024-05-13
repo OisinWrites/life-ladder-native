@@ -62,17 +62,11 @@ const CustomNumericInput = forwardRef(({
 
   const handleClose = () => {
     setIsKeyboardVisible(false);
-    if (onKeyboardVisibleChange) {
-      onKeyboardVisibleChange(false);
-    }
   };
 
   const handleNext = () => {
+    setIsKeyboardVisible(false);
     if (onNext) {
-        setIsKeyboardVisible(false);
-      if (onKeyboardVisibleChange) {
-        onKeyboardVisibleChange(false);
-      };
       onNext();
     }
   };
@@ -99,7 +93,7 @@ const CustomNumericInput = forwardRef(({
         />
       </Pressable>
       <Modal
-        animationType="slide"
+        animationType="none"
         transparent={true}
         visible={isKeyboardVisible}
         onRequestClose={handleClose}
