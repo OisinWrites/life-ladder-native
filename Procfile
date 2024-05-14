@@ -1,0 +1,1 @@
+web: gunicorn life-ladder.wsgi
