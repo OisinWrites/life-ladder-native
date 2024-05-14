@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import styles from '../styles/appStyles';
 import borrowingStyles from '../styles/borrowingStyles';
@@ -43,6 +43,10 @@ const PersonalFinances= ({
     setOtherSavingGoals2,
     scrollRef,
     onKeyboardVisibleChange,
+    savingPowerMonthly1,
+    savingPowerMonthly2,
+    setSavingPowerMonthly1,
+    setSavingPowerMonthly2,
 }) => {
 
     const taxDetails1 = parseFloat(salary1) > 0 ? calculateTaxDetails(salary1) : 0;
@@ -61,8 +65,13 @@ const PersonalFinances= ({
     const savings2Ref = useRef(null);
     const savingGoals2Ref = useRef(null);
 
-    const savingPowerMonthly1 = (taxDetails1.netMonthlyIncome) - rent1 - bills1 - ((parseFloat(weeklyDiscretionary1) || 0) * 52) / 12 - (annualBills1/12)
-    const savingPowerMonthly2 = (taxDetails2.netMonthlyIncome) - rent2 - bills2 - ((parseFloat(weeklyDiscretionary2) || 0) * 52) / 12 - (annualBills2/12)
+    const newSavingPowerMonthly1 = (taxDetails1.netMonthlyIncome) - rent1 - bills1 - ((parseFloat(weeklyDiscretionary1) || 0) * 52) / 12 - (annualBills1/12)
+    const newSavingPowerMonthly2 = (taxDetails2.netMonthlyIncome) - rent2 - bills2 - ((parseFloat(weeklyDiscretionary2) || 0) * 52) / 12 - (annualBills2/12)
+
+    useEffect (() => {
+        setSavingPowerMonthly1(newSavingPowerMonthly1);
+        setSavingPowerMonthly2(newSavingPowerMonthly2);
+    }, [newSavingPowerMonthly1, newSavingPowerMonthly2])
 
     const handleNext = (currentRef) => {
         const refsOrder = [

@@ -72,7 +72,7 @@ function App() {
   const [savingPowerMonthly2, setSavingPowerMonthly2] = useState('');
   const [mortgageDrawdown, setMortgageDrawdown] = useState(estimatedPropertyValue * 0.8);
   const [multiplier, setMultiplier] = useState(3.5);
-    
+
   const handleHeaderClick = () => {
     if (borrowingSectionComplete) {
       setDisplaySwap(true);
@@ -182,9 +182,7 @@ function App() {
               <Image source={lifeladderheader} style={styles.logoHeader} />
               <CustomText style={[styles.subHeaderText, styles.h2]}>Mortgage and Savings Calculator</CustomText>
             </Pressable>
-            <CustomText>estimatedPropertyValue: {estimatedPropertyValue}</CustomText>
-            <CustomText>MortgageDrawdown: {mortgageDrawdown}</CustomText>
-            <CustomText>maxBorrowableAmount: {maxBorrowableAmount}</CustomText>
+ 
             <View style={[styles.main, styles.section, styles.center ]}>
               <BorrowingCapacityCalculator
                 applicants={applicants}
@@ -249,8 +247,6 @@ function App() {
                 onKeyboardVisibleChange={setIsKeyboardVisible}
               />
             </View>
-            <CustomText>{savingPowerMonthly1}</CustomText>
-            <CustomText>{savingPowerMonthly2}</CustomText>
 
             <View style={[styles.main, styles.section, styles.center]}>
               <DepositSavingPeriod

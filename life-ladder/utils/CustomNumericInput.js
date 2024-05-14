@@ -83,13 +83,13 @@ const CustomNumericInput = forwardRef(({
     <View style={keyboardStyles.container} ref={inputRef}>
       <Pressable onPress={handleToggleKeyboard}>
         <TextInput
-          {...props}
           style={[keyboardStyles.defaultInput(defaultFontSize), style]}
           value={value}
           placeholderTextColor={`rgba(3, 161, 252, ${placeholderOpacity})`}
           placeholder={placeholder}
           inputMode="numeric"
           editable ={false} // Disable default keyboard
+          {...props}
         />
       </Pressable>
       <Modal

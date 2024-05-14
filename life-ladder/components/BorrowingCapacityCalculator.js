@@ -154,7 +154,7 @@ const BorrowingCapacityCalculator = ({
                     <View>
                         <View style={[styles.row, styles.fixedRowHeight, styles.center, styles.marginLeft]}>                            
                             <CustomText>
-                                {applicants === 2 ? ("Applicant 1's Annual Salary") : ("Your Annual Salary")}:
+                                {applicants === 2 ? ("First Annual Salary") : ("Your Annual Salary")}:
                             </CustomText>
                             <View style={[
                                 borrowingStyles.salaryInputs,

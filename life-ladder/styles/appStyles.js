@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
       paddingRight: 10,
     },
     larger: {
-      fontSize: 20,
+      fontSize: 40,
     },
 });
 
