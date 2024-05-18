@@ -165,6 +165,7 @@ const BorrowingCapacityCalculator = ({
                                     onKeyboardVisibleChange={onKeyboardVisibleChange}
                                     scrollRef={scrollRef}
                                     ref={salary1Ref}
+                                    label={applicants === 2 ? ("First Annual Salary :") : ("Your Annual Salary :")}
                                     onNext={() => handleNext(salary1Ref)}
                                     style={styles.bigblue}                             
                                     value={handleFormattedDisplay(salary1)}                                    
@@ -188,6 +189,7 @@ const BorrowingCapacityCalculator = ({
                                 ref={salary2Ref}
                                 style={[styles.bigblue]}                             
                                 value={handleFormattedDisplay(salary2)}
+                                label="Applicant 2's Annual Salary:"
                                 onChangeText={(text) => handleNumericChange(text, setSalary2)}
                                 onNext={() => handleNext(salary2Ref)}
                             />
@@ -290,6 +292,7 @@ const BorrowingCapacityCalculator = ({
                                     value={handleFormattedDisplay(maxBorrowableAmount)}
                                     scrollRef={scrollRef}
                                     ref={maxBorrowableAmountRef}
+                                    label="Enter a custom mortgage quote:"
                                     onNext={() => handleNext(maxBorrowableAmountRef)}
                                     onChangeText={(text) => handleNumericChange(text, setMaxBorrowableAmount)}
                                 />

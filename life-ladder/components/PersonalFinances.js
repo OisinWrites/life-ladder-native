@@ -138,6 +138,7 @@ const PersonalFinances= ({
                                         style={[styles.bigblue ]}                             
                                         value={handleFormattedDisplay(rent1)}
                                         onChangeText={(text) => handleNumericChange(text, setRent1)}
+                                        label="Monthly Rent:"
                                     />       
                                 </View>
                             </View>
@@ -157,6 +158,7 @@ const PersonalFinances= ({
                                         style={[styles.bigblue ]}                             
                                         value={handleFormattedDisplay(bills1)}
                                         onChangeText={(text) => handleNumericChange(text, setBills1)}
+                                        label="Monthly Bills:"
                                     />       
                                 </View>
                             </View>
@@ -176,6 +178,7 @@ const PersonalFinances= ({
                                         style={[styles.bigblue ]}                             
                                         value={handleFormattedDisplay(weeklyDiscretionary1)}
                                         onChangeText={(text) => handleNumericChange(text, setWeeklyDiscretionary1)}
+                                        label="Weekly Spending:"
                                     />       
                                 </View>
                             </View>
@@ -195,6 +198,7 @@ const PersonalFinances= ({
                                         style={[styles.bigblue ]}                             
                                         value={handleFormattedDisplay(annualBills1)}
                                         onChangeText={(text) => handleNumericChange(text, setAnnualBills1)}
+                                        label="Annual Bills:"
                                     />       
                                 </View>
                             </View>
@@ -205,7 +209,7 @@ const PersonalFinances= ({
                             </View>
 
                             <View style={[styles.row, styles.center]}>
-                                <CustomText>Current Savings</CustomText>
+                                <CustomText>Current Savings:</CustomText>
                                 <View style={[
                                     borrowingStyles.salaryInputs,
                                     styles.widthLimit,
@@ -219,12 +223,13 @@ const PersonalFinances= ({
                                         style={[styles.bigblue ]}                             
                                         value={handleFormattedDisplay(currentSavings1)}
                                         onChangeText={(text) => handleNumericChange(text, setCurrentSavings1)}
+                                        label="Current Savings:"
                                     />       
                                 </View>
                             </View>
 
                             <View style={[styles.row, styles.center]}>
-                                <CustomText>Other saving goals:</CustomText>
+                                <CustomText>Other Saving Goals:</CustomText>
                                 <View style={[
                                     borrowingStyles.salaryInputs,
                                     styles.widthLimit,
@@ -238,6 +243,7 @@ const PersonalFinances= ({
                                         style={[styles.bigblue ]}                             
                                         value={handleFormattedDisplay(otherSavingGoals1)}
                                         onChangeText={(text) => handleNumericChange(text, setOtherSavingGoals1)}
+                                        label="Other Saving Goals:"
                                     />       
                                 </View>
                             </View>
@@ -290,6 +296,7 @@ const PersonalFinances= ({
                                             style={[styles.bigblue ]}                             
                                             value={handleFormattedDisplay(rent2)}
                                             onChangeText={(text) => handleNumericChange(text, setRent2)}
+                                            label="Monthly Rent:"
                                         />       
                                     </View>
                                 </View>
@@ -309,6 +316,7 @@ const PersonalFinances= ({
                                             style={[styles.bigblue ]}                             
                                             value={handleFormattedDisplay(bills2)}
                                             onChangeText={(text) => handleNumericChange(text, setBills2)}
+                                            label="Monthly Bills:"
                                         />       
                                     </View>
                                 </View>
@@ -328,6 +336,7 @@ const PersonalFinances= ({
                                             style={[styles.bigblue ]}                             
                                             value={handleFormattedDisplay(weeklyDiscretionary2)}
                                             onChangeText={(text) => handleNumericChange(text, setWeeklyDiscretionary2)}
+                                            label="Weekly Spending:"
                                         />       
                                     </View>
                                 </View>
@@ -347,6 +356,7 @@ const PersonalFinances= ({
                                             style={[styles.bigblue ]}                             
                                             value={handleFormattedDisplay(annualBills2)}
                                             onChangeText={(text) => handleNumericChange(text, setAnnualBills2)}
+                                            label="Annual Bills:"
                                         />       
                                     </View>
                                 </View>
@@ -371,12 +381,13 @@ const PersonalFinances= ({
                                             style={[styles.bigblue ]}                             
                                             value={handleFormattedDisplay(currentSavings2)}
                                             onChangeText={(text) => handleNumericChange(text, setCurrentSavings2)}
+                                            label="Current Savings:"
                                         />       
                                     </View>
                                 </View>
 
                                 <View style={[styles.row, styles.center]}>
-                                    <CustomText>Other saving goals:</CustomText>
+                                    <CustomText>Other Saving Goals:</CustomText>
                                     <View style={[
                                         borrowingStyles.salaryInputs,
                                         styles.widthLimit,
@@ -390,6 +401,7 @@ const PersonalFinances= ({
                                             style={[styles.bigblue ]}                             
                                             value={handleFormattedDisplay(otherSavingGoals2)}
                                             onChangeText={(text) => handleNumericChange(text, setOtherSavingGoals2)}
+                                            label="Other Saving Goals:"
                                         />       
                                     </View>
                                 </View>

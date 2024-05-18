@@ -124,7 +124,6 @@ function App() {
     (applicants === 1 || (applicants === 2 && normalizeNumber(salary2) !== null && normalizeNumber(salary2) !== 0));
   
   useEffect(() => {
-    // Update mortgageDrawdown whenever estimatedPropertyValue changes
     setMortgageDrawdown(estimatedPropertyValue * 0.8);
   }, [estimatedPropertyValue]);
 
@@ -164,12 +163,12 @@ function App() {
 
   useEffect(() => {
     if (fontsLoaded) {
-      SplashScreen.hideAsync(); // Hide the splash screen when fonts are loaded
+      SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return null; // Optionally, return a fallback view
+    return null;
   }
 
     return (

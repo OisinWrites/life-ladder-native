@@ -6,7 +6,7 @@ import keyboardStyles from '../styles/keyboardStyles';
 
 const CustomNumericInput = forwardRef(({
   value, onChangeText, placeholder, 
-  style, scrollRef, onNext, 
+  style, scrollRef, onNext, label,
   onKeyboardVisibleChange, ...props }, ref) => {
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const { defaultFontSize, placeholderOpacity } = useGlobalStyles();
@@ -109,6 +109,7 @@ const CustomNumericInput = forwardRef(({
                 onClose={handleClose}
                 onNext={handleNext}
                 inputValue={value}
+                label={label}
               />
             </Pressable>
           </Pressable>

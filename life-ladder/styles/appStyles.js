@@ -46,7 +46,8 @@ const styles = StyleSheet.create({
     },
     container: {
       flex: 1,
-      padding: 10,
+      padding: 5,
+      margin: 5,
       maxWidth: 600,
     },
     header: {
@@ -113,7 +114,10 @@ const styles = StyleSheet.create({
       marginBottom: 15,
     },
     widthLimit: {
-      width: 190,
+      width: 155,
+    },
+    widthLimitLonger: {
+      width: 280,
     },
     marginRight: {
       marginRight: 8,
@@ -159,8 +163,8 @@ const styles = StyleSheet.create({
       fontSize: 15,
     },
     largerCircle: {
-      height: 80,
-      width: 80,
+      height: 70,
+      width: 70,
       fontSize: 60,
       marginBottom: 6,
       marginLeft: 6,
@@ -180,14 +184,22 @@ const styles = StyleSheet.create({
       lineHeight: 35,
     },
     justifyCenter: {
-      justifyContent: 'flex-end',
       justifyContent: 'space-between',
+      justifyContent: 'flex-end',
     },
     paddingRight: {
       paddingRight: 10,
     },
     larger: {
       fontSize: 40,
+    },
+    pickerCustom: {
+      borderWidth: 0,
+      backgroundColor: 'rgba(255, 99, 71, 0.0)',
+      borderRadius: 10,
+      marginLeft: 2,
+      fontFamily: 'Lato_700Bold',
+      color: 'white',    
     },
 });
 

@@ -8,6 +8,12 @@ const keyboardStyles = StyleSheet.create({
         bottom: 0,
         width: '100%',
     },
+    fullScreenModal: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
     keyboardContainer: {
         flexDirection: 'column',
         justifyContent: 'center',
@@ -19,9 +25,9 @@ const keyboardStyles = StyleSheet.create({
         width: '100%',
         },
     key: {
-        width: 80,
-        height: 80,
-        marginBottom: 7,
+        width: 70,
+        height: 70,
+        marginBottom: 8,
         backgroundColor: '#03a1fc',
         borderRadius: 50,
         justifyContent: 'center',
@@ -42,7 +48,9 @@ const keyboardStyles = StyleSheet.create({
         backgroundColor: '#3DB7FD',
     },
     nextKey: {
-        backgroundColor: '#20A14A',
+        marginLeft: 6,
+        marginTop: 10,
+        backgroundColor: 'white',
     },
     submitKey: {
         backgroundColor: '#20A14A',
@@ -85,16 +93,28 @@ const keyboardStyles = StyleSheet.create({
         paddingRight: 10,
     }),
     largerInputValue: {
-        height: 60,
-        width: 300,
+        height: 70,
+        width: 222,
     },
     largerInputFont: {
-        fontSize: 40,
+        fontSize: 30,
         textAlign: 'right',
+        
+        marginTop: 12,
     },
     modalContainer: {
         flex: 1,
         justifyContent: 'flex-end',
+    },
+    label: {
+        fontSize: 16,
+        fontFamily: 'Lato_400Regular',
+        color: 'white',
+    },
+    leaf: {
+        height: 70,
+        width: 70,
+        resizeMode: 'contain',
     },
 });
 
