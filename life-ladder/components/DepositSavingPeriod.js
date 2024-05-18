@@ -96,20 +96,38 @@ const DepositSavingPeriod = ({
 
     useEffect(() => {
         let newDepositSavingPeriod;
+        let newTotalCosts = parseFloat(totalAdditionalCosts) + parseFloat(depositRequired);
         if (applicants === 2) {
             if (combinedEffort) {
-                newDepositSavingPeriod = (depositRequired + totalAdditionalCosts) / (savingPowerMonthly1 + savingPowerMonthly2);
+                newDepositSavingPeriod = newTotalCosts / (savingPowerMonthly1 + savingPowerMonthly2);
             } else {
-                newDepositSavingPeriod = (depositRequired + totalAdditionalCosts) / evenEffort;
+                newDepositSavingPeriod = newTotalCosts / evenEffort;
             }
         } else {
-            newDepositSavingPeriod = (depositRequired + totalAdditionalCosts) / savingPowerMonthly1;
+            newDepositSavingPeriod = newTotalCosts / savingPowerMonthly1;
         }
-        newDepositSavingPeriod = newDepositSavingPeriod.toFixed(1);
-        setDepositSavingPeriod(newDepositSavingPeriod);
+    
+        // Convert to integer for months
+        newDepositSavingPeriod = Math.floor(newDepositSavingPeriod);
+    
+        // Function to format months into years and months
+        function formatPeriod(months) {
+            if (months < 12) {
+                return `${months} months`;
+            } else {
+                const years = Math.floor(months / 12);
+                const remainingMonths = months % 12;
+                if (remainingMonths === 0) {
+                    return `${years} year${years > 1 ? 's' : ''}`;
+                } else {
+                    return `${years} year${years > 1 ? 's' : ''} and ${remainingMonths} month${remainingMonths > 1 ? 's' : ''}`;
+                }
+            }
+        }
+    
+        // Update the state with the formatted time period
+        setDepositSavingPeriod(formatPeriod(newDepositSavingPeriod));
     }, [applicants, combinedEffort, depositRequired, totalAdditionalCosts, savingPowerMonthly1, savingPowerMonthly2, evenEffort]);
-    
-    
 
     useEffect(() => {
         let newDepositRequired = propertyPrice - mortgageDrawdown;
@@ -177,7 +195,7 @@ const DepositSavingPeriod = ({
         if (lockLTVRatio && focusState.propertyPriceFocused) {
             let newMortgageDrawdown = propertyPrice * (LTVRatio/100);
 
-            setMortgageDrawdown(Number(newMortgageDrawdown).toFixed(2));
+            setMortgageDrawdown(Number(newMortgageDrawdown).toFixed(0));
         }
     },[lockLTVRatio, focusState.propertyPriceFocused, propertyPrice, LTVRatio]);
 
@@ -361,7 +379,7 @@ const DepositSavingPeriod = ({
                         </View>
 
                         <View style={[styles.center, styles.row]}>
-                            <CustomText>LTV Ratio: {(LTVRatio).toFixed(1)}%</CustomText>                       
+                            <CustomText>LTV Ratio: {(LTVRatio).toFixed(0)}%</CustomText>                       
                             {lockLTVRatio ? (
                                 <Pressable 
                                     title="Lock LTV Ratio" 
@@ -448,7 +466,7 @@ const DepositSavingPeriod = ({
                     </View>
                         
                     <View style={[borrowingStyles.quoteToggle, styles.centerText, styles.widthLimitLonger, styles.fixedRowHeight]}>
-                        <View style={[styles.center, ]}>
+                        <View style={[styles.center]}>
                             <Picker
                                 selectedValue={selectedCounty}
                                 onValueChange={handleCountyChange}
@@ -480,11 +498,11 @@ const DepositSavingPeriod = ({
                         <View style={styles.horizontalRule}/>
                         <View style={styles.row}>
                             <CustomText>Total Additional Costs:</CustomText>
-                            <CustomText style={[styles.textRight, styles.marginLeft]}> €{totalAdditionalCosts.toFixed(2)}</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}> {handleFormattedDisplayTwoDecimal(totalAdditionalCosts)}</CustomText>
                         </View>
                         <View style={styles.row}>
                             <CustomText>Total Savings Required:</CustomText>
-                            <CustomText style={[styles.textRight, styles.marginLeft]}> {handleFormattedDisplayTwoDecimal(totalAdditionalCosts+depositRequired)}</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}> {handleFormattedDisplayTwoDecimal(parseFloat(totalAdditionalCosts) + parseFloat(depositRequired))}</CustomText>
                         </View>
                         
                     
@@ -507,13 +525,9 @@ const DepositSavingPeriod = ({
                             </Pressable>
                         </View>
                     }
-                    <CustomText>{depositRequired}</CustomText>
-                    <CustomText>{totalAdditionalCosts}</CustomText>
-                    <CustomText>{savingPowerMonthly1}</CustomText>
-
                     <View style={styles.row}>
                         <CustomText>Deposit Saving Period:</CustomText>
-                        <CustomText style={[styles.textRight, styles.marginLeft]}>{depositSavingPeriod} months</CustomText>
+                        <CustomText style={[styles.textRight, styles.marginLeft]}>{depositSavingPeriod}</CustomText>
                     </View>
                 </View>
             )}

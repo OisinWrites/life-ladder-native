@@ -198,8 +198,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'rgba(255, 99, 71, 0.0)',
       borderRadius: 10,
       marginLeft: 2,
-      fontFamily: 'Lato_700Bold',
-      color: 'white',    
+      fontFamily: 'Lato_700Bold',   
     },
 });
 
