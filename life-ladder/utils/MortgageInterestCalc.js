@@ -1,47 +1,64 @@
 export const calculateMonthlyMortgagePayment = (mortgageDrawdown, mortgageRate, loanTerm) => {
-    const monthlyInterestRate = mortgageRate / 12 / 100;
-    const loanTermMonths = loanTerm * 12;
-    const monthlyPayment = mortgageDrawdown * 
-      (monthlyInterestRate / (1 - Math.pow(1 + monthlyInterestRate, -loanTermMonths)));
-    return monthlyPayment;
+  const monthlyInterestRate = mortgageRate / 12 / 100;
+  const loanTermMonths = loanTerm * 12;
+  const monthlyPayment = mortgageDrawdown * 
+    (monthlyInterestRate / (1 - Math.pow(1 + monthlyInterestRate, -loanTermMonths)));
+  return monthlyPayment;
 };
   
-export const generateRepaymentSchedule = (mortgageDrawdown, mortgageRate, loanTerm) => {
-    const monthlyInterestRate = mortgageRate / 12 / 100;
-    const loanTermMonths = loanTerm * 12;
-    const monthlyPayment = calculateMonthlyMortgagePayment(mortgageDrawdown, mortgageRate, loanTerm);
-  
-    let repaymentSchedule = [];
-    let remainingBalance = mortgageDrawdown;
-  
-    for (let year = 1; year <= loanTerm; year++) {
+export const generateRepaymentSchedule = (mortgageDrawdown, mortgageRate, loanTerm, remortgages = [], startYear = 1) => {
+  const monthlyInterestRate = mortgageRate / 12 / 100;
+  const loanTermMonths = loanTerm * 12;
+  const monthlyPayment = calculateMonthlyMortgagePayment(mortgageDrawdown, mortgageRate, loanTerm);
+
+  let repaymentSchedule = [];
+  let remainingBalance = mortgageDrawdown;
+  let remortgageIndex = 0;
+  let currentRemortgage = remortgages[remortgageIndex];
+
+  for (let year = startYear; year < startYear + loanTerm; year++) {
       let annualInterestCharged = 0;
       let capitalRepayment = 0;
-  
+
       for (let month = 1; month <= 12; month++) {
-        let interestForMonth = remainingBalance * monthlyInterestRate;
-        let mortgageDrawdownRepaymentForMonth = monthlyPayment - interestForMonth;
-        remainingBalance -= mortgageDrawdownRepaymentForMonth;
-  
-        // Accumulate totals for the year
-        annualInterestCharged += interestForMonth;
-        capitalRepayment += mortgageDrawdownRepaymentForMonth;
+          let interestForMonth = remainingBalance * monthlyInterestRate;
+          let mortgageDrawdownRepaymentForMonth = monthlyPayment - interestForMonth;
+          remainingBalance -= mortgageDrawdownRepaymentForMonth;
+
+          annualInterestCharged += interestForMonth;
+          capitalRepayment += mortgageDrawdownRepaymentForMonth;
       }
-  
-      // Correct for potential negative remaining balance in the last year
+
       if (remainingBalance < 0) {
-        capitalRepayment += remainingBalance; // Subtract since remainingBalance is negative
-        remainingBalance = 0;
+          capitalRepayment += remainingBalance; 
+          remainingBalance = 0;
       }
-  
+
       repaymentSchedule.push({
-        year,
-        openingBalance: remainingBalance + capitalRepayment, // Adjusted for the loop's decrement
-        annualInterestCharged,
-        capitalRepayment,
+          year,
+          openingBalance: remainingBalance + capitalRepayment, 
+          annualInterestCharged,
+          capitalRepayment,
+          nestedSchedule: []
       });
-    }
-  
-    return repaymentSchedule;
+
+      // Handle nested remortgage
+      if (currentRemortgage && year === currentRemortgage.year) {
+          const { newRate, newTerm } = currentRemortgage;
+          const nestedSchedule = generateRepaymentSchedule(remainingBalance, newRate, newTerm, remortgages.slice(remortgageIndex + 1), year).repaymentSchedule;
+          repaymentSchedule[year - startYear].nestedSchedule = nestedSchedule;
+          break;
+      }
+  }
+
+  return { repaymentSchedule, remainingBalance };
 };
+
+
+
+
+
+
+
+
   

@@ -8,8 +8,6 @@ const tableStyles = StyleSheet.create({
     },
     tableHeader: {
         flexDirection: 'row',
-        borderBottomWidth: 1,
-        borderBottomColor: '#000',
     },
     tableRow: {
         flexDirection: 'row',
