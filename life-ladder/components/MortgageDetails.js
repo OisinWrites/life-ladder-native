@@ -88,25 +88,30 @@ const MortgageDetails = ({
                         onValueChange={setMortgageRate}
                     />                                        
                 </View>
-
             </View>
-                <View style={tableStyles.table}>
-                    <View style={tableStyles.tableHeader}>
-                        <CustomText style={[tableStyles.cell, tableStyles.headerCell]}>Year</CustomText>
-                        <CustomText style={[tableStyles.cell, tableStyles.headerCell]}>Opening Balance</CustomText>
-                        <CustomText style={[tableStyles.cell, tableStyles.headerCell]}>Annual Interest Charged</CustomText>
-                        <CustomText style={[tableStyles.cell, tableStyles.headerCell]}>Capital Repayment</CustomText>
-                    </View>
 
-                {repaymentSchedule.map(({ year, openingBalance, annualInterestCharged, capitalRepayment }) => (
-                    <View key={year.toString()} style={tableStyles.tableRow}>
-                        <CustomText style={tableStyles.cell}>{year}</CustomText>
-                        <CustomText style={tableStyles.cell}>{handleFormattedDisplayTwoDecimal(openingBalance)}</CustomText>
-                        <CustomText style={tableStyles.cell}>{handleFormattedDisplayTwoDecimal(annualInterestCharged)}</CustomText>
-                        <CustomText style={tableStyles.cell}>{handleFormattedDisplayTwoDecimal(capitalRepayment)}</CustomText>
-                    </View>
-                ))}
+            <View style={styles.row}>
+                <CustomText>Monthly Payment:</CustomText>
+                <CustomText style={[styles.textRight, styles.marginLeft]}> {handleFormattedDisplayTwoDecimal(parseFloat(monthlyPayment))}</CustomText>
+            </View>
+
+            <View style={tableStyles.table}>
+                <View style={tableStyles.tableHeader}>
+                    <CustomText style={[tableStyles.cell, tableStyles.headerCell]}>Year</CustomText>
+                    <CustomText style={[tableStyles.cell, tableStyles.headerCell]}>Opening Balance</CustomText>
+                    <CustomText style={[tableStyles.cell, tableStyles.headerCell]}>Annual Interest Charged</CustomText>
+                    <CustomText style={[tableStyles.cell, tableStyles.headerCell]}>Capital Repayment</CustomText>
                 </View>
+
+            {repaymentSchedule.map(({ year, openingBalance, annualInterestCharged, capitalRepayment }) => (
+                <View key={year.toString()} style={tableStyles.tableRow}>
+                    <CustomText style={tableStyles.cell}>{year}</CustomText>
+                    <CustomText style={tableStyles.cell}>{handleFormattedDisplayTwoDecimal(openingBalance)}</CustomText>
+                    <CustomText style={tableStyles.cell}>{handleFormattedDisplayTwoDecimal(annualInterestCharged)}</CustomText>
+                    <CustomText style={tableStyles.cell}>{handleFormattedDisplayTwoDecimal(capitalRepayment)}</CustomText>
+                </View>
+            ))}
+            </View>
         </View>
     );
 };
