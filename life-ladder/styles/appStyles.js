@@ -200,6 +200,15 @@ const styles = StyleSheet.create({
       marginLeft: 2,
       fontFamily: 'Lato_700Bold',   
     },
+    wheelPickerContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    wheelPicker: {
+      width: 200,
+      height: 150
+    },
 });
 
 export default styles

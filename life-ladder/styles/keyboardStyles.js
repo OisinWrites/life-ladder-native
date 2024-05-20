@@ -53,7 +53,7 @@ const keyboardStyles = StyleSheet.create({
         backgroundColor: 'white',
     },
     submitKey: {
-        backgroundColor: '#20A14A',
+        backgroundColor: '#14a730',
     },
     keyText: {
         color: '#ffffff',

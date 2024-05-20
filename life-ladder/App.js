@@ -11,6 +11,7 @@ import { handleFormattedDisplayTwoDecimal } from './utils/FormatNumber';
 import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculator';
 import PersonalFinances from './components/PersonalFinances';
 import DepositSavingPeriod from './components/DepositSavingPeriod';
+import MortgageDetails from './components/MortgageDetails';
 
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
@@ -71,7 +72,10 @@ function App() {
   const [savingPowerMonthly1, setSavingPowerMonthly1] = useState('');
   const [savingPowerMonthly2, setSavingPowerMonthly2] = useState('');
   const [mortgageDrawdown, setMortgageDrawdown] = useState(estimatedPropertyValue * 0.8);
+  const [propertyPrice, setPropertyPrice] = useState(estimatedPropertyValue);
   const [multiplier, setMultiplier] = useState(3.5);
+  const [loanTerm, setLoanTerm] = useState(30);
+  const [mortgageRate, setMortgageRate] = useState(4);
 
   const handleHeaderClick = () => {
     if (borrowingSectionComplete) {
@@ -125,6 +129,10 @@ function App() {
   
   useEffect(() => {
     setMortgageDrawdown(estimatedPropertyValue * 0.8);
+  }, [estimatedPropertyValue]);
+
+  useEffect(() => {
+    setPropertyPrice(estimatedPropertyValue);
   }, [estimatedPropertyValue]);
 
   useEffect(() => {
@@ -246,12 +254,13 @@ function App() {
                 onKeyboardVisibleChange={setIsKeyboardVisible}
               />
             </View>
-
             <View style={[styles.main, styles.section, styles.center]}>
               <DepositSavingPeriod
                 applicants={applicants}
                 maxBorrowableAmount={maxBorrowableAmount}
                 estimatedPropertyValue={estimatedPropertyValue}
+                propertyPrice={propertyPrice}
+                setPropertyPrice={setPropertyPrice}
                 displaySwap3={displaySwap3}
                 displayWarning3={displayWarning3}
                 handleToggleComplete3={handleToggleComplete3}
@@ -268,10 +277,19 @@ function App() {
               />
             </View>
 
-            {isKeyboardVisible && (
-              <View style={[styles.fullScreen]}>
-              </View>
-            )}
+            <View style={[styles.main, styles.section, styles.center]}>
+              <MortgageDetails
+                propertyPrice={propertyPrice}
+                mortgageDrawdown={mortgageDrawdown}
+                loanTerm={loanTerm}
+                setLoanTerm={setLoanTerm}
+                mortgageRate={mortgageRate}
+                setMortgageRate={setMortgageRate}
+              />
+            </View>
+            <View style={styles.appLogo}></View>
+
+
 
           </GlobalStylesProvider>
         </ScrollView>

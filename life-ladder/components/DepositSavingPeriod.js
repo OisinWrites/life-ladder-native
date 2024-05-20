@@ -29,7 +29,8 @@ const DepositSavingPeriod = ({
     setMortgageDrawdown,
     scrollRef,
     onKeyboardVisibleChange,
-
+    propertyPrice,
+    setPropertyPrice,
 }) => {
 
 
@@ -49,7 +50,6 @@ const DepositSavingPeriod = ({
     const propertyPriceRef = useRef(null);
     const drawdownRef = useRef(null);
 
-    const [propertyPrice, setPropertyPrice] = useState(estimatedPropertyValue);
     const [lockPropertyPrice, setLockPropertyPrice] = useState(false);
 
     const [lockMortgageDrawdown, setLockMortgageDrawdown] = useState(false);
@@ -393,8 +393,9 @@ const DepositSavingPeriod = ({
                                         <Slider
                                             minimumValue={40}
                                             maximumValue={90}
-                                            minimumTrackTintColor="#307ecc"
-                                            maximumTrackTintColor="#000000"
+                                            minimumTrackTintColor='#03a1fc'
+                                            maximumTrackTintColor='#91B0C2'
+                                            thumbTintColor='#14a730'
                                             step={1}
                                             value={LTVRatio}
                                             onValueChange={setLTVRatio}
