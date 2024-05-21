@@ -144,9 +144,6 @@ const MortgageDetails = ({
                             <CustomText style={tableStyles.cell}>{handleFormattedDisplayTwoDecimal(openingBalance)}</CustomText>
                             <CustomText style={tableStyles.cell}>{handleFormattedDisplayTwoDecimal(annualInterestCharged)}</CustomText>
                             <CustomText style={tableStyles.cell}>{handleFormattedDisplayTwoDecimal(capitalRepayment)}</CustomText>
-                            {(remortgageDetails.year === 0 || year > remortgageDetails.year) && (
-                                <Button title="Remortgage" onPress={() => handleRemortgage(year, openingBalance)} />
-                            )}
                         </View>
                     ))}
             </View>
@@ -208,3 +205,31 @@ const MortgageDetails = ({
 };
 
 export default MortgageDetails;
+
+
+
+const renderRepaymentSchedule = (schedule, detailIndex, startYear = 1, remortgagedYear) => {
+    return schedule
+        .filter(({ year }) => year < remortgagedYear || remortgagedYear === undefined)
+        .map(({ year, openingBalance, annualInterestCharged, capitalRepayment }) => {
+            const isBeforeRemortgagedYear = remortgagedYear !== undefined && year < remortgagedYear;
+            return (
+                <View key={`${detailIndex}-${year}`} style={tableStyles.tableRow}>
+                    <CustomText style={tableStyles.cell}>{year}</CustomText>
+                    <CustomText style={tableStyles.cell}>{handleFormattedDisplayTwoDecimal(openingBalance)}</CustomText>
+                    <CustomText style={tableStyles.cell}>{handleFormattedDisplayTwoDecimal(annualInterestCharged)}</CustomText>
+                    <CustomText style={tableStyles.cell}>{handleFormattedDisplayTwoDecimal(capitalRepayment)}</CustomText>
+                    {!isBeforeRemortgagedYear ? (
+                        <Pressable style={styles.remortgageIconParent} onPress={() => addRemortgagePeriod(year, openingBalance)}>
+                            <Image
+                                source={remortgageIcon}
+                                style={styles.remortgageIcon}
+                            />
+                        </Pressable>
+                    ) : (
+                        <FontAwesomeIcon name="lock" style={[styles.grey, styles.larger]} />
+                    )}
+            </View>
+        );
+    });
+};
