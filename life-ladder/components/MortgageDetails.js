@@ -4,7 +4,8 @@ import styles from '../styles/appStyles';
 import tableStyles from '../styles/tableStyles.js';
 import borrowingStyles from '../styles/borrowingStyles.js';
 import CustomText from '../utils/CustomText';
-import { handleFormattedDisplayTwoDecimal } from '../utils/FormatNumber';
+import CustomNumericInput from '../utils/CustomNumericInput.js';
+import { handleFormattedDisplayTwoDecimal, parseFormattedNumber, handleFormattedDisplay } from '../utils/FormatNumber';
 import { calculateMonthlyMortgagePayment, generateRepaymentSchedule } from '../utils/MortgageInterestCalc';
 import Slider from '@react-native-community/slider';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
@@ -23,8 +24,12 @@ const MortgageDetails = ({
         for (let index = 0; index < updatedRemortgageDetails.length; index++) {
             const details = updatedRemortgageDetails[index];
             const startYear = details.year || 1;
+
+            const adjustedOpeningBalance = parseFormattedNumber(details.openingBalance) + parseFormattedNumber(details.cashBack || 0);
+
+            // Send the adjusted opening balance to the generateRepaymentSchedule function
             const scheduleResult = generateRepaymentSchedule(
-                details.openingBalance,
+                adjustedOpeningBalance,  // Using adjusted opening balance
                 details.newRate,
                 details.newTerm,
                 remortgageDetails.slice(index + 1),
@@ -196,6 +201,18 @@ const MortgageDetails = ({
                                                         <FontAwesomeIcon style={borrowingStyles.larger} name="circle-xmark" size={20} color={'#FF6961'} />
                                                     </Pressable>
                                                 )}
+                                            </View>
+                                        </View>
+
+                                        <CustomText>{details.cashBack}</CustomText>
+                                        <View style={[styles.row, styles.fixedRowHeight, styles.center, styles.marginLeft]}>
+                                            <CustomText>Cash Back?</CustomText>
+                                            <View style={[borrowingStyles.salaryInputs, styles.widthLimit, styles.marginLeft]}>
+                                                <CustomNumericInput
+                                                    label="Cash released from mortgage:"
+                                                    style={styles.bigblue}
+                                                    value={handleFormattedDisplay(details.cashBack)}
+                                                    onChangeText={(text) => updateRemortgageDetail(index, 'cashBack', parseFormattedNumber(text))}                                                />
                                             </View>
                                         </View>
                                         <View style={styles.marginVertical}>

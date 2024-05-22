@@ -44,7 +44,7 @@ function App() {
 
   const [applicants, setApplicants] = useState(1);
   const [firstTimeBuyer, setFirstTimeBuyer] = useState('No');
-  const [salary1, setSalary1] = useState(50000);
+  const [salary1, setSalary1] = useState(2000);
   const [salary2, setSalary2] = useState(null);
   const [maxBorrowableAmount, setMaxBorrowableAmount] = useState(null);
 
@@ -310,7 +310,7 @@ function App() {
               <CustomText style={[styles.headerText, styles.h3]}>Remortgage Details</CustomText>
               {renderRemortgageDetails()}
             </View>
-            
+
             <View style={[styles.main, styles.section, styles.center]}>
               <MortgageDetails                
                 mortgageDrawdown={mortgageDrawdown}                
