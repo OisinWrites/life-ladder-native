@@ -26,10 +26,10 @@ const tableStyles = StyleSheet.create({
         maxWidth: 60,
     },
     midWidth: {
-        minWidth: 95,
+        minWidth: 115,
     },
     lrgWidth: {
-        minWidth: 100,
+        minWidth: 120,    
     },
     iconWidth: {
         minWidth: 100,

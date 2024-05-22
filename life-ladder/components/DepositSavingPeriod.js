@@ -276,13 +276,13 @@ const DepositSavingPeriod = ({
     return (
         <View style={styles.container}>
             {displaySwap3 ? (
-                <View>
+                <View style={styles.marginBottom}>
                     <Pressable style={styles.row} title="Edit Section" onPress={handleToggleComplete3} >
                         <CustomText style={[styles.centerText, styles.header, styles.completed]}>Deposit Saving Period</CustomText>
                     </Pressable>
                 </View>
             ) : (
-                <View>
+                <View style={styles.marginBottom}>
                     <View style={styles.marginBottom}>
                         <CustomText style={[styles.centerText, styles.header]}>Deposit Saving Period</CustomText>
                         {displayWarning3 && 

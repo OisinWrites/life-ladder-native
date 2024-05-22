@@ -43,7 +43,7 @@ function App() {
 
   const [applicants, setApplicants] = useState(1);
   const [firstTimeBuyer, setFirstTimeBuyer] = useState('No');
-  const [salary1, setSalary1] = useState(50000);
+  const [salary1, setSalary1] = useState(5000000);
   const [salary2, setSalary2] = useState(null);
   const [maxBorrowableAmount, setMaxBorrowableAmount] = useState(null);
 
