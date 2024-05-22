@@ -4,36 +4,57 @@ import { StyleSheet } from 'react-native';
 const tableStyles = StyleSheet.create({
     table: {
         flexDirection: 'column',
-        margin: 10,
+        margin: 2,
     },
     tableHeader: {
         flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        paddingBottom: 6,
     },
     tableRow: {
         flexDirection: 'row',
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
+        alignItems: 'center',
     },
     cell: {
         flex: 1,
-        margin: 4,
-        padding: 10,
+        margin: 1,
+        padding: 2,
+        alignContent: 'center',
     },
     headerCell: {
         fontWeight: 'bold',
+        fontSize: 12,
     },
     smlWidth: {
-        maxWidth: 60,
+        maxWidth: 30,
+        fontSize: 12,
     },
     midWidth: {
-        minWidth: 115,
+        maxWidth: 90,
+        fontSize: 12,
     },
     lrgWidth: {
-        minWidth: 120,    
+        minWidth: 10,    
+        fontSize: 12,
     },
     iconWidth: {
-        minWidth: 100,
+        maxWidth: 50,
     },
+    year: {
+        width: 35,
+    },
+    balance: {
+        minWidth: 80,
+    },
+    interest: {
+        minWidth: 82,
+    },
+    repaid: {
+        minWidth: 60,
+    }
   });
 
   

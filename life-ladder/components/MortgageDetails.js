@@ -10,10 +10,11 @@ import Slider from '@react-native-community/slider';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
 import remortgageIcon from '../assets/images/remortgageIcon.png';
 
-const MortgageDetails = ({ propertyPrice, mortgageDrawdown, scrollRef }) => {
-    const [remortgageDetails, setRemortgageDetails] = useState([
-        { newTerm: 25, newRate: 3.5, openingBalance: mortgageDrawdown, schedule: [] }
-    ]);
+const MortgageDetails = ({ 
+    mortgageDrawdown, 
+    remortgageDetails,
+    setRemortgageDetails,
+    }) => {
     const prevRemortgageDetails = useRef(JSON.stringify(remortgageDetails));
     const prevMortgageDrawdown = useRef(mortgageDrawdown);
 
@@ -101,14 +102,14 @@ const MortgageDetails = ({ propertyPrice, mortgageDrawdown, scrollRef }) => {
                         <CustomText numberOfLines={1} style={[ tableStyles.cell, tableStyles.midWidth ]}>{handleFormattedDisplayTwoDecimal(item.capitalRepayment)}</CustomText>
                         <View style={[tableStyles.iconWidth, styles.center]}>
                         {!nextRemortgageYear ? (
-                            <Pressable style={[styles.remortgageIconParent]} onPress={() => addRemortgagePeriod(year, item.openingBalance)}>
+                            <Pressable style={[styles.remortgageIconParent, styles.bigBlueBackground]} onPress={() => addRemortgagePeriod(year, item.openingBalance)}>
                                 <Image
                                     source={remortgageIcon}
                                     style={styles.remortgageIcon}
                                 />
                             </Pressable>
                         ) : (
-                            <FontAwesomeIcon name="lock" style={[styles.grey, styles.larger]} />
+                            <FontAwesomeIcon name="lock" style={[styles.remortgageIconParent, styles.grey, styles.larger]} />
                         )}
                         </View>
                     </View>
@@ -134,23 +135,35 @@ const MortgageDetails = ({ propertyPrice, mortgageDrawdown, scrollRef }) => {
                 <View style={styles.marginBottom}>
                     <CustomText style={[styles.centerText, styles.header]}>Mortgage Details</CustomText>
                 </View>
-                <CustomText>Total Years Until Mortgage is Repaid: {totalYearsUntilRepaid}</CustomText>
-                {remortgageDetails.map((details, index) => {
-                    const monthlyRepayments = calculateMonthlyMortgagePayment(details.openingBalance, details.newRate, details.newTerm);
-                    const nextRemortgage = remortgageDetails[index + 1];
-                    const yearsUntilRemortgage = nextRemortgage 
-                        ? Math.min(nextRemortgage.year - (details.year || 1), details.newTerm)
-                        : details.newTerm;
-                    return (
-                        <CustomText key={`remortgage-period-${index}`}>
-                            {monthlyRepayments > 1 && (
-                                <>
-                                    Period {index + 1}: {yearsUntilRemortgage} years, at {handleFormattedDisplayTwoDecimal(monthlyRepayments)} per month
-                                </>
-                            )}
-                        </CustomText>
-                    );
-                })}
+                <View style={styles.remortgageContainer}>
+                    <View style={[styles.row, tableStyles.tableHeader, styles.marginBottom]}>
+                        <CustomText>Length of Mortgage Period</CustomText>
+                        <CustomText style={[styles.textRight, styles.marginLeft]}>Monthly Repayments</CustomText>
+                    </View>
+
+                    {remortgageDetails.map((details, index) => {
+                        const monthlyRepayments = calculateMonthlyMortgagePayment(details.openingBalance, details.newRate, details.newTerm);
+                        const nextRemortgage = remortgageDetails[index + 1];
+                        const yearsUntilRemortgage = nextRemortgage 
+                            ? Math.min(nextRemortgage.year - (details.year || 1), details.newTerm)
+                            : details.newTerm;
+                        return (
+                            <View key={`remortgage-period-${index}`}>
+                                {monthlyRepayments > 1 && (
+                                    <View style={styles.row}>
+                                        <View style={styles.row}>
+                                            <CustomText style={[styles.widthLimitSmall, styles.textRight]}>{yearsUntilRemortgage}</CustomText>
+                                            <CustomText style={[styles.marginLeft]}>{ yearsUntilRemortgage === 1 ? (" year ") : (" years ")}</CustomText>
+                                        </View>
+                                        <CustomText style={[styles.textRight, styles.marginLeft]}>
+                                        {handleFormattedDisplayTwoDecimal(monthlyRepayments)}
+                                        </CustomText>
+                                    </View>
+                                )}
+                            </View>
+                        );
+                    })}
+                </View>
                 <View>
                     {remortgageDetails.map((details, index) => {
                         const monthlyRepayments = calculateMonthlyMortgagePayment(details.openingBalance, details.newRate, details.newTerm);
@@ -162,51 +175,67 @@ const MortgageDetails = ({ propertyPrice, mortgageDrawdown, scrollRef }) => {
                             <View key={`remortgage-container-${index}`}>
                                 {details.schedule.length > 0 && details.schedule[0].openingBalance > 1 && (
                                     <View style={styles.remortgageContainer}>
-                                        <CustomText>Monthly Repayments: {handleFormattedDisplayTwoDecimal(monthlyRepayments)}</CustomText>
-                                        <CustomText>Length of Mortgage Period: {yearsUntilRemortgage}</CustomText>
-                                        {index === 0 ? (
-                                            <Pressable onPress={refreshSchedules}>
-                                                <FontAwesomeIcon style={[borrowingStyles.larger, styles.bigblue]} name="repeat" size={20} />
-                                            </Pressable>
-                                        ) : (
-                                            <Pressable onPress={() => deleteRemortgagePeriod(index)}>
-                                                <FontAwesomeIcon style={borrowingStyles.larger} name="circle-xmark" size={20} color={'#FF6961'} />
-                                            </Pressable>
-                                        )}
-                                        <View style={[styles.center, styles.row]}>
-                                            <CustomText>Loan Term: {details.newTerm} {details.newTerm === 1 ? "year" : "years"} </CustomText>
-                                            <Slider
-                                                minimumValue={1}
-                                                maximumValue={35}
-                                                minimumTrackTintColor='#03a1fc'
-                                                maximumTrackTintColor='#91B0C2'
-                                                thumbTintColor='#14a730'
-                                                style={styles.widthLimitLonger}
-                                                step={1}
-                                                value={details.newTerm}
-                                                onValueChange={(value) => updateRemortgageDetail(index, 'newTerm', value)}
-                                            />
+                                        <View style={styles.row}>
+                                            <View>
+                                                <View style={styles.row}>
+                                                    <CustomText style={styles.widthLimitLonger}>Length of Mortgage Period:</CustomText>
+                                                    <CustomText style={[styles.textRight, styles.marginLeft]}>{yearsUntilRemortgage}{ yearsUntilRemortgage === 1 ? (" year ") : (" years ")}</CustomText>
+                                                </View>
+                                                <View style={styles.row}>
+                                                    <CustomText style={styles.widthLimitLonger}>Monthly Repayments: </CustomText>
+                                                    <CustomText style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplayTwoDecimal(monthlyRepayments)}</CustomText>
+                                                </View>
+                                            </View>
+                                            <View style={[styles.textRight, styles.marginLeftLarger]}>
+                                                {index === 0 ? (
+                                                    <Pressable onPress={refreshSchedules}>
+                                                        <FontAwesomeIcon style={[borrowingStyles.larger, styles.bigblue]} name="repeat" size={20} />
+                                                    </Pressable>
+                                                ) : (
+                                                    <Pressable onPress={() => deleteRemortgagePeriod(index)}>
+                                                        <FontAwesomeIcon style={borrowingStyles.larger} name="circle-xmark" size={20} color={'#FF6961'} />
+                                                    </Pressable>
+                                                )}
+                                            </View>
                                         </View>
-                                        <View style={[styles.center, styles.row]}>
-                                            <CustomText>Mortgage Rate: {details.newRate}% </CustomText>
-                                            <Slider
-                                                minimumValue={2}
-                                                maximumValue={7}
-                                                minimumTrackTintColor='#03a1fc'
-                                                maximumTrackTintColor='#91B0C2'
-                                                thumbTintColor='#14a730'
-                                                style={styles.widthLimitLonger}
-                                                step={0.01}
-                                                value={details.newRate}
-                                                onValueChange={(value) => updateRemortgageDetail(index, 'newRate', value)}
-                                            />
+                                        <View style={styles.marginVertical}>
+                                            <View style={[styles.center, styles.row]}>
+                                                <CustomText style={[styles.widthLimitMid, styles.textRight]}>Term:</CustomText>
+                                                <CustomText style={[styles.textRight, styles.marginLeft]}>{details.newTerm} {details.newTerm === 1 ? "year" : "years"} </CustomText>
+                                                <Slider
+                                                    minimumValue={1}
+                                                    maximumValue={35}
+                                                    minimumTrackTintColor='#03a1fc'
+                                                    maximumTrackTintColor='#91B0C2'
+                                                    thumbTintColor='#14a730'
+                                                    style={styles.widthLimitLonger}
+                                                    step={1}
+                                                    value={details.newTerm}
+                                                    onValueChange={(value) => updateRemortgageDetail(index, 'newTerm', value)}
+                                                />
+                                            </View>
+                                            <View style={[styles.center, styles.row]}>
+                                                <CustomText style={[styles.widthLimitMid, styles.textRight]}>Rate:</CustomText>
+                                                <CustomText style={[styles.textRight, styles.marginLeft]}>{(details.newRate).toFixed(2)}%</CustomText>
+                                                <Slider
+                                                    minimumValue={2}
+                                                    maximumValue={7}
+                                                    minimumTrackTintColor='#03a1fc'
+                                                    maximumTrackTintColor='#91B0C2'
+                                                    thumbTintColor='#14a730'
+                                                    style={styles.widthLimitLonger}
+                                                    step={0.01}
+                                                    value={details.newRate}
+                                                    onValueChange={(value) => updateRemortgageDetail(index, 'newRate', value)}
+                                                />
+                                            </View>
                                         </View>
                                         <View style={tableStyles.tableHeader}>
-                                            <CustomText style={[tableStyles.cell, tableStyles.headerCell, tableStyles.smlWidth]}>Year</CustomText>
-                                            <CustomText style={[tableStyles.cell, tableStyles.headerCell, tableStyles.lrgWidth, styles.paddingLeft]}>Balance</CustomText>
-                                            <CustomText style={[tableStyles.cell, tableStyles.headerCell, tableStyles.midWidth, styles.paddingLeft]}>Interest</CustomText>
-                                            <CustomText style={[tableStyles.cell, tableStyles.headerCell, tableStyles.midWidth, styles.paddingLeft]}>Repaid</CustomText>
-                                            <CustomText style={[tableStyles.cell, tableStyles.headerCell, tableStyles.iconWidth]}>Remortgage</CustomText>
+                                            <CustomText style={[tableStyles.headerCell, tableStyles.year]}>Year</CustomText>
+                                            <CustomText style={[tableStyles.headerCell, tableStyles.balance]}>Balance</CustomText>
+                                            <CustomText style={[tableStyles.headerCell, tableStyles.interest]}>Interest</CustomText>
+                                            <CustomText style={[tableStyles.headerCell, tableStyles.repaid]}>Repaid</CustomText>
+                                            <CustomText numberOfLines={1} style={[tableStyles.headerCell]}>Remortgage</CustomText>
                                         </View>
                                         {renderRepaymentSchedule(details.schedule, index, details.year || 1, remortgageDetails.length > index + 1 ? remortgageDetails[index + 1].year : undefined)}
                                     </View>

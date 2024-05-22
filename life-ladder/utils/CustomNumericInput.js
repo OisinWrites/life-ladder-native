@@ -88,7 +88,7 @@ const CustomNumericInput = forwardRef(({
           placeholderTextColor={`rgba(3, 161, 252, ${placeholderOpacity})`}
           placeholder={placeholder}
           inputMode="numeric"
-          readOnly ={false} // Disable default keyboard
+          editable={false} // Disable default keyboard
           {...props}
         />
       </Pressable>

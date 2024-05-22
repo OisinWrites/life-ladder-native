@@ -116,14 +116,23 @@ const styles = StyleSheet.create({
   widthLimit: {
     width: 155,
   },
+  widthLimitMid: {
+    width: 40,
+  },
+  widthLimitSmall: {
+    width: 20,
+  },
   widthLimitLonger: {
-    width: 280,
+    width: 230,
   },
   marginRight: {
     marginRight: 8,
   },
   marginLeft: {
     marginLeft: 8,
+  },
+  marginLeftLarger: {
+    marginLeft: 15,
   },
   sendRight: {
     justifyContent: 'right',
@@ -149,6 +158,9 @@ const styles = StyleSheet.create({
   marginVertical: {
     marginTop: 8,
     marginBottom: 8,
+  },
+  marginHorizontal: {
+    marginHorizontal: 10,
   },
   marginTop: {
     marginTop: 10,
@@ -196,12 +208,29 @@ const styles = StyleSheet.create({
   larger: {
     fontSize: 40,
   },
-  pickerCustom: {
-    borderWidth: 0,
-    backgroundColor: 'rgba(255, 99, 71, 0.0)',
-    borderRadius: 10,
-    marginLeft: 2,
-    fontFamily: 'Lato_700Bold',   
+  lptBox: {
+    width: 275,
+    padding: 10,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 5
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 50,
+    overflow: 'hidden',
+    height: 40,
+    marginVertical: 3,
+  },
+  picker: {
+    top: -7,
+    width: '100%',
+    color: '#333',
+  },
+  pickerItem: {
+    height: 50,
+    color: '#666',
   },
   wheelPickerContainer: {
     flex: 1,
@@ -224,13 +253,15 @@ const styles = StyleSheet.create({
     width: 30,
   },
   remortgageIconParent: {
-    backgroundColor: '#03a1fc',
-    borderRadius: 50,
     height: 40,
     width: 40,
     margin: 3,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  bigBlueBackground: {
+    backgroundColor: '#03a1fc',
+    borderRadius: 50,
   },
 });
 

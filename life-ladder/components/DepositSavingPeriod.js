@@ -291,69 +291,27 @@ const DepositSavingPeriod = ({
                             </CustomText>
                         }
                     </View>            
-                    <View style={styles.marginLeft}>
-                        <View style={[styles.row, styles.center]}>
-                            <CustomText>Property Price:</CustomText>
-                            <View style={styles.row}>
-                                <View style={[
-                                    borrowingStyles.salaryInputs,
-                                    styles.widthLimit,
-                                    styles.marginRight,
-                                    styles.marginLeft
-                                ]}>
-                                    {!lockPropertyPrice ? (
-                                        <CustomNumericInput
-                                            scrollRef={scrollRef}
-                                            ref={propertyPriceRef}
-                                            onNext={() => handleNext(propertyPriceRef)}
-                                            onKeyboardVisibleChange={onKeyboardVisibleChange}
-                                            style={[styles.bigblue, styles.h2, styles.latoFont]}                             
-                                            value={handleFormattedDisplay(propertyPrice)}
-                                            onChangeText={(text) => handleNumericChange(text, setPropertyPrice)}
-                                            label="Property Price:"
-                                        />
-                                    ) : (
-                                        <CustomText style={[
-                                            styles.bigblue, 
-                                            styles.h2, 
-                                            styles.textRight, 
-                                            styles.marginRight
-                                        ]}>
-                                            {handleFormattedDisplay(propertyPrice)}
-                                        </CustomText>
-                                    )}
-                                </View>
-                                <Pressable 
-                                    title="Lock Property Price" 
-                                    onPress={() => handleLock('propertyPrice')}
-                                >
-                                    {lockPropertyPrice ? (
-                                        <FontAwesomeIcon name="lock" style={[styles.bigblue, styles.larger]} />
-                                    ) : (
-                                        <FontAwesomeIcon name="unlock" style={[styles.grey, styles.larger]} />
-                                    )}
-                                </Pressable>
-                            </View>
-                        </View>
 
-                        <View style={[styles.row, styles.center]}>
-                            <CustomText>Mortgage Drawdown:</CustomText>
+
+                    <View style={[styles.row, styles.center]}>
+                        <CustomText>Property Price:</CustomText>
+                        <View style={styles.row}>
                             <View style={[
                                 borrowingStyles.salaryInputs,
                                 styles.widthLimit,
                                 styles.marginRight,
                                 styles.marginLeft
                             ]}>
-                                {!lockMortgageDrawdown ? (
+                                {!lockPropertyPrice ? (
                                     <CustomNumericInput
                                         scrollRef={scrollRef}
-                                        ref={drawdownRef}
-                                        onNext={() => handleNext(drawdownRef)}
+                                        ref={propertyPriceRef}
+                                        onNext={() => handleNext(propertyPriceRef)}
                                         onKeyboardVisibleChange={onKeyboardVisibleChange}
                                         style={[styles.bigblue, styles.h2, styles.latoFont]}                             
-                                        value={handleFormattedDisplay(mortgageDrawdown)}
-                                        onChangeText={(text) => handleNumericChange(text, setMortgageDrawdown)}
-                                        label="Mortgage Drawdown:"
+                                        value={handleFormattedDisplay(propertyPrice)}
+                                        onChangeText={(text) => handleNumericChange(text, setPropertyPrice)}
+                                        label="Property Price:"
                                     />
                                 ) : (
                                     <CustomText style={[
@@ -362,151 +320,195 @@ const DepositSavingPeriod = ({
                                         styles.textRight, 
                                         styles.marginRight
                                     ]}>
-                                        {handleFormattedDisplay(mortgageDrawdown)}
+                                        {handleFormattedDisplay(propertyPrice)}
                                     </CustomText>
                                 )}
                             </View>
                             <Pressable 
-                                title="Lock Mortgage Drawdown" 
-                                onPress={() => handleLock('mortgageDrawdown')}
+                                title="Lock Property Price" 
+                                onPress={() => handleLock('propertyPrice')}
                             >
-                                {lockMortgageDrawdown ? (
+                                {lockPropertyPrice ? (
                                     <FontAwesomeIcon name="lock" style={[styles.bigblue, styles.larger]} />
                                 ) : (
                                     <FontAwesomeIcon name="unlock" style={[styles.grey, styles.larger]} />
                                 )}
                             </Pressable>
                         </View>
+                    </View>
 
-                        <View style={[styles.center, styles.row]}>
-                            <CustomText>LTV Ratio: {(LTVRatio).toFixed(0)}%</CustomText>                       
-                            {lockLTVRatio ? (
+                    <View style={[styles.row, styles.center]}>
+                        <CustomText>Mortgage Drawdown:</CustomText>
+                        <View style={[
+                            borrowingStyles.salaryInputs,
+                            styles.widthLimit,
+                            styles.marginRight,
+                            styles.marginLeft
+                        ]}>
+                            {!lockMortgageDrawdown ? (
+                                <CustomNumericInput
+                                    scrollRef={scrollRef}
+                                    ref={drawdownRef}
+                                    onNext={() => handleNext(drawdownRef)}
+                                    onKeyboardVisibleChange={onKeyboardVisibleChange}
+                                    style={[styles.bigblue, styles.h2, styles.latoFont]}                             
+                                    value={handleFormattedDisplay(mortgageDrawdown)}
+                                    onChangeText={(text) => handleNumericChange(text, setMortgageDrawdown)}
+                                    label="Mortgage Drawdown:"
+                                />
+                            ) : (
+                                <CustomText style={[
+                                    styles.bigblue, 
+                                    styles.h2, 
+                                    styles.textRight, 
+                                    styles.marginRight
+                                ]}>
+                                    {handleFormattedDisplay(mortgageDrawdown)}
+                                </CustomText>
+                            )}
+                        </View>
+                        <Pressable 
+                            title="Lock Mortgage Drawdown" 
+                            onPress={() => handleLock('mortgageDrawdown')}
+                        >
+                            {lockMortgageDrawdown ? (
+                                <FontAwesomeIcon name="lock" style={[styles.bigblue, styles.larger]} />
+                            ) : (
+                                <FontAwesomeIcon name="unlock" style={[styles.grey, styles.larger]} />
+                            )}
+                        </Pressable>
+                    </View>
+
+                    <View style={[styles.center, styles.row]}>
+                        <CustomText>LTV Ratio: {(LTVRatio).toFixed(0)}%</CustomText>                       
+                        {lockLTVRatio ? (
+                            <Pressable 
+                                title="Lock LTV Ratio" 
+                                onPress={() => handleLock('LTVRatio')}
+                            >
+                                <FontAwesomeIcon name="lock" style={[styles.bigblue, styles.larger]} />
+                            </Pressable>
+                        ) : (
+                            <View style={[styles.center, styles.row]}>
+                                <View style={styles.widthLimit}>
+                                    <Slider
+                                        minimumValue={40}
+                                        maximumValue={90}
+                                        minimumTrackTintColor='#03a1fc'
+                                        maximumTrackTintColor='#91B0C2'
+                                        thumbTintColor='#14a730'
+                                        step={1}
+                                        value={LTVRatio}
+                                        onValueChange={setLTVRatio}
+                                    />                                        
+                                </View>
                                 <Pressable 
+                                    style={styles.marginLeft} 
                                     title="Lock LTV Ratio" 
                                     onPress={() => handleLock('LTVRatio')}
                                 >
-                                    <FontAwesomeIcon name="lock" style={[styles.bigblue, styles.larger]} />
+                                    <FontAwesomeIcon name="unlock" style={[styles.grey, styles.larger]} />
                                 </Pressable>
-                            ) : (
-                                <View style={[styles.center, styles.row]}>
-                                    <View style={styles.widthLimit}>
-                                        <Slider
-                                            minimumValue={40}
-                                            maximumValue={90}
-                                            minimumTrackTintColor='#03a1fc'
-                                            maximumTrackTintColor='#91B0C2'
-                                            thumbTintColor='#14a730'
-                                            step={1}
-                                            value={LTVRatio}
-                                            onValueChange={setLTVRatio}
-                                        />                                        
-                                    </View>
-                                    <Pressable 
-                                        style={styles.marginLeft} 
-                                        title="Lock LTV Ratio" 
-                                        onPress={() => handleLock('LTVRatio')}
-                                    >
-                                        <FontAwesomeIcon name="unlock" style={[styles.grey, styles.larger]} />
-                                    </Pressable>
-                                </View>
-                            )}
-                        </View>
+                            </View>
+                        )}
+                    </View>
 
+
+                    <View>
+                        <View style={styles.row}>
+                            <CustomText>Deposit Required:</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplay(depositRequired)}</CustomText>
+                        </View>
+                        <CustomText style={[styles.marginTop, styles.bold]}>Additional Fees</CustomText>
+                        <View style={styles.horizontalRule}></View>
+                        <View style={styles.row}>
+                            <CustomText>Stamp Duty @{propertyPrice < 1000000 ? "1%" : "2%"} of the property value:</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}> {handleFormattedDisplayTwoDecimal(stampDuty)}</CustomText>
+                        </View>
+                        <View style={styles.row}>
+                            <CustomText>Solicitor Fees:</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}> €{solicitorFees} </CustomText>
+                        </View>
+                        <View style={styles.row}>
+                            <CustomText>Valuer's Report:</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}> €{valuerReport}</CustomText>
+                        </View>
+                        <View style={styles.row}>
+                            <CustomText>Surveyor's Report:</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}> €{surveyorReport}</CustomText>
+                        </View>
+                        <View style={styles.row}>
+                            <CustomText>Registry Fee:</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}> €{registryFee}</CustomText>
+                        </View>
+                        <CustomText style={[styles.marginTop, styles.bold]}>Recurring Annual Fees</CustomText>
+                        <View style={styles.horizontalRule}></View>
+                        <View style={styles.row}>
+                            <CustomText>Homeowner's Insurance:</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}> €{(300)}</CustomText>
+                        </View>
+                        <View style={styles.row}>
+                            <CustomText>Mortgage Insurance:</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}> €{(360)}</CustomText>
+                        </View>
 
                         <View>
                             <View style={styles.row}>
-                                <CustomText>Deposit Required:</CustomText>
-                                <CustomText style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplay(depositRequired)}</CustomText>
-                            </View>
-                            <CustomText style={[styles.marginTop, styles.bold]}>Additional Fees</CustomText>
-                            <View style={styles.horizontalRule}></View>
-                            <View style={styles.row}>
-                                <CustomText>Stamp Duty @{propertyPrice < 1000000 ? "1%" : "2%"} of the property value:</CustomText>
-                                <CustomText style={[styles.textRight, styles.marginLeft]}> {handleFormattedDisplayTwoDecimal(stampDuty)}</CustomText>
-                            </View>
-                            <View style={styles.row}>
-                                <CustomText>Solicitor Fees:</CustomText>
-                                <CustomText style={[styles.textRight, styles.marginLeft]}> €{solicitorFees} </CustomText>
-                            </View>
-                            <View style={styles.row}>
-                                <CustomText>Valuer's Report:</CustomText>
-                                <CustomText style={[styles.textRight, styles.marginLeft]}> €{valuerReport}</CustomText>
-                            </View>
-                            <View style={styles.row}>
-                                <CustomText>Surveyor's Report:</CustomText>
-                                <CustomText style={[styles.textRight, styles.marginLeft]}> €{surveyorReport}</CustomText>
-                            </View>
-                            <View style={styles.row}>
-                                <CustomText>Registry Fee:</CustomText>
-                                <CustomText style={[styles.textRight, styles.marginLeft]}> €{registryFee}</CustomText>
-                            </View>
-                            <CustomText style={[styles.marginTop, styles.bold]}>Recurring Annual Fees</CustomText>
-                            <View style={styles.horizontalRule}></View>
-                            <View style={styles.row}>
-                                <CustomText>Homeowner's Insurance:</CustomText>
-                                <CustomText style={[styles.textRight, styles.marginLeft]}> €{(300)}</CustomText>
-                            </View>
-                            <View style={styles.row}>
-                                <CustomText>Mortgage Insurance:</CustomText>
-                                <CustomText style={[styles.textRight, styles.marginLeft]}> €{(360)}</CustomText>
-                            </View>
-
-                            <View>
-                                <View style={styles.row}>
-                                    <CustomText>LPT Charge (basic rate):</CustomText>
-                                    <CustomText style={[styles.textRight, styles.marginLeft]}>  {handleFormattedDisplayTwoDecimal(baseTaxValue)}</CustomText>
-                                </View>
-                                { propertyPrice > 1750000 && (
-                                    <View>
-                                        <CustomText>Base rate estimated for properties above €1,750,000 @ 0.25%</CustomText>
-                                    </View>   
-                                )}
-                                <CustomText style={styles.label}>Select a Local Authority:</CustomText>
-                            </View>
+                                <CustomText>Local Property Tax { propertyPrice > 1750000 ? (                                        
+                                        "(est 0.25% > €1.75 mil)"                                        
+                                ) : ("(basic rate)")}:</CustomText>
+                                <CustomText style={[styles.textRight, styles.marginLeft]}>  {handleFormattedDisplayTwoDecimal(baseTaxValue)}</CustomText>
+                            </View>                                
                         </View>
                     </View>
-                        
-                    <View style={[borrowingStyles.quoteToggle, styles.centerText, styles.widthLimitLonger, styles.fixedRowHeight]}>
-                        <View style={[styles.center]}>
-                            <Picker
-                                selectedValue={selectedCounty}
-                                onValueChange={handleCountyChange}
-                                style={[styles.pickerCustom, styles.marginRight, styles.paddingBottom]}
-                            >
-                                {sortedCounties.map((county, index) => (
-                                <Picker.Item label={county.name} value={county.name} key={index} />
-                                ))}
-                            </Picker> 
-                        </View>
-                    </View>  
-
-                    <View style={styles.marginLeft}>                            
-                            {selectedCounty ? (
-                                selectedPercentage === 0 ? (
-                                    <CustomText>This Local Authority has a 0% increase LPT</CustomText>
-                                ) : (
-                                    <View>                                        
-                                        <View style={styles.row}>
-                                            <CustomText>Local Authority Increase @ {selectedPercentage}%:</CustomText>
-                                            <CustomText style={[styles.textRight, styles.marginLeft]}>{handleFormattedDisplayTwoDecimal(selectedPercentage * (baseTaxValue/100))}</CustomText>
-                                        </View>    
-                                    </View>
-                                )
-                            ) : null}                                                                
-                        </View>
-
-
-                        <View style={styles.horizontalRule}/>
-                        <View style={styles.row}>
-                            <CustomText>Total Additional Costs:</CustomText>
-                            <CustomText style={[styles.textRight, styles.marginLeft]}> {handleFormattedDisplayTwoDecimal(totalAdditionalCosts)}</CustomText>
-                        </View>
-                        <View style={styles.row}>
-                            <CustomText>Total Savings Required:</CustomText>
-                            <CustomText style={[styles.textRight, styles.marginLeft]}> {handleFormattedDisplayTwoDecimal(parseFloat(totalAdditionalCosts) + parseFloat(depositRequired))}</CustomText>
-                        </View>
-                        
                     
+                        
+                    <View style={[styles.row]}>
+                        <View style={[styles.lptBox]}>
+                            <CustomText style={styles.marginLeft}>Select a Local Authority:</CustomText>
+                            <View style={styles.pickerContainer}>
+                                <Picker
+                                    selectedValue={selectedCounty}
+                                    onValueChange={handleCountyChange}
+                                    style={styles.picker}                                
+                                >
+                                    {sortedCounties.map((county, index) => (
+                                    <Picker.Item style={styles.pickerItem} label={county.name} value={county.name} key={index} />
+                                    ))}
+                                </Picker> 
+                            </View>
+                            <View style={styles.marginLeft}>                            
+                                {selectedCounty ? (
+                                    selectedPercentage === 0 ? (
+                                        <CustomText>Authority has a 0% increase on LPT</CustomText>
+                                    ) : (
+                                        <View>                                        
+                                            <View style={styles.row}>
+                                                <CustomText>Local Authority Increase @ {selectedPercentage}%</CustomText>
+                                            </View>    
+                                        </View>
+                                    )
+                                ) : null}                                                                
+                            </View>
+                        </View>
+                        { selectedPercentage > 1 && (
+                        <CustomText style={[styles.textRight, styles.marginLeft]}>
+                            {handleFormattedDisplayTwoDecimal(selectedPercentage * (baseTaxValue/100))}
+                        </CustomText>
+                        )}
+                    </View>
+
+                    <View style={styles.horizontalRule}/>
+                    <View style={styles.row}>
+                        <CustomText>Total Additional Costs:</CustomText>
+                        <CustomText style={[styles.textRight, styles.marginLeft]}> {handleFormattedDisplayTwoDecimal(totalAdditionalCosts)}</CustomText>
+                    </View>
+                    <View style={styles.row}>
+                        <CustomText>Total Savings Required:</CustomText>
+                        <CustomText style={[styles.textRight, styles.marginLeft]}> {handleFormattedDisplayTwoDecimal(parseFloat(totalAdditionalCosts) + parseFloat(depositRequired))}</CustomText>
+                    </View>
+                    
+                
                     { applicants === 2 && 
                         <View style={styles.container}>
                             <Pressable
@@ -514,7 +516,7 @@ const DepositSavingPeriod = ({
                                 style={({ pressed }) => [
                                     {
                                         backgroundColor: pressed
-                                            ? (combinedEffort ? '#FFA07A' : '#20B2AA') // Different color when pressed
+                                            ? (combinedEffort ? '#FFA07A' : '#20B2AA')
                                             : (combinedEffort ? '#20B2AA' : '#FFA07A')
                                     },
                                     styles.button
@@ -530,6 +532,7 @@ const DepositSavingPeriod = ({
                         <CustomText>Deposit Saving Period:</CustomText>
                         <CustomText style={[styles.textRight, styles.marginLeft]}>{depositSavingPeriod}</CustomText>
                     </View>
+                    
                 </View>
             )}
         </View>

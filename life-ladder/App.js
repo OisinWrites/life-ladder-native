@@ -7,6 +7,7 @@ import lifeladderheader from './assets/images/lifeladderheader.png';
 import { GlobalStylesProvider } from './utils/GlobalStylesContext';
 import CustomText from './utils/CustomText';
 import { handleFormattedDisplayTwoDecimal } from './utils/FormatNumber';
+import { calculateMonthlyMortgagePayment } from './utils/MortgageInterestCalc';
 
 import BorrowingCapacityCalculator from './components/BorrowingCapacityCalculator';
 import PersonalFinances from './components/PersonalFinances';
@@ -43,7 +44,7 @@ function App() {
 
   const [applicants, setApplicants] = useState(1);
   const [firstTimeBuyer, setFirstTimeBuyer] = useState('No');
-  const [salary1, setSalary1] = useState(5000000);
+  const [salary1, setSalary1] = useState(50000);
   const [salary2, setSalary2] = useState(null);
   const [maxBorrowableAmount, setMaxBorrowableAmount] = useState(null);
 
@@ -74,8 +75,10 @@ function App() {
   const [mortgageDrawdown, setMortgageDrawdown] = useState(estimatedPropertyValue * 0.8);
   const [propertyPrice, setPropertyPrice] = useState(estimatedPropertyValue);
   const [multiplier, setMultiplier] = useState(3.5);
-  const [loanTerm, setLoanTerm] = useState(30);
-  const [mortgageRate, setMortgageRate] = useState(4);
+  const [remortgageDetails, setRemortgageDetails] = useState([
+      { newTerm: 25, newRate: 3.5, openingBalance: mortgageDrawdown, schedule: [] }
+  ]);
+
 
   const handleHeaderClick = () => {
     if (borrowingSectionComplete) {
@@ -179,6 +182,32 @@ function App() {
     return null;
   }
 
+  const renderRemortgageDetails = () => {
+    return remortgageDetails.map((details, index) => {
+      const monthlyRepayments = calculateMonthlyMortgagePayment(details.openingBalance, details.newRate, details.newTerm);
+      const nextRemortgage = remortgageDetails[index + 1];
+      const yearsUntilRemortgage = nextRemortgage 
+        ? Math.min(nextRemortgage.year - (details.year || 1), details.newTerm)
+        : details.newTerm;
+
+      return (
+        <View key={`remortgage-period-${index}`} style={styles.row}>
+          {monthlyRepayments > 1 && (
+            <View style={styles.row}>
+              <View style={styles.row}>
+                <CustomText style={[styles.widthLimitSmall, styles.textRight]}>{yearsUntilRemortgage}</CustomText>
+                <CustomText style={[styles.marginLeft]}>{yearsUntilRemortgage === 1 ? " year " : " years "}</CustomText>
+              </View>
+              <CustomText style={[styles.textRight, styles.marginLeft]}>
+                {handleFormattedDisplayTwoDecimal(monthlyRepayments)}
+              </CustomText>
+            </View>
+          )}
+        </View>
+      );
+    });
+  };
+
     return (
       <SafeAreaProvider style={[styles.safeArea, { paddingTop: insets.top }]}>
 
@@ -278,13 +307,15 @@ function App() {
             </View>
 
             <View style={[styles.main, styles.section, styles.center]}>
-              <MortgageDetails
-                propertyPrice={propertyPrice}
-                mortgageDrawdown={mortgageDrawdown}
-                loanTerm={loanTerm}
-                setLoanTerm={setLoanTerm}
-                mortgageRate={mortgageRate}
-                setMortgageRate={setMortgageRate}
+              <CustomText style={[styles.headerText, styles.h3]}>Remortgage Details</CustomText>
+              {renderRemortgageDetails()}
+            </View>
+            
+            <View style={[styles.main, styles.section, styles.center]}>
+              <MortgageDetails                
+                mortgageDrawdown={mortgageDrawdown}                
+                remortgageDetails={remortgageDetails}
+                setRemortgageDetails={setRemortgageDetails}
               />
             </View>
             <View style={styles.appLogo}></View>

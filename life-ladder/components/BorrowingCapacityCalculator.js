@@ -276,7 +276,7 @@ const BorrowingCapacityCalculator = ({
                             <Pressable onPress={() => {setShowInput(prev => !prev);
                                  setAllowRecalculation(prev => !prev);}}>
                                 <View style={[borrowingStyles.quoteToggle, styles.centerText, styles.fixedRowHeight]}>
-                                    <CustomText style={[styles.textColorWhite, styles.marginVertical]}>
+                                    <CustomText style={[styles.textColorWhite, styles.marginVertical, styles.marginHorizontal]}>
                                         {showInput ? 'Revert to calculator?' : 'Use a manual quote?'}
                                     </CustomText>   
                                 </View>                             
