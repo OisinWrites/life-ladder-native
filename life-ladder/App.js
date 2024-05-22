@@ -44,7 +44,7 @@ function App() {
 
   const [applicants, setApplicants] = useState(1);
   const [firstTimeBuyer, setFirstTimeBuyer] = useState('No');
-  const [salary1, setSalary1] = useState(2000);
+  const [salary1, setSalary1] = useState(50000);
   const [salary2, setSalary2] = useState(null);
   const [maxBorrowableAmount, setMaxBorrowableAmount] = useState(null);
 
@@ -79,6 +79,56 @@ function App() {
       { newTerm: 25, newRate: 3.5, openingBalance: mortgageDrawdown, schedule: [] }
   ]);
 
+  const [personalFinances1, setPersonalFinances1] = useState({
+    salary: salary1,
+    rent: rent1,
+    bills: bills1,
+    weeklyDiscretionary: weeklyDiscretionary1,
+    annualBills: annualBills1,
+    currentSavings: currentSavings1,
+    otherSavingGoals: otherSavingGoals1,
+    savingPowerMonthly: savingPowerMonthly1
+  });
+  
+  const [personalFinances2, setPersonalFinances2] = useState({
+    salary: salary2,
+    rent: rent2,
+    bills: bills2,
+    weeklyDiscretionary: weeklyDiscretionary2,
+    annualBills: annualBills2,
+    currentSavings: currentSavings2,
+    otherSavingGoals: otherSavingGoals2,
+    savingPowerMonthly: savingPowerMonthly2
+  });
+  
+  useEffect(() => {
+    setPersonalFinances1(prevState => ({
+      ...prevState,
+      salary: salary1,
+      rent: rent1,
+      bills: bills1,
+      weeklyDiscretionary: weeklyDiscretionary1,
+      annualBills: annualBills1,
+      currentSavings: currentSavings1,
+      otherSavingGoals: otherSavingGoals1,
+      savingPowerMonthly: savingPowerMonthly1
+    }));
+  }, [salary1, rent1, bills1, weeklyDiscretionary1, annualBills1, currentSavings1, otherSavingGoals1, savingPowerMonthly1]);
+  
+  useEffect(() => {
+    setPersonalFinances2(prevState => ({
+      ...prevState,
+      salary: salary2,
+      rent: rent2,
+      bills: bills2,
+      weeklyDiscretionary: weeklyDiscretionary2,
+      annualBills: annualBills2,
+      currentSavings: currentSavings2,
+      otherSavingGoals: otherSavingGoals2,
+      savingPowerMonthly: savingPowerMonthly2
+    }));
+  }, [salary2, rent2, bills2, weeklyDiscretionary2, annualBills2, currentSavings2, otherSavingGoals2, savingPowerMonthly2]);
+  
 
   const handleHeaderClick = () => {
     if (borrowingSectionComplete) {
@@ -208,6 +258,30 @@ function App() {
     });
   };
 
+  const calculateTotalInterestPayments = () => {
+    return remortgageDetails.reduce((totalInterest, details) => {
+      return totalInterest + details.schedule.reduce((yearlyInterest, year) => {
+        return yearlyInterest + year.annualInterestCharged;
+      }, 0);
+    }, 0);
+  };
+
+  const renderInterestPaymentsPerYear = () => {
+    return remortgageDetails.map((details, remortgageIndex) => {
+      return details.schedule.map((year, yearIndex) => (
+        <View key={`interest-${remortgageIndex}-${yearIndex}`} style={styles.row}>
+          <CustomText style={[styles.widthLimitSmall, styles.textRight]}>
+            Year {year.year}
+          </CustomText>
+          <CustomText style={styles.marginLeft}>
+            {handleFormattedDisplayTwoDecimal(year.annualInterestCharged)}
+          </CustomText>
+        </View>
+      ));
+    });
+  };
+  
+
     return (
       <SafeAreaProvider style={[styles.safeArea, { paddingTop: insets.top }]}>
 
@@ -246,43 +320,18 @@ function App() {
             <View style={[styles.main, styles.section, styles.center]}>
               <PersonalFinances
                 applicants={applicants}
-                salary1={salary1}
-                salary2={salary2}
                 displaySwap2={displaySwap2}
                 displayWarning2={displayWarning2}
                 handleToggleComplete2={handleToggleComplete2}
-                rent1={rent1}
-                rent2={rent2}
-                setRent1={setRent1}
-                setRent2={setRent2}
-                bills1={bills1}
-                setBills1={setBills1}
-                bills2={bills2}
-                setBills2={setBills2}
-                weeklyDiscretionary1={weeklyDiscretionary1}
-                weeklyDiscretionary2={weeklyDiscretionary2}
-                setWeeklyDiscretionary1={setWeeklyDiscretionary1}
-                setWeeklyDiscretionary2={setWeeklyDiscretionary2}
-                annualBills1={annualBills1}
-                setAnnualBills1={setAnnualBills1}
-                annualBills2={annualBills2}
-                setAnnualBills2={setAnnualBills2}
-                currentSavings1={currentSavings1}
-                setCurrentSavings1={setCurrentSavings1}
-                currentSavings2={currentSavings2}
-                setCurrentSavings2={setCurrentSavings2}
-                otherSavingGoals1={otherSavingGoals1}
-                setOtherSavingGoals1={setOtherSavingGoals1}
-                otherSavingGoals2={otherSavingGoals2}
-                setOtherSavingGoals2={setOtherSavingGoals2}
-                savingPowerMonthly1={savingPowerMonthly1}
-                savingPowerMonthly2={savingPowerMonthly2}
-                setSavingPowerMonthly1={setSavingPowerMonthly1}
-                setSavingPowerMonthly2={setSavingPowerMonthly2}
+                personalFinances1={personalFinances1}
+                setPersonalFinances1={setPersonalFinances1}
+                personalFinances2={personalFinances2}
+                setPersonalFinances2={setPersonalFinances2}
                 scrollRef={scrollRef}
                 onKeyboardVisibleChange={setIsKeyboardVisible}
               />
             </View>
+
             <View style={[styles.main, styles.section, styles.center]}>
               <DepositSavingPeriod
                 applicants={applicants}
@@ -305,12 +354,7 @@ function App() {
                 onKeyboardVisibleChange={setIsKeyboardVisible}
               />
             </View>
-
-            <View style={[styles.main, styles.section, styles.center]}>
-              <CustomText style={[styles.headerText, styles.h3]}>Remortgage Details</CustomText>
-              {renderRemortgageDetails()}
-            </View>
-
+            
             <View style={[styles.main, styles.section, styles.center]}>
               <MortgageDetails                
                 mortgageDrawdown={mortgageDrawdown}                
