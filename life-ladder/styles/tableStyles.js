@@ -21,7 +21,19 @@ const tableStyles = StyleSheet.create({
     },
     headerCell: {
         fontWeight: 'bold',
-    }
+    },
+    smlWidth: {
+        maxWidth: 60,
+    },
+    midWidth: {
+        minWidth: 95,
+    },
+    lrgWidth: {
+        minWidth: 100,
+    },
+    iconWidth: {
+        minWidth: 100,
+    },
   });
 
   

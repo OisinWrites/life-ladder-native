@@ -190,6 +190,9 @@ const styles = StyleSheet.create({
   paddingRight: {
     paddingRight: 10,
   },
+  paddingLeft: {
+    paddingLeft: 20,
+  },
   larger: {
     fontSize: 40,
   },
