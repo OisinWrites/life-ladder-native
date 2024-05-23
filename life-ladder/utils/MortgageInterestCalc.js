@@ -30,7 +30,7 @@ export const generateRepaymentSchedule = (mortgageDrawdown, mortgageRate, loanTe
             capitalRepayment += mortgageDrawdownRepaymentForMonth;
         }
 
-        if (remainingBalance < 0) {
+        if (remainingBalance < 1) {
             capitalRepayment += remainingBalance;
             remainingBalance = 0;
         }

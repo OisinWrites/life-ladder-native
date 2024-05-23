@@ -3,6 +3,7 @@ import { View, Pressable } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import styles from '../styles/appStyles';
 import borrowingStyles from '../styles/borrowingStyles';
+import keyboardStyles from '../styles/keyboardStyles';
 import CustomText from '../utils/CustomText';
 import CustomNumericInput from '../utils/CustomNumericInput';
 import { countyPercentages, calculatePropertyTax, calculateBasePropertyTax } from '../utils/LocalPropertyTaxCalc';
@@ -35,6 +36,7 @@ const DepositSavingPeriod = ({
 
 
     const [depositRequired, setDepositRequired] = useState('');
+    const [drawdownInExcessOfBorrowingCapacity, setDrawdownInExcessOfBorrowingCapacity] = useState(false);
 
     const [propertyPriceFocused, setPropertyPriceFocused] = useState(false);
     const [mortgageDrawdownFocused, setMortgageDrawdownFocused] = useState(false);
@@ -46,6 +48,7 @@ const DepositSavingPeriod = ({
 
     const prevPropertyPrice = useRef();
     const prevMortgageDrawdown = useRef();
+    const prevLTVRatio = useRef(LTVRatio);
 
     const propertyPriceRef = useRef(null);
     const drawdownRef = useRef(null);
@@ -156,14 +159,16 @@ const DepositSavingPeriod = ({
 
     useEffect(() => {
         if (lockPropertyPrice && focusState.mortgageDrawdownFocused) {
-            // Calculate the new LTV ratio based on the current mortgage drawdown and property price
-            let newLTVRatio = (mortgageDrawdown / propertyPrice) * 100;
-            
-            newLTVRatio = parseFloat(newLTVRatio.toFixed(5));
-            // Set the new LTV ratio
-            setLTVRatio(newLTVRatio);
+            let newMortgageDrawdown = propertyPrice * (LTVRatio / 100);
+            if (newMortgageDrawdown > maxBorrowableAmount) {
+                setLTVRatio(prevLTVRatio.current);
+            } else {
+                setMortgageDrawdown(Number(newMortgageDrawdown).toFixed(0));
+            }
         }
-    }, [mortgageDrawdown, lockPropertyPrice, focusState.mortgageDrawdownFocused, propertyPrice]);
+        prevLTVRatio.current = LTVRatio;
+    }, [LTVRatio, lockPropertyPrice, focusState.mortgageDrawdownFocused, propertyPrice, maxBorrowableAmount]);
+    
 
     useEffect(() => {
         if (lockPropertyPrice && !mortgageDrawdownFocused) {
@@ -273,6 +278,20 @@ const DepositSavingPeriod = ({
         }
     };
 
+    useEffect(() => {
+        if (mortgageDrawdown > maxBorrowableAmount && prevMortgageDrawdown.current !== maxBorrowableAmount) {
+            setMortgageDrawdown(maxBorrowableAmount);
+            setDrawdownInExcessOfBorrowingCapacity(true);
+        } else if (mortgageDrawdown <= maxBorrowableAmount && prevMortgageDrawdown.current > maxBorrowableAmount) {
+            setDrawdownInExcessOfBorrowingCapacity(false);
+        }
+        prevMortgageDrawdown.current = mortgageDrawdown;
+    }, [mortgageDrawdown, maxBorrowableAmount]);   
+
+    const handleUserAction = () => {
+        setDrawdownInExcessOfBorrowingCapacity(false);
+    };
+
     return (
         <View style={styles.container}>
             {displaySwap3 ? (
@@ -310,7 +329,10 @@ const DepositSavingPeriod = ({
                                         onKeyboardVisibleChange={onKeyboardVisibleChange}
                                         style={[styles.bigblue, styles.h2, styles.latoFont]}                             
                                         value={handleFormattedDisplay(propertyPrice)}
-                                        onChangeText={(text) => handleNumericChange(text, setPropertyPrice)}
+                                        onChangeText={(text) => {
+                                            handleNumericChange(text, setPropertyPrice);
+                                            handleUserAction();
+                                        }}
                                         label="Property Price:"
                                     />
                                 ) : (
@@ -354,17 +376,28 @@ const DepositSavingPeriod = ({
                                     style={[styles.bigblue, styles.h2, styles.latoFont]}                             
                                     value={handleFormattedDisplay(mortgageDrawdown)}
                                     onChangeText={(text) => handleNumericChange(text, setMortgageDrawdown)}
-                                    label="Mortgage Drawdown:"
+                                    label={
+                                        <View style={styles.labelContainer}>
+                                            <CustomText style={[keyboardStyles.label, styles.centerText]}>Mortgage Drawdown:</CustomText>
+                                            {drawdownInExcessOfBorrowingCapacity && (
+                                                <CustomText style={styles.warning}>
+                                                    WARNING: Max Loan cannot be exceeded!
+                                                </CustomText>
+                                            )}
+                                        </View>
+                                    }
                                 />
                             ) : (
-                                <CustomText style={[
-                                    styles.bigblue, 
-                                    styles.h2, 
-                                    styles.textRight, 
-                                    styles.marginRight
-                                ]}>
-                                    {handleFormattedDisplay(mortgageDrawdown)}
-                                </CustomText>
+                                <>
+                                    <CustomText style={[
+                                        styles.bigblue, 
+                                        styles.h2, 
+                                        styles.textRight, 
+                                        styles.marginRight
+                                    ]}>
+                                        {handleFormattedDisplay(mortgageDrawdown)}
+                                    </CustomText>                                    
+                                </>
                             )}
                         </View>
                         <Pressable 
@@ -399,7 +432,10 @@ const DepositSavingPeriod = ({
                                         thumbTintColor='#14a730'
                                         step={1}
                                         value={LTVRatio}
-                                        onValueChange={setLTVRatio}
+                                        onValueChange={(value) => {
+                                            setLTVRatio(value);
+                                            handleUserAction();
+                                        }}
                                     />                                        
                                 </View>
                                 <Pressable 
@@ -413,6 +449,13 @@ const DepositSavingPeriod = ({
                         )}
                     </View>
 
+                    {drawdownInExcessOfBorrowingCapacity && (
+                        <View style={[styles.center, styles.marginTop]}>
+                            <CustomText style={[styles.warning, styles.marginBottom]}>
+                                WARNING: Max Loan cannot be exceeded!
+                            </CustomText>
+                        </View>
+                    )}
 
                     <View>
                         <View style={styles.row}>

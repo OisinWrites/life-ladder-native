@@ -18,6 +18,7 @@ const MortgageDetails = ({
     }) => {
     const prevRemortgageDetails = useRef(JSON.stringify(remortgageDetails));
     const prevMortgageDrawdown = useRef(mortgageDrawdown);
+    const hasValidRemortgagePeriods = remortgageDetails.some(detail => detail.openingBalance >= 1);
 
     const recalculateSchedules = () => {
         let updatedRemortgageDetails = [...remortgageDetails];
@@ -25,7 +26,9 @@ const MortgageDetails = ({
             const details = updatedRemortgageDetails[index];
             const startYear = details.year || 1;
 
-            const adjustedOpeningBalance = parseFormattedNumber(details.openingBalance) + parseFormattedNumber(details.cashBack || 0);
+            const adjustedOpeningBalance = parseFormattedNumber(details.openingBalance) > 1
+            ? parseFormattedNumber(details.openingBalance) + parseFormattedNumber(details.cashBack || 0)
+            : parseFormattedNumber(details.openingBalance);
 
             // Send the adjusted opening balance to the generateRepaymentSchedule function
             const scheduleResult = generateRepaymentSchedule(
@@ -100,12 +103,12 @@ const MortgageDetails = ({
             const year = startYear + i;
             return (
                 Number(item.openingBalance) > 1 && (
-                    <View key={`${index}-${i}`} style={tableStyles.tableRow}>
+                    <View key={`${index}-${i}`} style={[tableStyles.tableRow]}>
                         <CustomText style={[ tableStyles.cell, tableStyles.smlWidth ]}>{year}</CustomText>
                         <CustomText numberOfLines={1} style={[ tableStyles.cell, tableStyles.lrgWidth ]}>{handleFormattedDisplayTwoDecimal(item.openingBalance)}</CustomText>
                         <CustomText numberOfLines={1} style={[ tableStyles.cell, tableStyles.midWidth ]}>{handleFormattedDisplayTwoDecimal(item.annualInterestCharged)}</CustomText>
                         <CustomText numberOfLines={1} style={[ tableStyles.cell, tableStyles.midWidth ]}>{handleFormattedDisplayTwoDecimal(item.capitalRepayment)}</CustomText>
-                        <View style={[tableStyles.iconWidth, styles.center]}>
+                        <View style={[tableStyles.iconWidth, styles.center, styles.right]}>
                         {!nextRemortgageYear ? (
                             <Pressable style={[styles.remortgageIconParent, styles.bigBlueBackground]} onPress={() => addRemortgagePeriod(year, item.openingBalance)}>
                                 <Image
@@ -140,35 +143,37 @@ const MortgageDetails = ({
                 <View style={styles.marginBottom}>
                     <CustomText style={[styles.centerText, styles.header]}>Mortgage Details</CustomText>
                 </View>
-                <View style={styles.remortgageContainer}>
-                    <View style={[styles.row, tableStyles.tableHeader, styles.marginBottom]}>
-                        <CustomText>Length of Mortgage Period</CustomText>
-                        <CustomText style={[styles.textRight, styles.marginLeft]}>Monthly Repayments</CustomText>
-                    </View>
+                {remortgageDetails.length > 1 && hasValidRemortgagePeriods && (
+                    <View style={styles.remortgageContainer}>
+                        <View style={[styles.row, tableStyles.tableHeader, styles.marginBottom]}>
+                            <CustomText>Length of Mortgage Period</CustomText>
+                            <CustomText style={[styles.textRight, styles.marginLeft]}>Monthly Repayments</CustomText>
+                        </View>
 
-                    {remortgageDetails.map((details, index) => {
-                        const monthlyRepayments = calculateMonthlyMortgagePayment(details.openingBalance, details.newRate, details.newTerm);
-                        const nextRemortgage = remortgageDetails[index + 1];
-                        const yearsUntilRemortgage = nextRemortgage 
-                            ? Math.min(nextRemortgage.year - (details.year || 1), details.newTerm)
-                            : details.newTerm;
-                        return (
-                            <View key={`remortgage-period-${index}`}>
-                                {monthlyRepayments > 1 && (
-                                    <View style={styles.row}>
+                        {remortgageDetails.map((details, index) => {
+                            const monthlyRepayments = calculateMonthlyMortgagePayment(details.openingBalance, details.newRate, details.newTerm);
+                            const nextRemortgage = remortgageDetails[index + 1];
+                            const yearsUntilRemortgage = nextRemortgage 
+                                ? Math.min(nextRemortgage.year - (details.year || 1), details.newTerm)
+                                : details.newTerm;
+                            return (
+                                <View key={`remortgage-period-${index}`}>
+                                    {monthlyRepayments > 1 && (
                                         <View style={styles.row}>
-                                            <CustomText style={[styles.widthLimitSmall, styles.textRight]}>{yearsUntilRemortgage}</CustomText>
-                                            <CustomText style={[styles.marginLeft]}>{ yearsUntilRemortgage === 1 ? (" year ") : (" years ")}</CustomText>
+                                            <View style={styles.row}>
+                                                <CustomText style={[styles.widthLimitSmall, styles.textRight]}>{yearsUntilRemortgage}</CustomText>
+                                                <CustomText style={[styles.marginLeft]}>{ yearsUntilRemortgage === 1 ? (" year ") : (" years ")}</CustomText>
+                                            </View>
+                                            <CustomText style={[styles.textRight, styles.marginLeft]}>
+                                            {handleFormattedDisplayTwoDecimal(monthlyRepayments)}
+                                            </CustomText>
                                         </View>
-                                        <CustomText style={[styles.textRight, styles.marginLeft]}>
-                                        {handleFormattedDisplayTwoDecimal(monthlyRepayments)}
-                                        </CustomText>
-                                    </View>
-                                )}
-                            </View>
-                        );
-                    })}
-                </View>
+                                    )}
+                                </View>
+                            );
+                        })}
+                    </View>
+                )}
                 <View>
                     {remortgageDetails.map((details, index) => {
                         const monthlyRepayments = calculateMonthlyMortgagePayment(details.openingBalance, details.newRate, details.newTerm);
@@ -206,7 +211,7 @@ const MortgageDetails = ({
 
                                         <CustomText>{details.cashBack}</CustomText>
                                         <View style={[styles.row, styles.fixedRowHeight, styles.center, styles.marginLeft]}>
-                                            <CustomText>Cash Back?</CustomText>
+                                            <CustomText>Release Equity:</CustomText>
                                             <View style={[borrowingStyles.salaryInputs, styles.widthLimit, styles.marginLeft]}>
                                                 <CustomNumericInput
                                                     label="Cash released from mortgage:"

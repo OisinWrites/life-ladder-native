@@ -137,6 +137,9 @@ const styles = StyleSheet.create({
   sendRight: {
     justifyContent: 'right',
   },
+  right: {
+    justifyContent: 'flex-end',
+  },
   defaultPlaceholderOpacity: {
     opacity: 0.8,
   },
@@ -262,6 +265,12 @@ const styles = StyleSheet.create({
   bigBlueBackground: {
     backgroundColor: '#03a1fc',
     borderRadius: 50,
+  },
+  labelContainer: {
+    flexDirection: 'column',
+  },
+  warning: {
+    color: '#ff6961',
   },
 });
 

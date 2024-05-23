@@ -33,15 +33,15 @@ const tableStyles = StyleSheet.create({
         fontSize: 12,
     },
     midWidth: {
-        maxWidth: 90,
+        width: 90,
         fontSize: 12,
     },
     lrgWidth: {
-        minWidth: 10,    
+        width: 120,    
         fontSize: 12,
     },
     iconWidth: {
-        maxWidth: 50,
+        width: 50,
     },
     year: {
         width: 35,

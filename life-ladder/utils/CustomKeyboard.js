@@ -60,7 +60,7 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
             <View style={[keyboardStyles.keyboardContainer, keyboardStyles.greyBorderTop]}>
 
                 <View>
-                    <CustomText style={[keyboardStyles.label, styles.centerText]}>{label} </CustomText>
+                    <CustomText style={[keyboardStyles.label, styles.centerText]}>{label}</CustomText>
                     <View style={styles.row}>
                         <View style={[borrowingStyles.salaryInputs, styles.marginRight, styles.marginTop, styles.marginBottom,  keyboardStyles.greyBorder, keyboardStyles.largerInputValue, styles.borderRadiusSemi]}>
                             <View>
