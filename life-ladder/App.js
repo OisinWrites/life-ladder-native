@@ -24,7 +24,6 @@ import {
   Lato_400Regular,
   Lato_700Bold,
 } from '@expo-google-fonts/lato';
-import FinancialPlanner from './components/FinancialPlanner';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -77,59 +76,67 @@ function App() {
   const [mortgageDrawdown, setMortgageDrawdown] = useState(estimatedPropertyValue * 0.8);
   const [propertyPrice, setPropertyPrice] = useState(estimatedPropertyValue);
   const [multiplier, setMultiplier] = useState(3.5);
+  const [maxLoanTerm, setMaxLoanTerm]  = useState(35);
   const [remortgageDetails, setRemortgageDetails] = useState([
-      { newTerm: 25, newRate: 3.5, openingBalance: mortgageDrawdown, schedule: [] }
+      { newTerm: maxLoanTerm, newRate: 3.5, openingBalance: mortgageDrawdown, schedule: [] }
   ]);
-  const [personalFinances1, setPersonalFinances1] = useState({
-    salary: salary1,
-    rent: rent1,
-    bills: bills1,
-    weeklyDiscretionary: weeklyDiscretionary1,
-    annualBills: annualBills1,
-    currentSavings: currentSavings1,
-    otherSavingGoals: otherSavingGoals1,
-    savingPowerMonthly: savingPowerMonthly1
-  });
-  
-  const [personalFinances2, setPersonalFinances2] = useState({
-    salary: salary2,
-    rent: rent2,
-    bills: bills2,
-    weeklyDiscretionary: weeklyDiscretionary2,
-    annualBills: annualBills2,
-    currentSavings: currentSavings2,
-    otherSavingGoals: otherSavingGoals2,
-    savingPowerMonthly: savingPowerMonthly2
-  });
+
+  const [personalFinances, setPersonalFinances] = useState([
+    {
+      salary: 50000,
+      rent: '',
+      bills: '',
+      weeklyDiscretionary: '',
+      annualBills: '',
+      currentSavings: '',
+      otherSavingGoals: '',
+      savingPowerMonthly: ''
+    },
+    {
+      salary: null,
+      rent: '',
+      bills: '',
+      weeklyDiscretionary: '',
+      annualBills: '',
+      currentSavings: '',
+      otherSavingGoals: '',
+      savingPowerMonthly: ''
+    }
+  ]);
   
   useEffect(() => {
-    setPersonalFinances1(prevState => ({
-      ...prevState,
-      salary: salary1,
-      rent: rent1,
-      bills: bills1,
-      weeklyDiscretionary: weeklyDiscretionary1,
-      annualBills: annualBills1,
-      currentSavings: currentSavings1,
-      otherSavingGoals: otherSavingGoals1,
-      savingPowerMonthly: savingPowerMonthly1
-    }));
+    setPersonalFinances((prevState) => [
+      {
+        ...prevState[0],
+        salary: salary1,
+        rent: rent1,
+        bills: bills1,
+        weeklyDiscretionary: weeklyDiscretionary1,
+        annualBills: annualBills1,
+        currentSavings: currentSavings1,
+        otherSavingGoals: otherSavingGoals1,
+        savingPowerMonthly: savingPowerMonthly1
+      },
+      prevState[1]
+    ]);
   }, [salary1, rent1, bills1, weeklyDiscretionary1, annualBills1, currentSavings1, otherSavingGoals1, savingPowerMonthly1]);
-  
+
   useEffect(() => {
-    setPersonalFinances2(prevState => ({
-      ...prevState,
-      salary: salary2,
-      rent: rent2,
-      bills: bills2,
-      weeklyDiscretionary: weeklyDiscretionary2,
-      annualBills: annualBills2,
-      currentSavings: currentSavings2,
-      otherSavingGoals: otherSavingGoals2,
-      savingPowerMonthly: savingPowerMonthly2
-    }));
+    setPersonalFinances((prevState) => [
+      prevState[0],
+      {
+        ...prevState[1],
+        salary: salary2,
+        rent: rent2,
+        bills: bills2,
+        weeklyDiscretionary: weeklyDiscretionary2,
+        annualBills: annualBills2,
+        currentSavings: currentSavings2,
+        otherSavingGoals: otherSavingGoals2,
+        savingPowerMonthly: savingPowerMonthly2
+      }
+    ]);
   }, [salary2, rent2, bills2, weeklyDiscretionary2, annualBills2, currentSavings2, otherSavingGoals2, savingPowerMonthly2]);
-  
 
   const handleHeaderClick = () => {
     if (borrowingSectionComplete) {
@@ -323,11 +330,9 @@ function App() {
                   displaySwap2={displaySwap2}
                   displayWarning2={displayWarning2}
                   handleToggleComplete2={handleToggleComplete2}
-                  personalFinances1={personalFinances1}
-                  setPersonalFinances1={setPersonalFinances1}
-                  personalFinances2={personalFinances2}
-                  setPersonalFinances2={setPersonalFinances2}
                   scrollRef={scrollRef}
+                  personalFinances={personalFinances}
+                  setPersonalFinances={setPersonalFinances}
                 />
               </View>
 
@@ -341,12 +346,7 @@ function App() {
                   displaySwap3={displaySwap3}
                   displayWarning3={displayWarning3}
                   handleToggleComplete3={handleToggleComplete3}
-                  currentSavings1={currentSavings1}
-                  currentSavings2={currentSavings2}
-                  otherSavingGoals1={otherSavingGoals1}
-                  otherSavingGoals2={otherSavingGoals2}
-                  savingPowerMonthly1={savingPowerMonthly1}
-                  savingPowerMonthly2={savingPowerMonthly2}
+                  personalFinances={personalFinances}
                   mortgageDrawdown={mortgageDrawdown}
                   setMortgageDrawdown={setMortgageDrawdown}
                   scrollRef={scrollRef}
@@ -354,16 +354,22 @@ function App() {
               </View>
               
               <View style={[styles.main, styles.section, styles.center]}>
-                <MortgageDetails                
+                <MortgageDetails 
+                  applicants={applicants}               
                   mortgageDrawdown={mortgageDrawdown}                
                   remortgageDetails={remortgageDetails}
                   setRemortgageDetails={setRemortgageDetails}
+                  maxLoanTerm={maxLoanTerm}
+                  setMaxLoanTerm={setMaxLoanTerm}
                 />
               </View>
 
               <View style={[styles.main, styles.section, styles.center]}>
                 <FinancialPlanner
                   applicants={applicants}
+                  displaySwap2={displaySwap2}
+                  displayWarning2={displayWarning2}
+                  personalFinances={personalFinances}
                 />
               </View>
 

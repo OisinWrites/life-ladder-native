@@ -12,31 +12,52 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
 import remortgageIcon from '../assets/images/remortgageIcon.png';
 import { useKeyboard } from '../utils/KeyboardContext';
 
-
 const MortgageDetails = ({ 
+    applicants,
     mortgageDrawdown, 
     remortgageDetails,
     setRemortgageDetails,
-    }) => {
+    maxLoanTerm,
+    setMaxLoanTerm
+}) => {
+    const [applicantAge, setApplicantAge] = useState('');
     const { isKeyboardVisible, setIsKeyboardVisible } = useKeyboard();
+
+    useEffect(() => {
+        if (applicantAge !== '') {
+            const calculatedMaxLoanTerm = Math.min(35, 70 - applicantAge);
+            setMaxLoanTerm(calculatedMaxLoanTerm);
+            recalculateSchedules(calculatedMaxLoanTerm); // Recalculate schedules when applicantAge changes
+        }
+    }, [applicantAge]);
+
+    const calculateRemainingLoanTerm = (index) => {
+        const usedYears = remortgageDetails.slice(0, index).reduce((total, detail, idx) => {
+            const nextRemortgage = remortgageDetails[idx + 1];
+            const yearsUntilRemortgage = nextRemortgage 
+                ? Math.min(nextRemortgage.year - (detail.year || 1), detail.newTerm)
+                : detail.newTerm;
+            return total + yearsUntilRemortgage;
+        }, 0);
+        return Math.max(1, maxLoanTerm - usedYears);
+    };
 
     const prevRemortgageDetails = useRef(JSON.stringify(remortgageDetails));
     const prevMortgageDrawdown = useRef(mortgageDrawdown);
     const hasValidRemortgagePeriods = remortgageDetails.some(detail => detail.openingBalance >= 1);
 
-    const recalculateSchedules = () => {
+    const recalculateSchedules = (maxLoanTerm) => {
         let updatedRemortgageDetails = [...remortgageDetails];
         for (let index = 0; index < updatedRemortgageDetails.length; index++) {
             const details = updatedRemortgageDetails[index];
             const startYear = details.year || 1;
 
             const adjustedOpeningBalance = parseFormattedNumber(details.openingBalance) > 1
-            ? parseFormattedNumber(details.openingBalance) + parseFormattedNumber(details.cashBack || 0)
-            : parseFormattedNumber(details.openingBalance);
+                ? parseFormattedNumber(details.openingBalance) + parseFormattedNumber(details.cashBack || 0)
+                : parseFormattedNumber(details.openingBalance);
 
-            // Send the adjusted opening balance to the generateRepaymentSchedule function
             const scheduleResult = generateRepaymentSchedule(
-                adjustedOpeningBalance,  // Using adjusted opening balance
+                adjustedOpeningBalance,
                 details.newRate,
                 details.newTerm,
                 remortgageDetails.slice(index + 1),
@@ -59,10 +80,10 @@ const MortgageDetails = ({
     useEffect(() => {
         const currentRemortgageDetails = JSON.stringify(remortgageDetails);
         if (currentRemortgageDetails !== prevRemortgageDetails.current) {
-            recalculateSchedules();
+            recalculateSchedules(maxLoanTerm);
             prevRemortgageDetails.current = currentRemortgageDetails;
         }
-    }, [remortgageDetails]);
+    }, [remortgageDetails, maxLoanTerm]);
 
     useEffect(() => {
         if (prevMortgageDrawdown.current !== mortgageDrawdown) {
@@ -95,12 +116,12 @@ const MortgageDetails = ({
 
     const refreshSchedules = () => {
         setRemortgageDetails([{
-            newTerm: 25,
+            newTerm: maxLoanTerm,
             newRate: 3.5,
             openingBalance: mortgageDrawdown,
             schedule: []
         }]);
-    }
+    };
 
     const renderRepaymentSchedule = (schedule, index = 0, startYear = 1, nextRemortgageYear) => {
         return schedule.map((item, i) => {
@@ -147,7 +168,29 @@ const MortgageDetails = ({
                 <View style={styles.marginBottom}>
                     <CustomText style={[styles.centerText, styles.header]}>Mortgage Details</CustomText>
                 </View>
-                <CustomText>{ isKeyboardVisible ? ("visible") : ("Not Visible")}</CustomText>
+
+                <View style={[styles.row, styles.center]}>
+                    <CustomText>
+                        { applicants === 2 ? ("Oldest applicant's age next year:") : ("Your age next year:")}
+                    </CustomText>
+                    <View style={[borrowingStyles.salaryInputs, styles.marginLeft, styles.widthLimit]}>
+                        <CustomNumericInput
+                            onKeyboardVisibleChange={setIsKeyboardVisible}
+                            style={[styles.bigblue]}
+                            value={(applicantAge)}
+                            onChangeText={(value) => setApplicantAge(value)}
+                            label={ applicants === 2 ? ("Oldest applicant's age next year:") : ("Your age next year:")}
+                        />
+                    </View>
+                </View>
+                { applicantAge > 0 && (
+                    <View style={[styles.row]}>
+                        <CustomText>Maximum Mortgage Term:</CustomText>
+                        <CustomText style={[styles.textRight, styles.marginLeft]}>
+                            {maxLoanTerm} years
+                        </CustomText>
+                    </View>
+                )}
                 {remortgageDetails.length > 1 && hasValidRemortgagePeriods && (
                     <View style={styles.remortgageContainer}>
                         <View style={[styles.row, tableStyles.tableHeader, styles.marginBottom]}>
@@ -232,7 +275,7 @@ const MortgageDetails = ({
                                                 <CustomText style={[styles.textRight, styles.marginLeft]}>{details.newTerm} {details.newTerm === 1 ? "year" : "years"} </CustomText>
                                                 <Slider
                                                     minimumValue={1}
-                                                    maximumValue={35}
+                                                    maximumValue={calculateRemainingLoanTerm(index)}
                                                     minimumTrackTintColor='#03a1fc'
                                                     maximumTrackTintColor='#91B0C2'
                                                     thumbTintColor='#14a730'                                                   

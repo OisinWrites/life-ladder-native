@@ -11,112 +11,37 @@ import CustomNumericInput from '../utils/CustomNumericInput';
 import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal } from '../utils/FormatNumber';
 import { useKeyboard } from '../utils/KeyboardContext';
 
-const BorrowingCapacityCalculator = ({
+const FinancialPlanner = ({
     applicants,
-    setApplicants,
-    firstTimeBuyer,
-    setFirstTimeBuyer,
-    salary1,
-    setSalary1,
-    salary2,
-    setSalary2,
-    maxBorrowableAmount,
-    setMaxBorrowableAmount,
     displaySwap,
     displayWarning,
-    handleToggleComplete,
-    estimatedPropertyValue,
-    setAllowRecalculation,
-    multiplier,
-    setMultiplier,
-    scrollRef,
+    personalFinances
 }) => {
-    const formattedMaxBorrowableAmount = maxBorrowableAmount !== null ? handleFormattedDisplayTwoDecimal(parseFloat(maxBorrowableAmount)) : null;
-    const formattedEstimatedPropertyValue = estimatedPropertyValue !== null ? handleFormattedDisplayTwoDecimal(parseFloat(estimatedPropertyValue)) : null;
 
-    const [showInput, setShowInput] = useState(false);
-    const [exemptionGiven, setExemptionGiven] = useState('No')
-    const [totalSalary, setTotalSalary] = useState(0);
-
-    const { isKeyboardVisible, setIsKeyboardVisible } = useKeyboard();
-    const salary1Ref = useRef(null);
-    const salary2Ref = useRef(null);
-    const maxBorrowableAmountRef = useRef(null);
-
-    const focusInput = () => {
-        inputRef.current.focus();
+    const renderPersonalFinances0 = (personalFinances) => {
+        const items = Object.entries(personalFinances[0]);
+        return items.map(([key, value]) => (
+          <View style={styles.row} key={key}>
+            <CustomText>{key.charAt(0).toUpperCase() + key.slice(1)}</CustomText>
+            <CustomText style={[styles.textRight, styles.marginLeft]}>
+              {handleFormattedDisplayTwoDecimal(value)}
+            </CustomText>
+          </View>
+        ));
     };
-
-    const firstTimeBuyerOptions = [
-        {
-          label: 'No',
-          value: 'No',
-        },
-        {
-          label: 'Yes',
-          value: 'Yes',
-        },
-      ];
-    
-    const exemptionGivenOptions = [
-        {
-          label: 'No',
-          value: 'No',
-        },
-        {
-          label: 'Yes',
-          value: 'Yes',
-        },
-    ];
       
-    const applicantOptions = [
-        {
-        label: <FontAwesomeIcon style={borrowingStyles.larger} name="person" size={20} color={applicants === 1 ? '#03a1fc' : 'white'} />,
-        value: 1,
-        },
-        {
-        label: <FontAwesomeIcon name="user-group" size={20} color={applicants === 2 ? '#03a1fc' : 'white'} />,
-        value: 2,
-        },
-    ];
-    
-
-    useEffect(() => {
-        let calculatedTotalSalary = parseFloat(salary1) || 0;
-        if (applicants === 2 && salary2 > 0) {
-            calculatedTotalSalary += parseFloat(salary2);
-        }
-        setTotalSalary(calculatedTotalSalary);
-    }, [salary1, salary2, applicants]);
-
-    useEffect(() => {
-        if (!showInput) {
-            let totalSalary = parseFloat(salary1) || 0;
-            if (applicants === 2) {
-                totalSalary += parseFloat(salary2) || 0;
-            }
-            const calculatedAmount = totalSalary * multiplier;
-            setMaxBorrowableAmount(calculatedAmount);
-        }
-    }, [showInput, salary1, salary2, multiplier, applicants]);
-
-    useEffect(() => {
-        if (multiplier === 4.5 && exemptionGiven === 'No') {
-          setMultiplier(3.5);
-        } else if (multiplier === 4 && firstTimeBuyer === 'No') {
-          setMultiplier(3.5);
-        }
-    }, [firstTimeBuyer, exemptionGiven, multiplier]);
-
-    const handleNext = (currentRef) => {
-        if (currentRef === salary1Ref && applicants === 2) {
-          salary2Ref.current && salary2Ref.current.handleToggleKeyboard();
-        } else if (currentRef === salary2Ref) {
-          maxBorrowableAmountRef.current && maxBorrowableAmountRef.current.handleToggleKeyboard();
-        } else {
-          currentRef.current && currentRef.current.handleToggleKeyboard();
-        }
+    const renderPersonalFinances1 = (personalFinances) => {
+        const items = Object.entries(personalFinances[1]);
+        return items.map(([key, value]) => (
+          <View style={styles.row} key={key}>
+            <CustomText>{key.charAt(0).toUpperCase() + key.slice(1)}</CustomText>
+            <CustomText style={[styles.textRight, styles.marginLeft]}>
+              {handleFormattedDisplayTwoDecimal(value)}
+            </CustomText>
+          </View>
+        ));
     };
+
 
     return (
         <View style={styles.container}>
@@ -137,7 +62,15 @@ const BorrowingCapacityCalculator = ({
                             </CustomText>
                         }
                     </View>
-                    
+
+                    <View>
+                        { applicants === 2 && (
+                            <CustomText>Applicant 1</CustomText>
+                        )}                        
+                    </View>
+                    <View style={styles.container}>
+                        {renderPersonalFinances0(personalFinances)}
+                    </View>
                 </View>
             )}
         </View>

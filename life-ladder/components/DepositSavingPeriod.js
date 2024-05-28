@@ -9,7 +9,6 @@ import CustomNumericInput from '../utils/CustomNumericInput';
 import { countyPercentages, calculatePropertyTax, calculateBasePropertyTax } from '../utils/LocalPropertyTaxCalc';
 import Slider from '@react-native-community/slider';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
-
 import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal, parseFormattedNumber } from '../utils/FormatNumber';
 import { useKeyboard } from '../utils/KeyboardContext';
 
@@ -20,52 +19,32 @@ const DepositSavingPeriod = ({
     displaySwap3,
     displayWarning3,
     handleToggleComplete3,
-    currentSavings1,
-    currentSavings2,
-    otherSavingGoals1,
-    otherSavingGoals2,
-    savingPowerMonthly1,
-    savingPowerMonthly2,
+    personalFinances,
     mortgageDrawdown,
     setMortgageDrawdown,
     scrollRef,
     propertyPrice,
     setPropertyPrice,
 }) => {
-
     const { isKeyboardVisible, setIsKeyboardVisible } = useKeyboard();
     const [depositRequired, setDepositRequired] = useState('');
     const [drawdownInExcessOfBorrowingCapacity, setDrawdownInExcessOfBorrowingCapacity] = useState(false);
-
     const [propertyPriceFocused, setPropertyPriceFocused] = useState(false);
     const [mortgageDrawdownFocused, setMortgageDrawdownFocused] = useState(false);
-
     const [focusState, setFocusState] = useState({
         propertyPriceFocused: false,
         mortgageDrawdownFocused: false
     });
-
     const prevPropertyPrice = useRef();
     const prevMortgageDrawdown = useRef();
-    const prevLTVRatio = useRef(LTVRatio);
-
+    const prevLTVRatio = useRef(80);
     const propertyPriceRef = useRef(null);
     const drawdownRef = useRef(null);
-
     const [lockPropertyPrice, setLockPropertyPrice] = useState(false);
-
     const [lockMortgageDrawdown, setLockMortgageDrawdown] = useState(false);
-
     const [LTVRatio, setLTVRatio] = useState(80);
     const [sliderRange, setSliderRange] = useState({ min: 40, max: 90 });
     const [lockLTVRatio, setLockLTVRatio] = useState(true);
-   
-    const handleLock = (lockType) => {
-        setLockPropertyPrice(lockType === 'propertyPrice');
-        setLockMortgageDrawdown(lockType === 'mortgageDrawdown');
-        setLockLTVRatio(lockType === 'LTVRatio');
-    };
-
     const [depositSavingPeriod, setDepositSavingPeriod] = useState('');
     const [evenEffort, setEvenEffort] = useState('');
     const [firstAppSurplus, setFirstAppSurplus] = useState('');
@@ -75,44 +54,46 @@ const DepositSavingPeriod = ({
     const toggleCombinedEffort = () => {
         setCombinedEffort(previousState => !previousState);
     };
+   
+    const handleLock = (lockType) => {
+        setLockPropertyPrice(lockType === 'propertyPrice');
+        setLockMortgageDrawdown(lockType === 'mortgageDrawdown');
+        setLockLTVRatio(lockType === 'LTVRatio');
+    };
 
     useEffect(() => {
         if (applicants === 2) {
-            if (savingPowerMonthly1 > savingPowerMonthly2) {
-                let newEvenEffort = (savingPowerMonthly2 * 2).toFixed(1); // Correctly use toFixed immediately
+            if (personalFinances[0].savingPowerMonthly > personalFinances[1].savingPowerMonthly) {
+                let newEvenEffort = (personalFinances[1].savingPowerMonthly * 2).toFixed(1);
                 setEvenEffort(newEvenEffort);
-    
-                let newFirstAppSurplus = (savingPowerMonthly1 - savingPowerMonthly2).toFixed(1); // Correctly call toFixed
+                let newFirstAppSurplus = (personalFinances[0].savingPowerMonthly - personalFinances[1].savingPowerMonthly).toFixed(1);
                 setSecondAppSurplus(0);
                 setFirstAppSurplus(newFirstAppSurplus);
-            } else if (savingPowerMonthly2 > savingPowerMonthly1) {
-                let newEvenEffort = (savingPowerMonthly1 * 2).toFixed(1); // Correctly use toFixed immediately
+            } else if (personalFinances[1].savingPowerMonthly > personalFinances[0].savingPowerMonthly) {
+                let newEvenEffort = (personalFinances[0].savingPowerMonthly * 2).toFixed(1);
                 setEvenEffort(newEvenEffort);
-    
-                let newSecondAppSurplus = (savingPowerMonthly2 - savingPowerMonthly1).toFixed(1); // Correctly call toFixed
+                let newSecondAppSurplus = (personalFinances[1].savingPowerMonthly - personalFinances[0].savingPowerMonthly).toFixed(1);
                 setFirstAppSurplus(0);
                 setSecondAppSurplus(newSecondAppSurplus);
             }
         }
-    }, [savingPowerMonthly1, savingPowerMonthly2, applicants]);
+    }, [personalFinances, applicants]);
 
     useEffect(() => {
         let newDepositSavingPeriod;
         let newTotalCosts = parseFloat(totalAdditionalCosts) + parseFloat(depositRequired);
         if (applicants === 2) {
             if (combinedEffort) {
-                newDepositSavingPeriod = newTotalCosts / (savingPowerMonthly1 + savingPowerMonthly2);
+                newDepositSavingPeriod = newTotalCosts / (personalFinances[0].savingPowerMonthly + personalFinances[1].savingPowerMonthly);
             } else {
                 newDepositSavingPeriod = newTotalCosts / evenEffort;
             }
         } else {
-            newDepositSavingPeriod = newTotalCosts / savingPowerMonthly1;
+            newDepositSavingPeriod = newTotalCosts / personalFinances[0].savingPowerMonthly;
         }
     
-        // Convert to integer for months
         newDepositSavingPeriod = Math.floor(newDepositSavingPeriod);
     
-        // Function to format months into years and months
         function formatPeriod(months) {
             if (months < 12) {
                 return `${months} months`;
@@ -127,9 +108,8 @@ const DepositSavingPeriod = ({
             }
         }
     
-        // Update the state with the formatted time period
         setDepositSavingPeriod(formatPeriod(newDepositSavingPeriod));
-    }, [applicants, combinedEffort, depositRequired, totalAdditionalCosts, savingPowerMonthly1, savingPowerMonthly2, evenEffort]);
+    }, [applicants, combinedEffort, depositRequired, totalAdditionalCosts, personalFinances, evenEffort]);
 
     useEffect(() => {
         let newDepositRequired = propertyPrice - mortgageDrawdown;
@@ -138,16 +118,13 @@ const DepositSavingPeriod = ({
     }, [propertyPrice, mortgageDrawdown]);
 
     useEffect(() => {
-        // Determine if propertyPrice was changed most recently
         if (propertyPrice !== prevPropertyPrice.current) {
             setFocusState({
                 propertyPriceFocused: true,
                 mortgageDrawdownFocused: false
             });
             prevPropertyPrice.current = propertyPrice;
-        }
-        // Determine if mortgageDrawdown was changed most recently
-        else if (mortgageDrawdown !== prevMortgageDrawdown.current) {
+        } else if (mortgageDrawdown !== prevMortgageDrawdown.current) {
             setFocusState({
                 propertyPriceFocused: false,
                 mortgageDrawdownFocused: true
@@ -167,12 +144,10 @@ const DepositSavingPeriod = ({
         }
         prevLTVRatio.current = LTVRatio;
     }, [LTVRatio, lockPropertyPrice, focusState.mortgageDrawdownFocused, propertyPrice, maxBorrowableAmount, isKeyboardVisible]);
-    
 
     useEffect(() => {
         if (lockPropertyPrice && !mortgageDrawdownFocused) {
-            let newMortgageDrawdown = propertyPrice * (LTVRatio/100);
-
+            let newMortgageDrawdown = propertyPrice * (LTVRatio / 100);
             setMortgageDrawdown(Number(newMortgageDrawdown).toFixed(0));
         }
     }, [LTVRatio, lockPropertyPrice, focusState.mortgageDrawdownFocused, propertyPrice]);
@@ -180,37 +155,32 @@ const DepositSavingPeriod = ({
     useEffect(() => {
         if (lockMortgageDrawdown && focusState.propertyPriceFocused && (propertyPrice > 0) && !isKeyboardVisible) {
             let newLTVRatio = (mortgageDrawdown / propertyPrice) * 100;
-
             newLTVRatio = parseFloat(newLTVRatio.toFixed(5));
-                        
             setLTVRatio(newLTVRatio);
         }
     }, [lockMortgageDrawdown, mortgageDrawdown, focusState.propertyPriceFocused, propertyPrice, isKeyboardVisible]);
 
     useEffect(() => {
         if (lockMortgageDrawdown && !propertyPriceFocused) {
-            let newPropertyPrice = mortgageDrawdown/(LTVRatio/100);
-
+            let newPropertyPrice = mortgageDrawdown / (LTVRatio / 100);
             setPropertyPrice(Number(newPropertyPrice).toFixed(0));
         }
     }, [LTVRatio, lockMortgageDrawdown, focusState.propertyPriceFocused, mortgageDrawdown]);
 
     useEffect(() => {
         if (lockLTVRatio && focusState.propertyPriceFocused) {
-            let newMortgageDrawdown = propertyPrice * (LTVRatio/100);
-
+            let newMortgageDrawdown = propertyPrice * (LTVRatio / 100);
             setMortgageDrawdown(Number(newMortgageDrawdown).toFixed(0));
         }
-    },[lockLTVRatio, focusState.propertyPriceFocused, propertyPrice, LTVRatio]);
+    }, [lockLTVRatio, focusState.propertyPriceFocused, propertyPrice, LTVRatio]);
 
     useEffect(() => {
         if (lockLTVRatio && focusState.mortgageDrawdownFocused) {
-            let newPropertyPrice = mortgageDrawdown/(LTVRatio/100);
-
+            let newPropertyPrice = mortgageDrawdown / (LTVRatio / 100);
             setPropertyPrice(Number(newPropertyPrice).toFixed(0));
         }
-    },[lockLTVRatio, focusState.mortgageDrawdownFocused, mortgageDrawdown, LTVRatio]);
-     
+    }, [lockLTVRatio, focusState.mortgageDrawdownFocused, mortgageDrawdown, LTVRatio]);
+
     function calculateRegistryFee(propertyPrice) {
         if (propertyPrice <= 50000) return 400;
         if (propertyPrice <= 200000) return 600;
@@ -228,7 +198,6 @@ const DepositSavingPeriod = ({
         percentage: countyPercentages[name]
     }));
 
-    // Sort counties alphabetically
     const sortedCounties = counties.sort((a, b) => a.name.localeCompare(b.name));
 
     const handleCountyChange = (itemValue) => {
@@ -252,14 +221,13 @@ const DepositSavingPeriod = ({
         }
     }, [propertyPrice, selectedCounty]);
 
-    // Calculate additional costs
     const stampDuty = propertyPrice < 1000000 ? propertyPrice * 0.01 : propertyPrice * 0.02;
     const solicitorFees = 2000;
     const valuerReport = 150;
     const surveyorReport = 300 * 1.23;
-    const insuranceCosts = 300 + 360; // Homeowner's plus mortgage insurance
+    const insuranceCosts = 300 + 360;
     const registryFee = calculateRegistryFee(propertyPrice);
-    const totalAdditionalCosts = stampDuty + solicitorFees + valuerReport + surveyorReport + insuranceCosts + registryFee + baseTaxValue + (selectedPercentage * (baseTaxValue/100));
+    const totalAdditionalCosts = stampDuty + solicitorFees + valuerReport + surveyorReport + insuranceCosts + registryFee + baseTaxValue + (selectedPercentage * (baseTaxValue / 100));
 
     const handleNext = (currentRef) => {
         const refsOrder = [
@@ -295,7 +263,7 @@ const DepositSavingPeriod = ({
         <View style={styles.container}>
             {displaySwap3 ? (
                 <View style={styles.marginBottom}>
-                    <Pressable style={styles.row} title="Edit Section" onPress={handleToggleComplete3} >
+                    <Pressable style={styles.row} title="Edit Section" onPress={handleToggleComplete3}>
                         <CustomText style={[styles.centerText, styles.header, styles.completed]}>Deposit Saving Period</CustomText>
                     </Pressable>
                 </View>
@@ -303,13 +271,12 @@ const DepositSavingPeriod = ({
                 <View style={styles.marginBottom}>
                     <View style={styles.marginBottom}>
                         <CustomText style={[styles.centerText, styles.header]}>Deposit Saving Period</CustomText>
-                        {displayWarning3 && 
+                        {displayWarning3 &&
                             <CustomText style={[styles.textColorGreen, styles.centerText, styles.bold]}>
                                 Complete this section before moving on
                             </CustomText>
                         }
-                    </View>            
-
+                    </View>
 
                     <View style={[styles.row, styles.center]}>
                         <CustomText>Property Price:</CustomText>
@@ -326,7 +293,7 @@ const DepositSavingPeriod = ({
                                         ref={propertyPriceRef}
                                         onNext={() => handleNext(propertyPriceRef)}
                                         onKeyboardVisibleChange={setIsKeyboardVisible}
-                                        style={[styles.bigblue, styles.h2, styles.latoFont]}                             
+                                        style={[styles.bigblue, styles.h2, styles.latoFont]}
                                         value={handleFormattedDisplay(propertyPrice)}
                                         onChangeText={(text) => {
                                             handleNumericChange(text, setPropertyPrice);
@@ -336,9 +303,9 @@ const DepositSavingPeriod = ({
                                     />
                                 ) : (
                                     <CustomText style={[
-                                        styles.bigblue, 
-                                        styles.h2, 
-                                        styles.textRight, 
+                                        styles.bigblue,
+                                        styles.h2,
+                                        styles.textRight,
                                         styles.marginRight
                                     ]}>
                                         {handleFormattedDisplay(propertyPrice)}
@@ -372,7 +339,7 @@ const DepositSavingPeriod = ({
                                     ref={drawdownRef}
                                     onNext={() => handleNext(drawdownRef)}
                                     onKeyboardVisibleChange={setIsKeyboardVisible}
-                                    style={[styles.bigblue, styles.h2, styles.latoFont]}                             
+                                    style={[styles.bigblue, styles.h2, styles.latoFont]}
                                     value={handleFormattedDisplay(mortgageDrawdown)}
                                     onChangeText={(text) => handleNumericChange(text, setMortgageDrawdown)}
                                     label={
@@ -389,13 +356,13 @@ const DepositSavingPeriod = ({
                             ) : (
                                 <>
                                     <CustomText style={[
-                                        styles.bigblue, 
-                                        styles.h2, 
-                                        styles.textRight, 
+                                        styles.bigblue,
+                                        styles.h2,
+                                        styles.textRight,
                                         styles.marginRight
                                     ]}>
                                         {handleFormattedDisplay(mortgageDrawdown)}
-                                    </CustomText>                                    
+                                    </CustomText>
                                 </>
                             )}
                         </View>
@@ -412,7 +379,7 @@ const DepositSavingPeriod = ({
                     </View>
 
                     <View style={[styles.center, styles.row]}>
-                        <CustomText>LTV Ratio: {(LTVRatio).toFixed(0)}%</CustomText>                       
+                        <CustomText>LTV Ratio: {(LTVRatio).toFixed(0)}%</CustomText>
                         {lockLTVRatio ? (
                             <Pressable 
                                 title="Lock LTV Ratio" 
@@ -435,7 +402,7 @@ const DepositSavingPeriod = ({
                                             setLTVRatio(value);
                                             handleUserAction();
                                         }}
-                                    />                                        
+                                    />
                                 </View>
                                 <Pressable 
                                     style={styles.marginLeft} 
@@ -503,8 +470,7 @@ const DepositSavingPeriod = ({
                             </View>                                
                         </View>
                     </View>
-                    
-                        
+
                     <View style={[styles.row]}>
                         <View style={[styles.lptBox]}>
                             <CustomText style={styles.marginLeft}>Select a Local Authority:</CustomText>
@@ -535,12 +501,12 @@ const DepositSavingPeriod = ({
                         </View>
                         { selectedPercentage > 1 && (
                         <CustomText style={[styles.textRight, styles.marginLeft]}>
-                            {handleFormattedDisplayTwoDecimal(selectedPercentage * (baseTaxValue/100))}
+                            {handleFormattedDisplayTwoDecimal(selectedPercentage * (baseTaxValue / 100))}
                         </CustomText>
                         )}
                     </View>
 
-                    <View style={styles.horizontalRule}/>
+                    <View style={styles.horizontalRule} />
                     <View style={styles.row}>
                         <CustomText>Total Additional Costs:</CustomText>
                         <CustomText style={[styles.textRight, styles.marginLeft]}> {handleFormattedDisplayTwoDecimal(totalAdditionalCosts)}</CustomText>
@@ -549,9 +515,8 @@ const DepositSavingPeriod = ({
                         <CustomText>Total Savings Required:</CustomText>
                         <CustomText style={[styles.textRight, styles.marginLeft]}> {handleFormattedDisplayTwoDecimal(parseFloat(totalAdditionalCosts) + parseFloat(depositRequired))}</CustomText>
                     </View>
-                    
-                
-                    { applicants === 2 && 
+
+                    {applicants === 2 && 
                         <View style={styles.container}>
                             <Pressable
                                 onPress={toggleCombinedEffort}
@@ -574,7 +539,6 @@ const DepositSavingPeriod = ({
                         <CustomText>Deposit Saving Period:</CustomText>
                         <CustomText style={[styles.textRight, styles.marginLeft]}>{depositSavingPeriod}</CustomText>
                     </View>
-                    
                 </View>
             )}
         </View>

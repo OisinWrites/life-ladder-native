@@ -47,10 +47,10 @@ const tableStyles = StyleSheet.create({
         width: 35,
     },
     balance: {
-        minWidth: 80,
+        minWidth: 100,
     },
     interest: {
-        minWidth: 82,
+        width: 80,
     },
     repaid: {
         minWidth: 60,

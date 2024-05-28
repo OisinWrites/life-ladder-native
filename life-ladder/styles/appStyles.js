@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 5,
     margin: 5,
-    maxWidth: 600,
+    maxWidth: 380,
+    minWidth: 300,
   },
   header: {
     fontSize: 22,
