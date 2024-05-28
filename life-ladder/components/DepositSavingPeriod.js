@@ -38,26 +38,31 @@ const DepositSavingPeriod = ({
     const [depositRequired, setDepositRequired] = useState('');
     const [drawdownInExcessOfBorrowingCapacity, setDrawdownInExcessOfBorrowingCapacity] = useState(false);
     const [excessWarning, setExcessWarning] = useState(false);
+
     const [propertyPriceFocused, setPropertyPriceFocused] = useState(false);
     const [mortgageDrawdownFocused, setMortgageDrawdownFocused] = useState(false);
 
     const handlePropertyPriceFocus = () => {
+        console.log("Property Price Input Focused");
         setPropertyPriceFocused(true);
         setMortgageDrawdownFocused(false);
     };
     
     const handlePropertyPriceBlur = () => {
+        console.log("Property Price Input Blurred");
         setPropertyPriceFocused(false);
     };
     
     const handleMortgageDrawdownFocus = () => {
+        console.log("Mortgage Drawdown Input Focused");
         setMortgageDrawdownFocused(true);
         setPropertyPriceFocused(false);
     };
     
     const handleMortgageDrawdownBlur = () => {
+        console.log("Mortgage Drawdown Input Blurred");
         setMortgageDrawdownFocused(false);
-    };   
+    };  
   
     const prevPropertyPrice = useRef();
     const prevMortgageDrawdown = useRef();
@@ -161,8 +166,7 @@ const DepositSavingPeriod = ({
         const formattedPropertyPrice = parseFormattedNumber(propertyPrice);
         if (lockMortgageDrawdown && formattedMortgageDrawdown > 0) {
             if (propertyPriceFocused) {
-                let newLTVRatio = (formattedMortgageDrawdown / formattedPropertyPrice) * 100;
-                newLTVRatio = parseFloat(newLTVRatio.toFixed(5));
+                let newLTVRatio = (formattedMortgageDrawdown / formattedPropertyPrice) * 100;                
                 setLTVRatio(newLTVRatio);
             } else {
                 let newPropertyPrice = formattedMortgageDrawdown / (LTVRatio / 100);
@@ -172,18 +176,15 @@ const DepositSavingPeriod = ({
     }, [lockMortgageDrawdown, propertyPriceFocused, mortgageDrawdown, propertyPrice, LTVRatio, setPropertyPrice, setLTVRatio]);    
 
     useEffect(() => {
-        const formattedPropertyPrice = parseFormattedNumber(propertyPrice);
-        const formattedMortgageDrawdown = parseFormattedNumber(mortgageDrawdown);
-    
-        if (lockPropertyPrice && formattedPropertyPrice > 0) {
+        if (lockPropertyPrice) {
             if (mortgageDrawdownFocused) {
-                let newLTVRatio = (formattedMortgageDrawdown / formattedPropertyPrice) * 100;
+                let newLTVRatio = (mortgageDrawdown / propertyPrice) * 100;
                 newLTVRatio = parseFloat(newLTVRatio.toFixed(5));
                 setLTVRatio(newLTVRatio);
             } else {
-                let newMortgageDrawdown = formattedPropertyPrice * (LTVRatio / 100);
+                let newMortgageDrawdown = propertyPrice * (LTVRatio / 100);
                 if (newMortgageDrawdown > maxBorrowableAmount) {
-                    let adjustedLTVRatio = (maxBorrowableAmount / formattedPropertyPrice) * 100;
+                    let adjustedLTVRatio = (maxBorrowableAmount / propertyPrice) * 100;
                     setExcessWarning(true);
                     setLTVRatio(adjustedLTVRatio);
                     setMortgageDrawdown(maxBorrowableAmount);
@@ -194,6 +195,17 @@ const DepositSavingPeriod = ({
         }
     }, [lockPropertyPrice, mortgageDrawdownFocused, mortgageDrawdown, propertyPrice, LTVRatio, maxBorrowableAmount, setLTVRatio, setMortgageDrawdown, setExcessWarning]);
     
+    useEffect(() => {
+        if (!isKeyboardVisible) {
+            setPropertyPriceFocused(false);
+            setMortgageDrawdownFocused(false);
+        }
+    }, [isKeyboardVisible]);
+    
+
+
+
+
     const handleMortgageDrawdownChange = (value) => {
         const newValue = parseFormattedNumber(value);
         if (newValue <= maxBorrowableAmount) {
@@ -336,7 +348,6 @@ const DepositSavingPeriod = ({
                                         onChangeText={(text) => {handleNumericChange(text, setPropertyPrice)}}
                                         label="Property Price:"
                                         onFocus={handlePropertyPriceFocus}
-                                        onBlur={handlePropertyPriceBlur}
                                     />
                                 ) : (
                                     <CustomText style={[
@@ -391,7 +402,6 @@ const DepositSavingPeriod = ({
                                         </View>
                                     }
                                     onFocus={handleMortgageDrawdownFocus}
-                                    onBlur={handleMortgageDrawdownBlur}
                                 />
                             ) : (
                                 <>
