@@ -9,7 +9,13 @@ import CustomNumericInput from '../utils/CustomNumericInput';
 import { countyPercentages, calculatePropertyTax, calculateBasePropertyTax } from '../utils/LocalPropertyTaxCalc';
 import Slider from '@react-native-community/slider';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
-import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal, parseFormattedNumber } from '../utils/FormatNumber';
+import { 
+    handleNumericChange, 
+    handleFormattedDisplay, 
+    handleFormattedDisplayTwoDecimal,
+    handleFormattedDisplayNoDecimal,
+    parseFormattedNumber
+ } from '../utils/FormatNumber';
 import { useKeyboard } from '../utils/KeyboardContext';
 
 const DepositSavingPeriod = ({
@@ -25,16 +31,34 @@ const DepositSavingPeriod = ({
     scrollRef,
     propertyPrice,
     setPropertyPrice,
+    depositSavingPeriod,
+    setDepositSavingPeriod
 }) => {
     const { isKeyboardVisible, setIsKeyboardVisible } = useKeyboard();
     const [depositRequired, setDepositRequired] = useState('');
     const [drawdownInExcessOfBorrowingCapacity, setDrawdownInExcessOfBorrowingCapacity] = useState(false);
+    const [excessWarning, setExcessWarning] = useState(false);
     const [propertyPriceFocused, setPropertyPriceFocused] = useState(false);
     const [mortgageDrawdownFocused, setMortgageDrawdownFocused] = useState(false);
-    const [focusState, setFocusState] = useState({
-        propertyPriceFocused: false,
-        mortgageDrawdownFocused: false
-    });
+
+    const handlePropertyPriceFocus = () => {
+        setPropertyPriceFocused(true);
+        setMortgageDrawdownFocused(false);
+    };
+    
+    const handlePropertyPriceBlur = () => {
+        setPropertyPriceFocused(false);
+    };
+    
+    const handleMortgageDrawdownFocus = () => {
+        setMortgageDrawdownFocused(true);
+        setPropertyPriceFocused(false);
+    };
+    
+    const handleMortgageDrawdownBlur = () => {
+        setMortgageDrawdownFocused(false);
+    };   
+  
     const prevPropertyPrice = useRef();
     const prevMortgageDrawdown = useRef();
     const prevLTVRatio = useRef(80);
@@ -45,7 +69,6 @@ const DepositSavingPeriod = ({
     const [LTVRatio, setLTVRatio] = useState(80);
     const [sliderRange, setSliderRange] = useState({ min: 40, max: 90 });
     const [lockLTVRatio, setLockLTVRatio] = useState(true);
-    const [depositSavingPeriod, setDepositSavingPeriod] = useState('');
     const [evenEffort, setEvenEffort] = useState('');
     const [firstAppSurplus, setFirstAppSurplus] = useState('');
     const [secondAppSurplus, setSecondAppSurplus] = useState('');
@@ -118,68 +141,76 @@ const DepositSavingPeriod = ({
     }, [propertyPrice, mortgageDrawdown]);
 
     useEffect(() => {
-        if (propertyPrice !== prevPropertyPrice.current) {
-            setFocusState({
-                propertyPriceFocused: true,
-                mortgageDrawdownFocused: false
-            });
-            prevPropertyPrice.current = propertyPrice;
-        } else if (mortgageDrawdown !== prevMortgageDrawdown.current) {
-            setFocusState({
-                propertyPriceFocused: false,
-                mortgageDrawdownFocused: true
-            });
-            prevMortgageDrawdown.current = mortgageDrawdown;
-        }
-    }, [propertyPrice, mortgageDrawdown]);
-
-    useEffect(() => {
-        if (lockPropertyPrice && focusState.mortgageDrawdownFocused && (mortgageDrawdown > 0) && !isKeyboardVisible) {
-            let newMortgageDrawdown = propertyPrice * (LTVRatio / 100);
-            if (newMortgageDrawdown > maxBorrowableAmount) {
-                setLTVRatio(prevLTVRatio.current);
-            } else {
-                setMortgageDrawdown(Number(newMortgageDrawdown).toFixed(0));
+        if (lockLTVRatio) {
+            if (propertyPriceFocused) {
+                let newMortgageDrawdown = propertyPrice * (LTVRatio / 100);
+                if (newMortgageDrawdown > maxBorrowableAmount) {
+                    setLTVRatio(prevLTVRatio.current);
+                } else {
+                    setMortgageDrawdown(newMortgageDrawdown);
+                }
+            } else if (mortgageDrawdownFocused) {
+                let newPropertyPrice = mortgageDrawdown / (LTVRatio / 100);
+                setPropertyPrice(newPropertyPrice);
             }
         }
-        prevLTVRatio.current = LTVRatio;
-    }, [LTVRatio, lockPropertyPrice, focusState.mortgageDrawdownFocused, propertyPrice, maxBorrowableAmount, isKeyboardVisible]);
+    }, [lockLTVRatio, propertyPriceFocused, mortgageDrawdownFocused, propertyPrice, LTVRatio, maxBorrowableAmount, mortgageDrawdown, setLTVRatio, setMortgageDrawdown, setPropertyPrice]);
 
     useEffect(() => {
-        if (lockPropertyPrice && !mortgageDrawdownFocused) {
-            let newMortgageDrawdown = propertyPrice * (LTVRatio / 100);
-            setMortgageDrawdown(Number(newMortgageDrawdown).toFixed(0));
+        const formattedMortgageDrawdown = parseFormattedNumber(mortgageDrawdown);
+        const formattedPropertyPrice = parseFormattedNumber(propertyPrice);
+        if (lockMortgageDrawdown && formattedMortgageDrawdown > 0) {
+            if (propertyPriceFocused) {
+                let newLTVRatio = (formattedMortgageDrawdown / formattedPropertyPrice) * 100;
+                newLTVRatio = parseFloat(newLTVRatio.toFixed(5));
+                setLTVRatio(newLTVRatio);
+            } else {
+                let newPropertyPrice = formattedMortgageDrawdown / (LTVRatio / 100);
+                setPropertyPrice(newPropertyPrice);
+            }
         }
-    }, [LTVRatio, lockPropertyPrice, focusState.mortgageDrawdownFocused, propertyPrice]);
+    }, [lockMortgageDrawdown, propertyPriceFocused, mortgageDrawdown, propertyPrice, LTVRatio, setPropertyPrice, setLTVRatio]);    
 
     useEffect(() => {
-        if (lockMortgageDrawdown && focusState.propertyPriceFocused && (propertyPrice > 0) && !isKeyboardVisible) {
-            let newLTVRatio = (mortgageDrawdown / propertyPrice) * 100;
+        const formattedPropertyPrice = parseFormattedNumber(propertyPrice);
+        const formattedMortgageDrawdown = parseFormattedNumber(mortgageDrawdown);
+    
+        if (lockPropertyPrice && formattedPropertyPrice > 0) {
+            if (mortgageDrawdownFocused) {
+                let newLTVRatio = (formattedMortgageDrawdown / formattedPropertyPrice) * 100;
+                newLTVRatio = parseFloat(newLTVRatio.toFixed(5));
+                setLTVRatio(newLTVRatio);
+            } else {
+                let newMortgageDrawdown = formattedPropertyPrice * (LTVRatio / 100);
+                if (newMortgageDrawdown > maxBorrowableAmount) {
+                    let adjustedLTVRatio = (maxBorrowableAmount / formattedPropertyPrice) * 100;
+                    setExcessWarning(true);
+                    setLTVRatio(adjustedLTVRatio);
+                    setMortgageDrawdown(maxBorrowableAmount);
+                } else {
+                    setMortgageDrawdown(newMortgageDrawdown);
+                }
+            }
+        }
+    }, [lockPropertyPrice, mortgageDrawdownFocused, mortgageDrawdown, propertyPrice, LTVRatio, maxBorrowableAmount, setLTVRatio, setMortgageDrawdown, setExcessWarning]);
+    
+    const handleMortgageDrawdownChange = (value) => {
+        const newValue = parseFormattedNumber(value);
+        if (newValue <= maxBorrowableAmount) {
+            setMortgageDrawdown(newValue);
+            setDrawdownInExcessOfBorrowingCapacity(false);
+        } else {
+            setMortgageDrawdown(maxBorrowableAmount);
+            setDrawdownInExcessOfBorrowingCapacity(true);
+        }
+    
+        // Update LTV ratio if the property price is locked
+        if (lockPropertyPrice && propertyPrice > 0) {
+            let newLTVRatio = (newValue / parseFormattedNumber(propertyPrice)) * 100;
             newLTVRatio = parseFloat(newLTVRatio.toFixed(5));
             setLTVRatio(newLTVRatio);
         }
-    }, [lockMortgageDrawdown, mortgageDrawdown, focusState.propertyPriceFocused, propertyPrice, isKeyboardVisible]);
-
-    useEffect(() => {
-        if (lockMortgageDrawdown && !propertyPriceFocused) {
-            let newPropertyPrice = mortgageDrawdown / (LTVRatio / 100);
-            setPropertyPrice(Number(newPropertyPrice).toFixed(0));
-        }
-    }, [LTVRatio, lockMortgageDrawdown, focusState.propertyPriceFocused, mortgageDrawdown]);
-
-    useEffect(() => {
-        if (lockLTVRatio && focusState.propertyPriceFocused) {
-            let newMortgageDrawdown = propertyPrice * (LTVRatio / 100);
-            setMortgageDrawdown(Number(newMortgageDrawdown).toFixed(0));
-        }
-    }, [lockLTVRatio, focusState.propertyPriceFocused, propertyPrice, LTVRatio]);
-
-    useEffect(() => {
-        if (lockLTVRatio && focusState.mortgageDrawdownFocused) {
-            let newPropertyPrice = mortgageDrawdown / (LTVRatio / 100);
-            setPropertyPrice(Number(newPropertyPrice).toFixed(0));
-        }
-    }, [lockLTVRatio, focusState.mortgageDrawdownFocused, mortgageDrawdown, LTVRatio]);
+    };
 
     function calculateRegistryFee(propertyPrice) {
         if (propertyPrice <= 50000) return 400;
@@ -246,18 +277,23 @@ const DepositSavingPeriod = ({
     };
 
     useEffect(() => {
-        if (mortgageDrawdown > maxBorrowableAmount && prevMortgageDrawdown.current !== maxBorrowableAmount) {
+        if (mortgageDrawdown > maxBorrowableAmount && prevMortgageDrawdown.current <= maxBorrowableAmount) {
             setMortgageDrawdown(maxBorrowableAmount);
             setDrawdownInExcessOfBorrowingCapacity(true);
+            setExcessWarning(true);
         } else if (mortgageDrawdown <= maxBorrowableAmount && prevMortgageDrawdown.current > maxBorrowableAmount) {
             setDrawdownInExcessOfBorrowingCapacity(false);
         }
         prevMortgageDrawdown.current = mortgageDrawdown;
-    }, [mortgageDrawdown, maxBorrowableAmount]);   
-
-    const handleUserAction = () => {
-        setDrawdownInExcessOfBorrowingCapacity(false);
-    };
+    }, [mortgageDrawdown, maxBorrowableAmount]); 
+    
+    useEffect(() => {
+        const formattedMortgageDrawdown = parseFormattedNumber(mortgageDrawdown);
+        if (Math.ceil(formattedMortgageDrawdown) < maxBorrowableAmount) {
+            setExcessWarning(false);
+        }
+    }, [mortgageDrawdown, maxBorrowableAmount, setExcessWarning]);
+    
 
     return (
         <View style={styles.container}>
@@ -278,6 +314,8 @@ const DepositSavingPeriod = ({
                         }
                     </View>
 
+                    <CustomText>{ isKeyboardVisible ? ("Keyboard") : ("No keyboard")}</CustomText>
+                    <CustomText>{ propertyPriceFocused ? ("ON") : ("OFF")}</CustomText>
                     <View style={[styles.row, styles.center]}>
                         <CustomText>Property Price:</CustomText>
                         <View style={styles.row}>
@@ -294,12 +332,11 @@ const DepositSavingPeriod = ({
                                         onNext={() => handleNext(propertyPriceRef)}
                                         onKeyboardVisibleChange={setIsKeyboardVisible}
                                         style={[styles.bigblue, styles.h2, styles.latoFont]}
-                                        value={handleFormattedDisplay(propertyPrice)}
-                                        onChangeText={(text) => {
-                                            handleNumericChange(text, setPropertyPrice);
-                                            handleUserAction();
-                                        }}
+                                        value={handleFormattedDisplayNoDecimal(propertyPrice)}
+                                        onChangeText={(text) => {handleNumericChange(text, setPropertyPrice)}}
                                         label="Property Price:"
+                                        onFocus={handlePropertyPriceFocus}
+                                        onBlur={handlePropertyPriceBlur}
                                     />
                                 ) : (
                                     <CustomText style={[
@@ -308,7 +345,7 @@ const DepositSavingPeriod = ({
                                         styles.textRight,
                                         styles.marginRight
                                     ]}>
-                                        {handleFormattedDisplay(propertyPrice)}
+                                        {handleFormattedDisplayNoDecimal(propertyPrice)}
                                     </CustomText>
                                 )}
                             </View>
@@ -324,7 +361,8 @@ const DepositSavingPeriod = ({
                             </Pressable>
                         </View>
                     </View>
-
+                    <Pressable onPress={handleMortgageDrawdownFocus}><CustomText>MD on</CustomText></Pressable>
+                    <Pressable onPress={handleMortgageDrawdownBlur}><CustomText>MD off</CustomText></Pressable>
                     <View style={[styles.row, styles.center]}>
                         <CustomText>Mortgage Drawdown:</CustomText>
                         <View style={[
@@ -340,18 +378,20 @@ const DepositSavingPeriod = ({
                                     onNext={() => handleNext(drawdownRef)}
                                     onKeyboardVisibleChange={setIsKeyboardVisible}
                                     style={[styles.bigblue, styles.h2, styles.latoFont]}
-                                    value={handleFormattedDisplay(mortgageDrawdown)}
-                                    onChangeText={(text) => handleNumericChange(text, setMortgageDrawdown)}
+                                    value={handleFormattedDisplayNoDecimal(mortgageDrawdown)}
+                                    onChangeText={(text) => handleMortgageDrawdownChange(text)}
                                     label={
                                         <View style={styles.labelContainer}>
                                             <CustomText style={[keyboardStyles.label, styles.centerText]}>Mortgage Drawdown:</CustomText>
-                                            {drawdownInExcessOfBorrowingCapacity && (
+                                            {excessWarning && (
                                                 <CustomText style={styles.warning}>
                                                     WARNING: Max Loan cannot be exceeded!
                                                 </CustomText>
                                             )}
                                         </View>
                                     }
+                                    onFocus={handleMortgageDrawdownFocus}
+                                    onBlur={handleMortgageDrawdownBlur}
                                 />
                             ) : (
                                 <>
@@ -361,7 +401,7 @@ const DepositSavingPeriod = ({
                                         styles.textRight,
                                         styles.marginRight
                                     ]}>
-                                        {handleFormattedDisplay(mortgageDrawdown)}
+                                        {handleFormattedDisplayNoDecimal(mortgageDrawdown)}
                                     </CustomText>
                                 </>
                             )}
@@ -377,6 +417,7 @@ const DepositSavingPeriod = ({
                             )}
                         </Pressable>
                     </View>
+                    <CustomText>{ mortgageDrawdownFocused ? ("ON") : ("OFF")}</CustomText>
 
                     <View style={[styles.center, styles.row]}>
                         <CustomText>LTV Ratio: {(LTVRatio).toFixed(0)}%</CustomText>
@@ -398,10 +439,7 @@ const DepositSavingPeriod = ({
                                         thumbTintColor='#14a730'
                                         step={1}
                                         value={LTVRatio}
-                                        onValueChange={(value) => {
-                                            setLTVRatio(value);
-                                            handleUserAction();
-                                        }}
+                                        onValueChange={(value) => {setLTVRatio(value)}}
                                     />
                                 </View>
                                 <Pressable 
@@ -415,7 +453,7 @@ const DepositSavingPeriod = ({
                         )}
                     </View>
 
-                    {drawdownInExcessOfBorrowingCapacity && (
+                    { excessWarning && (
                         <View style={[styles.center, styles.marginTop]}>
                             <CustomText style={[styles.warning, styles.marginBottom]}>
                                 WARNING: Max Loan cannot be exceeded!

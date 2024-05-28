@@ -58,6 +58,7 @@ function App() {
   const [displayWarning3, setDisplayWarning3] = useState(false);
 
   const [estimatedPropertyValue, setEstimatedPropertyValue] = useState(0);
+  const [depositSavingPeriod, setDepositSavingPeriod] = useState('');
   const [allowRecalculation, setAllowRecalculation] = useState(true);
   const [rent1, setRent1] = useState('');
   const [rent2, setRent2] = useState('');
@@ -350,6 +351,8 @@ function App() {
                   mortgageDrawdown={mortgageDrawdown}
                   setMortgageDrawdown={setMortgageDrawdown}
                   scrollRef={scrollRef}
+                  depositSavingPeriod={depositSavingPeriod}
+                  setDepositSavingPeriod={setDepositSavingPeriod}
                 />
               </View>
               
@@ -361,6 +364,7 @@ function App() {
                   setRemortgageDetails={setRemortgageDetails}
                   maxLoanTerm={maxLoanTerm}
                   setMaxLoanTerm={setMaxLoanTerm}
+                  depositSavingPeriod={depositSavingPeriod}
                 />
               </View>
 

@@ -42,9 +42,15 @@ export const handleFormattedDisplay = (value) => {
 };
 
 export const handleFormattedDisplayTwoDecimal = (value) => {
-  if (value === null || value === undefined) return '0.00';
+  if (value === null || value === undefined) return '';
   const number = parseFloat(value) || 0;
   return handleFormattedDisplay(number.toFixed(2));
+};
+
+export const handleFormattedDisplayNoDecimal = (value) => {
+  if (value === null || value === undefined) return '';
+  const number = parseFloat(value) || 0;
+  return handleFormattedDisplay(number.toFixed(0));
 };
 
 export const parseFormattedNumber = (formattedValue) => {
