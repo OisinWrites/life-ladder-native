@@ -7,6 +7,7 @@ import { calculateTaxDetails } from '../utils/taxCalc';
 import CustomText from '../utils/CustomText';
 import CustomNumericInput from '../utils/CustomNumericInput';
 import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal, parseFormattedNumber } from '../utils/FormatNumber';
+import { useKeyboard } from '../utils/KeyboardContext';
 
 const PersonalFinances = ({
     applicants,
@@ -18,7 +19,6 @@ const PersonalFinances = ({
     personalFinances2,
     setPersonalFinances2,
     scrollRef,
-    onKeyboardVisibleChange,
     rent1Ref,
     bills1Ref,
     discretionary1Ref,
@@ -32,6 +32,8 @@ const PersonalFinances = ({
     savings2Ref,
     savingGoals2Ref
   }) => {
+    const { isKeyboardVisible, setIsKeyboardVisible } = useKeyboard();
+
     const taxDetails1 = parseFloat(personalFinances1.salary) > 0 ? calculateTaxDetails(personalFinances1.salary) : 0;
     const taxDetails2 = applicants === 2 ? calculateTaxDetails(personalFinances2.salary) : 0;
   
@@ -124,7 +126,7 @@ const PersonalFinances = ({
                         scrollRef={scrollRef}
                         ref={rent1Ref}
                         onNext={() => handleNext(rent1Ref)}
-                        onKeyboardVisibleChange={onKeyboardVisibleChange}
+                        onKeyboardVisibleChange={setIsKeyboardVisible}
                         style={[styles.bigblue]}
                         value={handleFormattedDisplay(personalFinances1.rent)}
                         onChangeText={(text) => handleNumericChange(text, (value) => handlePersonalFinancesChange1('rent', value))}
@@ -140,7 +142,7 @@ const PersonalFinances = ({
                         scrollRef={scrollRef}
                         ref={bills1Ref}
                         onNext={() => handleNext(bills1Ref)}
-                        onKeyboardVisibleChange={onKeyboardVisibleChange}
+                        onKeyboardVisibleChange={setIsKeyboardVisible}
                         style={[styles.bigblue]}
                         value={handleFormattedDisplay(personalFinances1.bills)}
                         onChangeText={(text) => handleNumericChange(text, (value) => handlePersonalFinancesChange1('bills', value))}
@@ -156,7 +158,7 @@ const PersonalFinances = ({
                         scrollRef={scrollRef}
                         ref={discretionary1Ref}
                         onNext={() => handleNext(discretionary1Ref)}
-                        onKeyboardVisibleChange={onKeyboardVisibleChange}
+                        onKeyboardVisibleChange={setIsKeyboardVisible}
                         style={[styles.bigblue]}
                         value={handleFormattedDisplay(personalFinances1.weeklyDiscretionary)}
                         onChangeText={(text) => handleNumericChange(text, (value) => handlePersonalFinancesChange1('weeklyDiscretionary', value))}
@@ -172,7 +174,7 @@ const PersonalFinances = ({
                         scrollRef={scrollRef}
                         ref={annualBills1Ref}
                         onNext={() => handleNext(annualBills1Ref)}
-                        onKeyboardVisibleChange={onKeyboardVisibleChange}
+                        onKeyboardVisibleChange={setIsKeyboardVisible}
                         style={[styles.bigblue]}
                         value={handleFormattedDisplay(personalFinances1.annualBills)}
                         onChangeText={(text) => handleNumericChange(text, (value) => handlePersonalFinancesChange1('annualBills', value))}
@@ -195,7 +197,7 @@ const PersonalFinances = ({
                         scrollRef={scrollRef}
                         ref={savings1Ref}
                         onNext={() => handleNext(savings1Ref)}
-                        onKeyboardVisibleChange={onKeyboardVisibleChange}
+                        onKeyboardVisibleChange={setIsKeyboardVisible}
                         style={[styles.bigblue]}
                         value={handleFormattedDisplay(personalFinances1.currentSavings)}
                         onChangeText={(text) => handleNumericChange(text, (value) => handlePersonalFinancesChange1('currentSavings', value))}
@@ -211,7 +213,7 @@ const PersonalFinances = ({
                         scrollRef={scrollRef}
                         ref={savingGoals1Ref}
                         onNext={() => handleNext(savingGoals1Ref)}
-                        onKeyboardVisibleChange={onKeyboardVisibleChange}
+                        onKeyboardVisibleChange={setIsKeyboardVisible}
                         style={[styles.bigblue]}
                         value={handleFormattedDisplay(personalFinances1.otherSavingGoals)}
                         onChangeText={(text) => handleNumericChange(text, (value) => handlePersonalFinancesChange1('otherSavingGoals', value))}
@@ -266,7 +268,7 @@ const PersonalFinances = ({
                           scrollRef={scrollRef}
                           ref={rent2Ref}
                           onNext={() => handleNext(rent2Ref)}
-                          onKeyboardVisibleChange={onKeyboardVisibleChange}
+                          onKeyboardVisibleChange={setIsKeyboardVisible}
                           style={[styles.bigblue]}
                           value={handleFormattedDisplay(personalFinances2.rent)}
                           onChangeText={(text) => handleNumericChange(text, (value) => handlePersonalFinancesChange2('rent', value))}
@@ -282,7 +284,7 @@ const PersonalFinances = ({
                           scrollRef={scrollRef}
                           ref={bills2Ref}
                           onNext={() => handleNext(bills2Ref)}
-                          onKeyboardVisibleChange={onKeyboardVisibleChange}
+                          onKeyboardVisibleChange={setIsKeyboardVisible}
                           style={[styles.bigblue]}
                           value={handleFormattedDisplay(personalFinances2.bills)}
                           onChangeText={(text) => handleNumericChange(text, (value) => handlePersonalFinancesChange2('bills', value))}
@@ -298,7 +300,7 @@ const PersonalFinances = ({
                           scrollRef={scrollRef}
                           ref={discretionary2Ref}
                           onNext={() => handleNext(discretionary2Ref)}
-                          onKeyboardVisibleChange={onKeyboardVisibleChange}
+                          onKeyboardVisibleChange={setIsKeyboardVisible}
                           style={[styles.bigblue]}
                           value={handleFormattedDisplay(personalFinances2.weeklyDiscretionary)}
                           onChangeText={(text) => handleNumericChange(text, (value) => handlePersonalFinancesChange2('weeklyDiscretionary', value))}
@@ -314,7 +316,7 @@ const PersonalFinances = ({
                           scrollRef={scrollRef}
                           ref={annualBills2Ref}
                           onNext={() => handleNext(annualBills2Ref)}
-                          onKeyboardVisibleChange={onKeyboardVisibleChange}
+                          onKeyboardVisibleChange={setIsKeyboardVisible}
                           style={[styles.bigblue]}
                           value={handleFormattedDisplay(personalFinances2.annualBills)}
                           onChangeText={(text) => handleNumericChange(text, (value) => handlePersonalFinancesChange2('annualBills', value))}
@@ -337,7 +339,7 @@ const PersonalFinances = ({
                           scrollRef={scrollRef}
                           ref={savings2Ref}
                           onNext={() => handleNext(savings2Ref)}
-                          onKeyboardVisibleChange={onKeyboardVisibleChange}
+                          onKeyboardVisibleChange={setIsKeyboardVisible}
                           style={[styles.bigblue]}
                           value={handleFormattedDisplay(personalFinances2.currentSavings)}
                           onChangeText={(text) => handleNumericChange(text, (value) => handlePersonalFinancesChange2('currentSavings', value))}
@@ -353,7 +355,7 @@ const PersonalFinances = ({
                           scrollRef={scrollRef}
                           ref={savingGoals2Ref}
                           onNext={() => handleNext(savingGoals2Ref)}
-                          onKeyboardVisibleChange={onKeyboardVisibleChange}
+                          onKeyboardVisibleChange={setIsKeyboardVisible}
                           style={[styles.bigblue]}
                           value={handleFormattedDisplay(personalFinances2.otherSavingGoals)}
                           onChangeText={(text) => handleNumericChange(text, (value) => handlePersonalFinancesChange2('otherSavingGoals', value))}

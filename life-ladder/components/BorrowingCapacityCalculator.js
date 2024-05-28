@@ -9,7 +9,7 @@ import CustomText from '../utils/CustomText';
 import CustomNumericInput from '../utils/CustomNumericInput';
 
 import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal } from '../utils/FormatNumber';
-
+import { useKeyboard } from '../utils/KeyboardContext';
 
 const BorrowingCapacityCalculator = ({
     applicants,
@@ -30,7 +30,6 @@ const BorrowingCapacityCalculator = ({
     multiplier,
     setMultiplier,
     scrollRef,
-    onKeyboardVisibleChange,
 }) => {
     const formattedMaxBorrowableAmount = maxBorrowableAmount !== null ? handleFormattedDisplayTwoDecimal(parseFloat(maxBorrowableAmount)) : null;
     const formattedEstimatedPropertyValue = estimatedPropertyValue !== null ? handleFormattedDisplayTwoDecimal(parseFloat(estimatedPropertyValue)) : null;
@@ -39,6 +38,7 @@ const BorrowingCapacityCalculator = ({
     const [exemptionGiven, setExemptionGiven] = useState('No')
     const [totalSalary, setTotalSalary] = useState(0);
 
+    const { isKeyboardVisible, setIsKeyboardVisible } = useKeyboard();
     const salary1Ref = useRef(null);
     const salary2Ref = useRef(null);
     const maxBorrowableAmountRef = useRef(null);
@@ -162,7 +162,7 @@ const BorrowingCapacityCalculator = ({
                                 styles.marginLeft
                             ]}>                            
                                 <CustomNumericInput
-                                    onKeyboardVisibleChange={onKeyboardVisibleChange}
+                                    onKeyboardVisibleChange={setIsKeyboardVisible}
                                     scrollRef={scrollRef}
                                     ref={salary1Ref}
                                     label={applicants === 2 ? ("First Annual Salary :") : ("Your Annual Salary :")}
@@ -184,7 +184,7 @@ const BorrowingCapacityCalculator = ({
                                 styles.marginLeft
                             ]}>   
                             <CustomNumericInput
-                                onKeyboardVisibleChange={onKeyboardVisibleChange}
+                                onKeyboardVisibleChange={setIsKeyboardVisible}
                                 scrollRef={scrollRef}
                                 ref={salary2Ref}
                                 style={[styles.bigblue]}                             
@@ -287,7 +287,7 @@ const BorrowingCapacityCalculator = ({
                             ]}>
                             {showInput && (
                                 <CustomNumericInput
-                                    onKeyboardVisibleChange={onKeyboardVisibleChange}
+                                    onKeyboardVisibleChange={setIsKeyboardVisible}
                                     style={[styles.bigblue]}                    
                                     value={handleFormattedDisplay(maxBorrowableAmount)}
                                     scrollRef={scrollRef}

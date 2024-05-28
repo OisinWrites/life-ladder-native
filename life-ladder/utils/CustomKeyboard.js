@@ -5,7 +5,7 @@ import keyboardStyles from '../styles/keyboardStyles';
 import borrowingStyles from '../styles/borrowingStyles';
 import CustomText from './CustomText';
 import leaflifeladder from '../assets/images/leaflifeladder.png';
-
+import { useKeyboard } from '../utils/KeyboardContext';
 
 const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inputValue, onNext, label }) => {
   const keys = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', '.' ];
@@ -17,6 +17,10 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
     keys.slice(9, 11)
   ];
 
+  const { isKeyboardVisible, setIsKeyboardVisible } = useKeyboard();
+  const handleClose = () => {
+    setIsKeyboardVisible(false);
+  };
   const [modalVisible, setModalVisible] = useState(false);
 
   const handlePress = () => {
@@ -60,6 +64,7 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
             <View style={[keyboardStyles.keyboardContainer, keyboardStyles.greyBorderTop]}>
 
                 <View>
+                <CustomText>{ isKeyboardVisible ? ("visible") : ("Not Visible")}</CustomText>
                     <CustomText style={[keyboardStyles.label, styles.centerText]}>{label}</CustomText>
                     <View style={styles.row}>
                         <View style={[borrowingStyles.salaryInputs, styles.marginRight, styles.marginTop, styles.marginBottom,  keyboardStyles.greyBorder, keyboardStyles.largerInputValue, styles.borderRadiusSemi]}>
@@ -122,7 +127,7 @@ const CustomKeyboard = ({ onKeyPress, onDelete, onClear, onSubmit, onClose, inpu
                         <Pressable style={[keyboardStyles.key, keyboardStyles.greyBorder, keyboardStyles.clearKey]} onPress={onClear}>
                             <CustomText style={keyboardStyles.keyText}>Clear</CustomText>
                         </Pressable>
-                        <Pressable style={[keyboardStyles.key, keyboardStyles.greyBorder, keyboardStyles.closeKey]} onPress={() => { onClear(); onClose(); }}>
+                        <Pressable style={[keyboardStyles.key, keyboardStyles.greyBorder, keyboardStyles.closeKey]} onPress={() => { onClose(); }}>
                             <CustomText style={keyboardStyles.keyText}>Exit</CustomText>
                         </Pressable>
                     </View>

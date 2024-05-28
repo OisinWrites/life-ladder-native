@@ -3,6 +3,7 @@ import { View, StyleSheet, TextInput, Modal, Pressable, ScrollView, StatusBar } 
 import CustomKeyboard from './CustomKeyboard';
 import { useGlobalStyles } from './GlobalStylesContext';
 import keyboardStyles from '../styles/keyboardStyles';
+import { useKeyboard } from '../utils/KeyboardContext';
 
 const CustomNumericInput = forwardRef(({
   value, onChangeText, placeholder, 

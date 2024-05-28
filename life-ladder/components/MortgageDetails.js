@@ -10,12 +10,16 @@ import { calculateMonthlyMortgagePayment, generateRepaymentSchedule } from '../u
 import Slider from '@react-native-community/slider';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
 import remortgageIcon from '../assets/images/remortgageIcon.png';
+import { useKeyboard } from '../utils/KeyboardContext';
+
 
 const MortgageDetails = ({ 
     mortgageDrawdown, 
     remortgageDetails,
     setRemortgageDetails,
     }) => {
+    const { isKeyboardVisible, setIsKeyboardVisible } = useKeyboard();
+
     const prevRemortgageDetails = useRef(JSON.stringify(remortgageDetails));
     const prevMortgageDrawdown = useRef(mortgageDrawdown);
     const hasValidRemortgagePeriods = remortgageDetails.some(detail => detail.openingBalance >= 1);
@@ -143,6 +147,7 @@ const MortgageDetails = ({
                 <View style={styles.marginBottom}>
                     <CustomText style={[styles.centerText, styles.header]}>Mortgage Details</CustomText>
                 </View>
+                <CustomText>{ isKeyboardVisible ? ("visible") : ("Not Visible")}</CustomText>
                 {remortgageDetails.length > 1 && hasValidRemortgagePeriods && (
                     <View style={styles.remortgageContainer}>
                         <View style={[styles.row, tableStyles.tableHeader, styles.marginBottom]}>
@@ -208,12 +213,13 @@ const MortgageDetails = ({
                                                 )}
                                             </View>
                                         </View>
-
-                                        <CustomText>{details.cashBack}</CustomText>
+                                        
                                         <View style={[styles.row, styles.fixedRowHeight, styles.center, styles.marginLeft]}>
                                             <CustomText>Release Equity:</CustomText>
+                                            <CustomText style={[styles.marginLeft]}>{handleFormattedDisplay(details.cashBack)}</CustomText>
                                             <View style={[borrowingStyles.salaryInputs, styles.widthLimit, styles.marginLeft]}>
                                                 <CustomNumericInput
+                                                    onKeyboardVisibleChange={setIsKeyboardVisible}
                                                     label="Cash released from mortgage:"
                                                     style={styles.bigblue}
                                                     value={handleFormattedDisplay(details.cashBack)}

@@ -11,7 +11,7 @@ import Slider from '@react-native-community/slider';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
 
 import { handleNumericChange, handleFormattedDisplay, handleFormattedDisplayTwoDecimal, parseFormattedNumber } from '../utils/FormatNumber';
-
+import { useKeyboard } from '../utils/KeyboardContext';
 
 const DepositSavingPeriod = ({
     applicants,
@@ -29,12 +29,11 @@ const DepositSavingPeriod = ({
     mortgageDrawdown,
     setMortgageDrawdown,
     scrollRef,
-    onKeyboardVisibleChange,
     propertyPrice,
     setPropertyPrice,
 }) => {
 
-
+    const { isKeyboardVisible, setIsKeyboardVisible } = useKeyboard();
     const [depositRequired, setDepositRequired] = useState('');
     const [drawdownInExcessOfBorrowingCapacity, setDrawdownInExcessOfBorrowingCapacity] = useState(false);
 
@@ -158,7 +157,7 @@ const DepositSavingPeriod = ({
     }, [propertyPrice, mortgageDrawdown]);
 
     useEffect(() => {
-        if (lockPropertyPrice && focusState.mortgageDrawdownFocused) {
+        if (lockPropertyPrice && focusState.mortgageDrawdownFocused && (mortgageDrawdown > 0) && !isKeyboardVisible) {
             let newMortgageDrawdown = propertyPrice * (LTVRatio / 100);
             if (newMortgageDrawdown > maxBorrowableAmount) {
                 setLTVRatio(prevLTVRatio.current);
@@ -167,7 +166,7 @@ const DepositSavingPeriod = ({
             }
         }
         prevLTVRatio.current = LTVRatio;
-    }, [LTVRatio, lockPropertyPrice, focusState.mortgageDrawdownFocused, propertyPrice, maxBorrowableAmount]);
+    }, [LTVRatio, lockPropertyPrice, focusState.mortgageDrawdownFocused, propertyPrice, maxBorrowableAmount, isKeyboardVisible]);
     
 
     useEffect(() => {
@@ -179,14 +178,14 @@ const DepositSavingPeriod = ({
     }, [LTVRatio, lockPropertyPrice, focusState.mortgageDrawdownFocused, propertyPrice]);
 
     useEffect(() => {
-        if (lockMortgageDrawdown && focusState.propertyPriceFocused && (propertyPrice > 0)) {
+        if (lockMortgageDrawdown && focusState.propertyPriceFocused && (propertyPrice > 0) && !isKeyboardVisible) {
             let newLTVRatio = (mortgageDrawdown / propertyPrice) * 100;
 
             newLTVRatio = parseFloat(newLTVRatio.toFixed(5));
                         
             setLTVRatio(newLTVRatio);
         }
-    }, [lockMortgageDrawdown, mortgageDrawdown, focusState.propertyPriceFocused, propertyPrice]);
+    }, [lockMortgageDrawdown, mortgageDrawdown, focusState.propertyPriceFocused, propertyPrice, isKeyboardVisible]);
 
     useEffect(() => {
         if (lockMortgageDrawdown && !propertyPriceFocused) {
@@ -326,7 +325,7 @@ const DepositSavingPeriod = ({
                                         scrollRef={scrollRef}
                                         ref={propertyPriceRef}
                                         onNext={() => handleNext(propertyPriceRef)}
-                                        onKeyboardVisibleChange={onKeyboardVisibleChange}
+                                        onKeyboardVisibleChange={setIsKeyboardVisible}
                                         style={[styles.bigblue, styles.h2, styles.latoFont]}                             
                                         value={handleFormattedDisplay(propertyPrice)}
                                         onChangeText={(text) => {
@@ -372,7 +371,7 @@ const DepositSavingPeriod = ({
                                     scrollRef={scrollRef}
                                     ref={drawdownRef}
                                     onNext={() => handleNext(drawdownRef)}
-                                    onKeyboardVisibleChange={onKeyboardVisibleChange}
+                                    onKeyboardVisibleChange={setIsKeyboardVisible}
                                     style={[styles.bigblue, styles.h2, styles.latoFont]}                             
                                     value={handleFormattedDisplay(mortgageDrawdown)}
                                     onChangeText={(text) => handleNumericChange(text, setMortgageDrawdown)}
